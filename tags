@@ -1,0 +1,1071 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+-device-map	Makefile	/^	grub --device-map=\/dev\/null < grub.in$/;"	m
+ADDR_BASE	kernel/config.h	17;"	d
+ALOCATORS	kernel/kmalloc.c	5;"	d	file:
+BITS	kernel/palloc.c	4;"	d	file:
+BLACK	kernel/screen.c	/^	BLACK = 0,$/;"	e	enum:ScreenColor	file:
+BLACK	mnt/srv_screen.c	/^	BLACK = 0,$/;"	e	enum:ScreenColor	file:
+BLACK	userspace/srv_screen.c	/^	BLACK = 0,$/;"	e	enum:ScreenColor	file:
+BLUE	kernel/screen.c	/^	BLUE,$/;"	e	enum:ScreenColor	file:
+BLUE	mnt/srv_screen.c	/^	BLUE,$/;"	e	enum:ScreenColor	file:
+BLUE	userspace/srv_screen.c	/^	BLUE,$/;"	e	enum:ScreenColor	file:
+BROWN	kernel/screen.c	/^	BROWN,$/;"	e	enum:ScreenColor	file:
+BROWN	mnt/srv_screen.c	/^	BROWN,$/;"	e	enum:ScreenColor	file:
+BROWN	userspace/srv_screen.c	/^	BROWN,$/;"	e	enum:ScreenColor	file:
+CFLAGS	kernel/Makefile	/^CFLAGS=-nostdlib -nostdinc -fno-builtin -fno-stack-protector -pipe -Werror -march=native ${OPTIMIZE}$/;"	m
+CFLAGS	libc/Makefile	/^CFLAGS=-nostdlib -nostdinc -fno-builtin -fno-stack-protector -Wall -pedantic -pipe -Werror -march=native ${OPTIMIZE}$/;"	m
+CFLAGS	userspace/Makefile	/^CFLAGS=-I..\/libc\/ -fno-builtin -fno-stack-protector -Wall -pedantic -pipe -Werror -march=native ${OPTIMIZE}$/;"	m
+CORES	Makefile	/^CORES=4$/;"	m
+COUNT	kernel/kmalloc.c	7;"	d	file:
+CYAN	kernel/screen.c	/^	CYAN,$/;"	e	enum:ScreenColor	file:
+CYAN	mnt/srv_screen.c	/^	CYAN,$/;"	e	enum:ScreenColor	file:
+CYAN	userspace/srv_screen.c	/^	CYAN,$/;"	e	enum:ScreenColor	file:
+DARKGRAY	kernel/screen.c	/^	DARKGRAY,$/;"	e	enum:ScreenColor	file:
+DARKGRAY	mnt/srv_screen.c	/^	DARKGRAY,$/;"	e	enum:ScreenColor	file:
+DARKGRAY	userspace/srv_screen.c	/^	DARKGRAY,$/;"	e	enum:ScreenColor	file:
+DEFAULT_PRIORITY	kernel/config.h	9;"	d
+DEV	Makefile	/^DEV=\/dev\/loop0$/;"	m
+D_0	mnt/srv_keyboard.c	/^	D_0,$/;"	e	enum:scancode	file:
+D_0	userspace/srv_keyboard.c	/^	D_0,$/;"	e	enum:scancode	file:
+D_1	mnt/srv_keyboard.c	/^	D_1,$/;"	e	enum:scancode	file:
+D_1	userspace/srv_keyboard.c	/^	D_1,$/;"	e	enum:scancode	file:
+D_2	mnt/srv_keyboard.c	/^	D_2,$/;"	e	enum:scancode	file:
+D_2	userspace/srv_keyboard.c	/^	D_2,$/;"	e	enum:scancode	file:
+D_3	mnt/srv_keyboard.c	/^	D_3,$/;"	e	enum:scancode	file:
+D_3	userspace/srv_keyboard.c	/^	D_3,$/;"	e	enum:scancode	file:
+D_4	mnt/srv_keyboard.c	/^	D_4,$/;"	e	enum:scancode	file:
+D_4	userspace/srv_keyboard.c	/^	D_4,$/;"	e	enum:scancode	file:
+D_5	mnt/srv_keyboard.c	/^	D_5,$/;"	e	enum:scancode	file:
+D_5	userspace/srv_keyboard.c	/^	D_5,$/;"	e	enum:scancode	file:
+D_6	mnt/srv_keyboard.c	/^	D_6,$/;"	e	enum:scancode	file:
+D_6	userspace/srv_keyboard.c	/^	D_6,$/;"	e	enum:scancode	file:
+D_7	mnt/srv_keyboard.c	/^	D_7,$/;"	e	enum:scancode	file:
+D_7	userspace/srv_keyboard.c	/^	D_7,$/;"	e	enum:scancode	file:
+D_8	mnt/srv_keyboard.c	/^	D_8,$/;"	e	enum:scancode	file:
+D_8	userspace/srv_keyboard.c	/^	D_8,$/;"	e	enum:scancode	file:
+D_9	mnt/srv_keyboard.c	/^	D_9,$/;"	e	enum:scancode	file:
+D_9	userspace/srv_keyboard.c	/^	D_9,$/;"	e	enum:scancode	file:
+D_A	mnt/srv_keyboard.c	/^	D_A,$/;"	e	enum:scancode	file:
+D_A	userspace/srv_keyboard.c	/^	D_A,$/;"	e	enum:scancode	file:
+D_ALTSYS	mnt/srv_keyboard.c	/^	D_ALTSYS,$/;"	e	enum:scancode	file:
+D_ALTSYS	userspace/srv_keyboard.c	/^	D_ALTSYS,$/;"	e	enum:scancode	file:
+D_APO	mnt/srv_keyboard.c	/^	D_APO,$/;"	e	enum:scancode	file:
+D_APO	userspace/srv_keyboard.c	/^	D_APO,$/;"	e	enum:scancode	file:
+D_B	mnt/srv_keyboard.c	/^	D_B,$/;"	e	enum:scancode	file:
+D_B	userspace/srv_keyboard.c	/^	D_B,$/;"	e	enum:scancode	file:
+D_BACKSLASH	mnt/srv_keyboard.c	/^	D_BACKSLASH,$/;"	e	enum:scancode	file:
+D_BACKSLASH	userspace/srv_keyboard.c	/^	D_BACKSLASH,$/;"	e	enum:scancode	file:
+D_BACKSPACE	mnt/srv_keyboard.c	/^	D_BACKSPACE,$/;"	e	enum:scancode	file:
+D_BACKSPACE	userspace/srv_keyboard.c	/^	D_BACKSPACE,$/;"	e	enum:scancode	file:
+D_C	mnt/srv_keyboard.c	/^	D_C,$/;"	e	enum:scancode	file:
+D_C	userspace/srv_keyboard.c	/^	D_C,$/;"	e	enum:scancode	file:
+D_CAPS	mnt/srv_keyboard.c	/^	D_CAPS,$/;"	e	enum:scancode	file:
+D_CAPS	userspace/srv_keyboard.c	/^	D_CAPS,$/;"	e	enum:scancode	file:
+D_COLON	mnt/srv_keyboard.c	/^	D_COLON,$/;"	e	enum:scancode	file:
+D_COLON	userspace/srv_keyboard.c	/^	D_COLON,$/;"	e	enum:scancode	file:
+D_D	mnt/srv_keyboard.c	/^	D_D,$/;"	e	enum:scancode	file:
+D_D	userspace/srv_keyboard.c	/^	D_D,$/;"	e	enum:scancode	file:
+D_E	mnt/srv_keyboard.c	/^	D_E,$/;"	e	enum:scancode	file:
+D_E	userspace/srv_keyboard.c	/^	D_E,$/;"	e	enum:scancode	file:
+D_ENTER	mnt/srv_keyboard.c	/^	D_ENTER,$/;"	e	enum:scancode	file:
+D_ENTER	userspace/srv_keyboard.c	/^	D_ENTER,$/;"	e	enum:scancode	file:
+D_F	mnt/srv_keyboard.c	/^	D_F,$/;"	e	enum:scancode	file:
+D_F	userspace/srv_keyboard.c	/^	D_F,$/;"	e	enum:scancode	file:
+D_F1	mnt/srv_keyboard.c	/^	D_F1,$/;"	e	enum:scancode	file:
+D_F1	userspace/srv_keyboard.c	/^	D_F1,$/;"	e	enum:scancode	file:
+D_F10	mnt/srv_keyboard.c	/^	D_F10,$/;"	e	enum:scancode	file:
+D_F10	userspace/srv_keyboard.c	/^	D_F10,$/;"	e	enum:scancode	file:
+D_F2	mnt/srv_keyboard.c	/^	D_F2,$/;"	e	enum:scancode	file:
+D_F2	userspace/srv_keyboard.c	/^	D_F2,$/;"	e	enum:scancode	file:
+D_F3	mnt/srv_keyboard.c	/^	D_F3,$/;"	e	enum:scancode	file:
+D_F3	userspace/srv_keyboard.c	/^	D_F3,$/;"	e	enum:scancode	file:
+D_F4	mnt/srv_keyboard.c	/^	D_F4,$/;"	e	enum:scancode	file:
+D_F4	userspace/srv_keyboard.c	/^	D_F4,$/;"	e	enum:scancode	file:
+D_F5	mnt/srv_keyboard.c	/^	D_F5,$/;"	e	enum:scancode	file:
+D_F5	userspace/srv_keyboard.c	/^	D_F5,$/;"	e	enum:scancode	file:
+D_F6	mnt/srv_keyboard.c	/^	D_F6,$/;"	e	enum:scancode	file:
+D_F6	userspace/srv_keyboard.c	/^	D_F6,$/;"	e	enum:scancode	file:
+D_F7	mnt/srv_keyboard.c	/^	D_F7,$/;"	e	enum:scancode	file:
+D_F7	userspace/srv_keyboard.c	/^	D_F7,$/;"	e	enum:scancode	file:
+D_F8	mnt/srv_keyboard.c	/^	D_F8,$/;"	e	enum:scancode	file:
+D_F8	userspace/srv_keyboard.c	/^	D_F8,$/;"	e	enum:scancode	file:
+D_F9	mnt/srv_keyboard.c	/^	D_F9,$/;"	e	enum:scancode	file:
+D_F9	userspace/srv_keyboard.c	/^	D_F9,$/;"	e	enum:scancode	file:
+D_FN	mnt/srv_keyboard.c	/^	D_FN,$/;"	e	enum:scancode	file:
+D_FN	userspace/srv_keyboard.c	/^	D_FN,$/;"	e	enum:scancode	file:
+D_G	mnt/srv_keyboard.c	/^	D_G,$/;"	e	enum:scancode	file:
+D_G	userspace/srv_keyboard.c	/^	D_G,$/;"	e	enum:scancode	file:
+D_GTHEN	mnt/srv_keyboard.c	/^	D_GTHEN,$/;"	e	enum:scancode	file:
+D_GTHEN	userspace/srv_keyboard.c	/^	D_GTHEN,$/;"	e	enum:scancode	file:
+D_H	mnt/srv_keyboard.c	/^	D_H,$/;"	e	enum:scancode	file:
+D_H	userspace/srv_keyboard.c	/^	D_H,$/;"	e	enum:scancode	file:
+D_I	mnt/srv_keyboard.c	/^	D_I,$/;"	e	enum:scancode	file:
+D_I	userspace/srv_keyboard.c	/^	D_I,$/;"	e	enum:scancode	file:
+D_J	mnt/srv_keyboard.c	/^	D_J,$/;"	e	enum:scancode	file:
+D_J	userspace/srv_keyboard.c	/^	D_J,$/;"	e	enum:scancode	file:
+D_K	mnt/srv_keyboard.c	/^	D_K,$/;"	e	enum:scancode	file:
+D_K	userspace/srv_keyboard.c	/^	D_K,$/;"	e	enum:scancode	file:
+D_KEYPAD	mnt/srv_keyboard.c	/^	D_KEYPAD,$/;"	e	enum:scancode	file:
+D_KEYPAD	userspace/srv_keyboard.c	/^	D_KEYPAD,$/;"	e	enum:scancode	file:
+D_KEYPAD0	mnt/srv_keyboard.c	/^	D_KEYPAD0,$/;"	e	enum:scancode	file:
+D_KEYPAD0	userspace/srv_keyboard.c	/^	D_KEYPAD0,$/;"	e	enum:scancode	file:
+D_KEYPAD2	mnt/srv_keyboard.c	/^	D_KEYPAD2,$/;"	e	enum:scancode	file:
+D_KEYPAD2	userspace/srv_keyboard.c	/^	D_KEYPAD2,$/;"	e	enum:scancode	file:
+D_KEYPAD3	mnt/srv_keyboard.c	/^	D_KEYPAD3,$/;"	e	enum:scancode	file:
+D_KEYPAD3	userspace/srv_keyboard.c	/^	D_KEYPAD3,$/;"	e	enum:scancode	file:
+D_KEYPAD4	mnt/srv_keyboard.c	/^	D_KEYPAD4,$/;"	e	enum:scancode	file:
+D_KEYPAD4	userspace/srv_keyboard.c	/^	D_KEYPAD4,$/;"	e	enum:scancode	file:
+D_KEYPAD5	mnt/srv_keyboard.c	/^	D_KEYPAD5,$/;"	e	enum:scancode	file:
+D_KEYPAD5	userspace/srv_keyboard.c	/^	D_KEYPAD5,$/;"	e	enum:scancode	file:
+D_KEYPAD6	mnt/srv_keyboard.c	/^	D_KEYPAD6,$/;"	e	enum:scancode	file:
+D_KEYPAD6	userspace/srv_keyboard.c	/^	D_KEYPAD6,$/;"	e	enum:scancode	file:
+D_KEYPAD7	mnt/srv_keyboard.c	/^	D_KEYPAD7,$/;"	e	enum:scancode	file:
+D_KEYPAD7	userspace/srv_keyboard.c	/^	D_KEYPAD7,$/;"	e	enum:scancode	file:
+D_KEYPAD8	mnt/srv_keyboard.c	/^	D_KEYPAD8,$/;"	e	enum:scancode	file:
+D_KEYPAD8	userspace/srv_keyboard.c	/^	D_KEYPAD8,$/;"	e	enum:scancode	file:
+D_KEYPAD9	mnt/srv_keyboard.c	/^	D_KEYPAD9,$/;"	e	enum:scancode	file:
+D_KEYPAD9	userspace/srv_keyboard.c	/^	D_KEYPAD9,$/;"	e	enum:scancode	file:
+D_KEYPADDOT	mnt/srv_keyboard.c	/^	D_KEYPADDOT,$/;"	e	enum:scancode	file:
+D_KEYPADDOT	userspace/srv_keyboard.c	/^	D_KEYPADDOT,$/;"	e	enum:scancode	file:
+D_KEYPADEND	mnt/srv_keyboard.c	/^	D_KEYPADEND,$/;"	e	enum:scancode	file:
+D_KEYPADEND	userspace/srv_keyboard.c	/^	D_KEYPADEND,$/;"	e	enum:scancode	file:
+D_KEYPADMINUS	mnt/srv_keyboard.c	/^	D_KEYPADMINUS,$/;"	e	enum:scancode	file:
+D_KEYPADMINUS	userspace/srv_keyboard.c	/^	D_KEYPADMINUS,$/;"	e	enum:scancode	file:
+D_KEYPADPLUS	mnt/srv_keyboard.c	/^	D_KEYPADPLUS,$/;"	e	enum:scancode	file:
+D_KEYPADPLUS	userspace/srv_keyboard.c	/^	D_KEYPADPLUS,$/;"	e	enum:scancode	file:
+D_L	mnt/srv_keyboard.c	/^	D_L,$/;"	e	enum:scancode	file:
+D_L	userspace/srv_keyboard.c	/^	D_L,$/;"	e	enum:scancode	file:
+D_LALT	mnt/srv_keyboard.c	/^	D_LALT,$/;"	e	enum:scancode	file:
+D_LALT	userspace/srv_keyboard.c	/^	D_LALT,$/;"	e	enum:scancode	file:
+D_LCTRL	mnt/srv_keyboard.c	/^	D_LCTRL,$/;"	e	enum:scancode	file:
+D_LCTRL	userspace/srv_keyboard.c	/^	D_LCTRL,$/;"	e	enum:scancode	file:
+D_LESS	mnt/srv_keyboard.c	/^	D_LESS,$/;"	e	enum:scancode	file:
+D_LESS	userspace/srv_keyboard.c	/^	D_LESS,$/;"	e	enum:scancode	file:
+D_LSB	mnt/srv_keyboard.c	/^	D_LSB,$/;"	e	enum:scancode	file:
+D_LSB	userspace/srv_keyboard.c	/^	D_LSB,$/;"	e	enum:scancode	file:
+D_LSHIFT	mnt/srv_keyboard.c	/^	D_LSHIFT,$/;"	e	enum:scancode	file:
+D_LSHIFT	userspace/srv_keyboard.c	/^	D_LSHIFT,$/;"	e	enum:scancode	file:
+D_M	mnt/srv_keyboard.c	/^	D_M,$/;"	e	enum:scancode	file:
+D_M	userspace/srv_keyboard.c	/^	D_M,$/;"	e	enum:scancode	file:
+D_MINUS	mnt/srv_keyboard.c	/^	D_MINUS,$/;"	e	enum:scancode	file:
+D_MINUS	userspace/srv_keyboard.c	/^	D_MINUS,$/;"	e	enum:scancode	file:
+D_N	mnt/srv_keyboard.c	/^	D_N,$/;"	e	enum:scancode	file:
+D_N	userspace/srv_keyboard.c	/^	D_N,$/;"	e	enum:scancode	file:
+D_NUMLOCK	mnt/srv_keyboard.c	/^	D_NUMLOCK,$/;"	e	enum:scancode	file:
+D_NUMLOCK	userspace/srv_keyboard.c	/^	D_NUMLOCK,$/;"	e	enum:scancode	file:
+D_O	mnt/srv_keyboard.c	/^	D_O,$/;"	e	enum:scancode	file:
+D_O	userspace/srv_keyboard.c	/^	D_O,$/;"	e	enum:scancode	file:
+D_P	mnt/srv_keyboard.c	/^	D_P,$/;"	e	enum:scancode	file:
+D_P	userspace/srv_keyboard.c	/^	D_P,$/;"	e	enum:scancode	file:
+D_PLUS	mnt/srv_keyboard.c	/^	D_PLUS,$/;"	e	enum:scancode	file:
+D_PLUS	userspace/srv_keyboard.c	/^	D_PLUS,$/;"	e	enum:scancode	file:
+D_Q	mnt/srv_keyboard.c	/^	D_Q,$/;"	e	enum:scancode	file:
+D_Q	userspace/srv_keyboard.c	/^	D_Q,$/;"	e	enum:scancode	file:
+D_R	mnt/srv_keyboard.c	/^	D_R,$/;"	e	enum:scancode	file:
+D_R	userspace/srv_keyboard.c	/^	D_R,$/;"	e	enum:scancode	file:
+D_RSB	mnt/srv_keyboard.c	/^	D_RSB,$/;"	e	enum:scancode	file:
+D_RSB	userspace/srv_keyboard.c	/^	D_RSB,$/;"	e	enum:scancode	file:
+D_RSHIFT	mnt/srv_keyboard.c	/^	D_RSHIFT,$/;"	e	enum:scancode	file:
+D_RSHIFT	userspace/srv_keyboard.c	/^	D_RSHIFT,$/;"	e	enum:scancode	file:
+D_S	mnt/srv_keyboard.c	/^	D_S,$/;"	e	enum:scancode	file:
+D_S	userspace/srv_keyboard.c	/^	D_S,$/;"	e	enum:scancode	file:
+D_SCROLL	mnt/srv_keyboard.c	/^	D_SCROLL,$/;"	e	enum:scancode	file:
+D_SCROLL	userspace/srv_keyboard.c	/^	D_SCROLL,$/;"	e	enum:scancode	file:
+D_SLASH	mnt/srv_keyboard.c	/^	D_SLASH,$/;"	e	enum:scancode	file:
+D_SLASH	userspace/srv_keyboard.c	/^	D_SLASH,$/;"	e	enum:scancode	file:
+D_SPACE	mnt/srv_keyboard.c	/^	D_SPACE,$/;"	e	enum:scancode	file:
+D_SPACE	userspace/srv_keyboard.c	/^	D_SPACE,$/;"	e	enum:scancode	file:
+D_T	mnt/srv_keyboard.c	/^	D_T,$/;"	e	enum:scancode	file:
+D_T	userspace/srv_keyboard.c	/^	D_T,$/;"	e	enum:scancode	file:
+D_TAB	mnt/srv_keyboard.c	/^	D_TAB,$/;"	e	enum:scancode	file:
+D_TAB	userspace/srv_keyboard.c	/^	D_TAB,$/;"	e	enum:scancode	file:
+D_TILDA	mnt/srv_keyboard.c	/^	D_TILDA,$/;"	e	enum:scancode	file:
+D_TILDA	userspace/srv_keyboard.c	/^	D_TILDA,$/;"	e	enum:scancode	file:
+D_U	mnt/srv_keyboard.c	/^	D_U,$/;"	e	enum:scancode	file:
+D_U	userspace/srv_keyboard.c	/^	D_U,$/;"	e	enum:scancode	file:
+D_V	mnt/srv_keyboard.c	/^	D_V,$/;"	e	enum:scancode	file:
+D_V	userspace/srv_keyboard.c	/^	D_V,$/;"	e	enum:scancode	file:
+D_W	mnt/srv_keyboard.c	/^	D_W,$/;"	e	enum:scancode	file:
+D_W	userspace/srv_keyboard.c	/^	D_W,$/;"	e	enum:scancode	file:
+D_X	mnt/srv_keyboard.c	/^	D_X,$/;"	e	enum:scancode	file:
+D_X	userspace/srv_keyboard.c	/^	D_X,$/;"	e	enum:scancode	file:
+D_Y	mnt/srv_keyboard.c	/^	D_Y,$/;"	e	enum:scancode	file:
+D_Y	userspace/srv_keyboard.c	/^	D_Y,$/;"	e	enum:scancode	file:
+D_Z	mnt/srv_keyboard.c	/^	D_Z,$/;"	e	enum:scancode	file:
+D_Z	userspace/srv_keyboard.c	/^	D_Z,$/;"	e	enum:scancode	file:
+EI_NIDENT	kernel/elf.h	6;"	d
+ENTRIES	kernel/palloc.c	5;"	d	file:
+ERR	mnt/srv_keyboard.c	/^	ERR,$/;"	e	enum:scancode	file:
+ERR	userspace/srv_keyboard.c	/^	ERR,$/;"	e	enum:scancode	file:
+ESC	mnt/srv_keyboard.c	/^	ESC,$/;"	e	enum:scancode	file:
+ESC	userspace/srv_keyboard.c	/^	ESC,$/;"	e	enum:scancode	file:
+GDT_ENTRIES	kernel/gdt.c	4;"	d	file:
+GREEN	kernel/screen.c	/^	GREEN,$/;"	e	enum:ScreenColor	file:
+GREEN	mnt/srv_screen.c	/^	GREEN,$/;"	e	enum:ScreenColor	file:
+GREEN	userspace/srv_screen.c	/^	GREEN,$/;"	e	enum:ScreenColor	file:
+IDT_IRQ	kernel/interrupts.c	214;"	d	file:
+IDT_ISR	kernel/interrupts.c	212;"	d	file:
+IMG	Makefile	/^IMG=disk.img$/;"	m
+INT_RETURN	kernel/interrupts.h	6;"	d
+IOAPIC_BASE	kernel/interrupts.h	18;"	d
+IOAPIC_DISABLE	kernel/interrupts.c	10;"	d	file:
+IOAPIC_REDIR_BASE	kernel/interrupts.h	15;"	d
+IRQ	kernel/interrupts.c	213;"	d	file:
+IRQ	kernel/isr.s	/^IRQ 128$/;"	l
+IRQ	kernel/isr.s	/^IRQ 200$/;"	l
+IRQ	kernel/isr.s	/^IRQ 201$/;"	l
+IRQ	kernel/isr.s	/^IRQ 202$/;"	l
+IRQ	kernel/isr.s	/^IRQ 203$/;"	l
+IRQ	kernel/isr.s	/^IRQ 204$/;"	l
+IRQ	kernel/isr.s	/^IRQ 205$/;"	l
+IRQ	kernel/isr.s	/^IRQ 206$/;"	l
+IRQ	kernel/isr.s	/^IRQ 207$/;"	l
+IRQ	kernel/isr.s	/^IRQ 208$/;"	l
+IRQ	kernel/isr.s	/^IRQ 209$/;"	l
+IRQ	kernel/isr.s	/^IRQ 210$/;"	l
+IRQ	kernel/isr.s	/^IRQ 211$/;"	l
+IRQ	kernel/isr.s	/^IRQ 212$/;"	l
+IRQ	kernel/isr.s	/^IRQ 213$/;"	l
+IRQ	kernel/isr.s	/^IRQ 214$/;"	l
+IRQ	kernel/isr.s	/^IRQ 215$/;"	l
+IRQ	kernel/isr.s	/^IRQ 216$/;"	l
+IRQ	kernel/isr.s	/^IRQ 217$/;"	l
+IRQ	kernel/isr.s	/^IRQ 218$/;"	l
+IRQ	kernel/isr.s	/^IRQ 219$/;"	l
+ISR	kernel/interrupts.c	211;"	d	file:
+ISR_EC	kernel/isr.s	/^ISR_EC 10$/;"	l
+ISR_EC	kernel/isr.s	/^ISR_EC 11$/;"	l
+ISR_EC	kernel/isr.s	/^ISR_EC 12$/;"	l
+ISR_EC	kernel/isr.s	/^ISR_EC 13$/;"	l
+ISR_EC	kernel/isr.s	/^ISR_EC 14$/;"	l
+ISR_EC	kernel/isr.s	/^ISR_EC 8$/;"	l
+ISR_NEC	kernel/isr.s	/^ISR_NEC 0$/;"	l
+ISR_NEC	kernel/isr.s	/^ISR_NEC 1$/;"	l
+ISR_NEC	kernel/isr.s	/^ISR_NEC 15$/;"	l
+ISR_NEC	kernel/isr.s	/^ISR_NEC 16$/;"	l
+ISR_NEC	kernel/isr.s	/^ISR_NEC 17$/;"	l
+ISR_NEC	kernel/isr.s	/^ISR_NEC 18$/;"	l
+ISR_NEC	kernel/isr.s	/^ISR_NEC 19$/;"	l
+ISR_NEC	kernel/isr.s	/^ISR_NEC 2$/;"	l
+ISR_NEC	kernel/isr.s	/^ISR_NEC 20$/;"	l
+ISR_NEC	kernel/isr.s	/^ISR_NEC 21$/;"	l
+ISR_NEC	kernel/isr.s	/^ISR_NEC 22$/;"	l
+ISR_NEC	kernel/isr.s	/^ISR_NEC 23$/;"	l
+ISR_NEC	kernel/isr.s	/^ISR_NEC 24$/;"	l
+ISR_NEC	kernel/isr.s	/^ISR_NEC 25$/;"	l
+ISR_NEC	kernel/isr.s	/^ISR_NEC 26$/;"	l
+ISR_NEC	kernel/isr.s	/^ISR_NEC 27$/;"	l
+ISR_NEC	kernel/isr.s	/^ISR_NEC 28$/;"	l
+ISR_NEC	kernel/isr.s	/^ISR_NEC 29$/;"	l
+ISR_NEC	kernel/isr.s	/^ISR_NEC 3$/;"	l
+ISR_NEC	kernel/isr.s	/^ISR_NEC 30$/;"	l
+ISR_NEC	kernel/isr.s	/^ISR_NEC 31$/;"	l
+ISR_NEC	kernel/isr.s	/^ISR_NEC 4$/;"	l
+ISR_NEC	kernel/isr.s	/^ISR_NEC 5$/;"	l
+ISR_NEC	kernel/isr.s	/^ISR_NEC 6$/;"	l
+ISR_NEC	kernel/isr.s	/^ISR_NEC 7$/;"	l
+ISR_NEC	kernel/isr.s	/^ISR_NEC 80$/;"	l
+ISR_NEC	kernel/isr.s	/^ISR_NEC 9$/;"	l
+KERNEL_PAGE_DIR_PHYS	kernel/paging.h	19;"	d
+LAPIC_BASE	kernel/interrupts.h	17;"	d
+LAPIC_EOI	kernel/interrupts.h	10;"	d
+LAPIC_ERR	kernel/interrupts.h	12;"	d
+LAPIC_ID	kernel/interrupts.h	8;"	d
+LAPIC_PERF_MON	kernel/interrupts.h	14;"	d
+LAPIC_SIR	kernel/interrupts.h	11;"	d
+LAPIC_TIMER	kernel/interrupts.h	13;"	d
+LAPIC_TPR	kernel/interrupts.h	9;"	d
+LDFLAGS	kernel/Makefile	/^LDFLAGS=-Tlink.ld -nostdlib -nodefaultlibs$/;"	m
+LDFLAGS	userspace/Makefile	/^LDFLAGS=-L..\/libc\/ -lc -nostdlib -static$/;"	m
+LIGHTBLUE	kernel/screen.c	/^	LIGHTBLUE,$/;"	e	enum:ScreenColor	file:
+LIGHTBLUE	mnt/srv_screen.c	/^	LIGHTBLUE,$/;"	e	enum:ScreenColor	file:
+LIGHTBLUE	userspace/srv_screen.c	/^	LIGHTBLUE,$/;"	e	enum:ScreenColor	file:
+LIGHTBROWN	kernel/screen.c	/^	LIGHTBROWN,$/;"	e	enum:ScreenColor	file:
+LIGHTBROWN	mnt/srv_screen.c	/^	LIGHTBROWN,$/;"	e	enum:ScreenColor	file:
+LIGHTBROWN	userspace/srv_screen.c	/^	LIGHTBROWN,$/;"	e	enum:ScreenColor	file:
+LIGHTCYAN	kernel/screen.c	/^	LIGHTCYAN,$/;"	e	enum:ScreenColor	file:
+LIGHTCYAN	mnt/srv_screen.c	/^	LIGHTCYAN,$/;"	e	enum:ScreenColor	file:
+LIGHTCYAN	userspace/srv_screen.c	/^	LIGHTCYAN,$/;"	e	enum:ScreenColor	file:
+LIGHTGREEN	kernel/screen.c	/^	LIGHTGREEN,$/;"	e	enum:ScreenColor	file:
+LIGHTGREEN	mnt/srv_screen.c	/^	LIGHTGREEN,$/;"	e	enum:ScreenColor	file:
+LIGHTGREEN	userspace/srv_screen.c	/^	LIGHTGREEN,$/;"	e	enum:ScreenColor	file:
+LIGHTGREY	kernel/screen.c	/^	LIGHTGREY,$/;"	e	enum:ScreenColor	file:
+LIGHTGREY	mnt/srv_screen.c	/^	LIGHTGREY,$/;"	e	enum:ScreenColor	file:
+LIGHTGREY	userspace/srv_screen.c	/^	LIGHTGREY,$/;"	e	enum:ScreenColor	file:
+LIGHTMAGENTA	kernel/screen.c	/^	LIGHTMAGENTA,$/;"	e	enum:ScreenColor	file:
+LIGHTMAGENTA	mnt/srv_screen.c	/^	LIGHTMAGENTA,$/;"	e	enum:ScreenColor	file:
+LIGHTMAGENTA	userspace/srv_screen.c	/^	LIGHTMAGENTA,$/;"	e	enum:ScreenColor	file:
+LIGHTRED	kernel/screen.c	/^	LIGHTRED,$/;"	e	enum:ScreenColor	file:
+LIGHTRED	mnt/srv_screen.c	/^	LIGHTRED,$/;"	e	enum:ScreenColor	file:
+LIGHTRED	userspace/srv_screen.c	/^	LIGHTRED,$/;"	e	enum:ScreenColor	file:
+MAGENTA	kernel/screen.c	/^	MAGENTA,$/;"	e	enum:ScreenColor	file:
+MAGENTA	mnt/srv_screen.c	/^	MAGENTA,$/;"	e	enum:ScreenColor	file:
+MAGENTA	userspace/srv_screen.c	/^	MAGENTA,$/;"	e	enum:ScreenColor	file:
+MAX_CPU	kernel/config.h	7;"	d
+MAX_PRIORITIES	kernel/config.h	8;"	d
+MAX_PROCESSES	kernel/config.h	5;"	d
+MAX_QUEUES	kernel/config.h	6;"	d
+MAX_THREADS	kernel/config.h	4;"	d
+MEMALOC_SIZE	kernel/kmalloc.c	4;"	d	file:
+MEMORY	Makefile	/^MEMORY=1024$/;"	m
+MP_config	kernel/cpu.h	/^struct MP_config{$/;"	s
+MP_config::base_tab_len	kernel/cpu.h	/^	uint16 base_tab_len;$/;"	m	struct:MP_config	access:public
+MP_config::checksum	kernel/cpu.h	/^	uint8 checksum;$/;"	m	struct:MP_config	access:public
+MP_config::entry_count	kernel/cpu.h	/^	uint16 entry_count;$/;"	m	struct:MP_config	access:public
+MP_config::ext_tab_checksum	kernel/cpu.h	/^	uint8 ext_tab_checksum;$/;"	m	struct:MP_config	access:public
+MP_config::ext_tab_len	kernel/cpu.h	/^	uint16 ext_tab_len;$/;"	m	struct:MP_config	access:public
+MP_config::lapic_addr	kernel/cpu.h	/^	uint32 lapic_addr;$/;"	m	struct:MP_config	access:public
+MP_config::oem_id	kernel/cpu.h	/^	uint8 oem_id[8];$/;"	m	struct:MP_config	access:public
+MP_config::oem_table_ptr	kernel/cpu.h	/^	uint32 oem_table_ptr;$/;"	m	struct:MP_config	access:public
+MP_config::oem_table_size	kernel/cpu.h	/^	uint16 oem_table_size;$/;"	m	struct:MP_config	access:public
+MP_config::prod_id	kernel/cpu.h	/^	uint8 prod_id[12];$/;"	m	struct:MP_config	access:public
+MP_config::signature	kernel/cpu.h	/^	uint8 signature[4];$/;"	m	struct:MP_config	access:public
+MP_config::specRev	kernel/cpu.h	/^	uint8 specRev;$/;"	m	struct:MP_config	access:public
+MP_float_ptr	kernel/cpu.h	/^struct MP_float_ptr{$/;"	s
+MP_float_ptr::checksum	kernel/cpu.h	/^	uint8 checksum;$/;"	m	struct:MP_float_ptr	access:public
+MP_float_ptr::config	kernel/cpu.h	/^	struct MP_config *config;$/;"	m	struct:MP_float_ptr	typeref:struct:MP_float_ptr::MP_config	access:public
+MP_float_ptr::features	kernel/cpu.h	/^	uint8 features[2];$/;"	m	struct:MP_float_ptr	access:public
+MP_float_ptr::length	kernel/cpu.h	/^	uint8 length;$/;"	m	struct:MP_float_ptr	access:public
+MP_float_ptr::reserved	kernel/cpu.h	/^	uint8 reserved[3];$/;"	m	struct:MP_float_ptr	access:public
+MP_float_ptr::signature	kernel/cpu.h	/^	uint8 signature[4];$/;"	m	struct:MP_float_ptr	access:public
+MP_float_ptr::version	kernel/cpu.h	/^	uint8 version;$/;"	m	struct:MP_float_ptr	access:public
+MP_ioapic_entry	kernel/cpu.h	/^struct MP_ioapic_entry{$/;"	s
+MP_ioapic_entry::addr	kernel/cpu.h	/^	uint32 addr;$/;"	m	struct:MP_ioapic_entry	access:public
+MP_ioapic_entry::enabled	kernel/cpu.h	/^	uint8 enabled;$/;"	m	struct:MP_ioapic_entry	access:public
+MP_ioapic_entry::id	kernel/cpu.h	/^	uint8 id;$/;"	m	struct:MP_ioapic_entry	access:public
+MP_ioapic_entry::type	kernel/cpu.h	/^	uint8 type;$/;"	m	struct:MP_ioapic_entry	access:public
+MP_ioapic_entry::ver	kernel/cpu.h	/^	uint8 ver;$/;"	m	struct:MP_ioapic_entry	access:public
+MP_proc_entry	kernel/cpu.h	/^struct MP_proc_entry{$/;"	s
+MP_proc_entry::cpu_feat_flags	kernel/cpu.h	/^	uint32 cpu_feat_flags;$/;"	m	struct:MP_proc_entry	access:public
+MP_proc_entry::cpu_flags	kernel/cpu.h	/^	uint8 cpu_flags;$/;"	m	struct:MP_proc_entry	access:public
+MP_proc_entry::cpu_sig	kernel/cpu.h	/^	uint8 cpu_sig[4];$/;"	m	struct:MP_proc_entry	access:public
+MP_proc_entry::lapic_id	kernel/cpu.h	/^	uint8 lapic_id;$/;"	m	struct:MP_proc_entry	access:public
+MP_proc_entry::lapic_ver	kernel/cpu.h	/^	uint8 lapic_ver;$/;"	m	struct:MP_proc_entry	access:public
+MP_proc_entry::type	kernel/cpu.h	/^	uint8 type;$/;"	m	struct:MP_proc_entry	access:public
+NODES	kernel/kmalloc.c	6;"	d	file:
+NULL_PROCESS	kernel/multitasking.h	12;"	d
+NULL_THREAD	kernel/multitasking.h	8;"	d
+OBJ	kernel/Makefile	/^OBJ=$(subst .s,.o,$(SRC:.c=.o))$/;"	m
+OBJ	libc/Makefile	/^OBJ=$(subst .s,.o,$(SRC:.c=.o))$/;"	m
+OBJ	userspace/Makefile	/^OBJ=$(subst .c,,$(SRC))$/;"	m
+OPTIMIZE	kernel/Makefile	/^OPTIMIZE=-ggdb$/;"	m
+OPTIMIZE	libc/Makefile	/^OPTIMIZE=-O2$/;"	m
+OPTIMIZE	userspace/Makefile	/^OPTIMIZE=-O2$/;"	m
+PAGES	kernel/config.h	13;"	d
+PAGE_4MBPAGE	kernel/paging.h	14;"	d
+PAGE_ACCESSED	kernel/paging.h	12;"	d
+PAGE_DIRTY	kernel/paging.h	13;"	d
+PAGE_DIR_VIRT_ADDR	kernel/paging.h	17;"	d
+PAGE_GLOBAL	kernel/paging.h	15;"	d
+PAGE_NOCACHE	kernel/paging.h	11;"	d
+PAGE_PRESENT	kernel/paging.h	7;"	d
+PAGE_SHIFT	kernel/config.h	11;"	d
+PAGE_SIZE	kernel/config.h	12;"	d
+PAGE_USERMODE	kernel/paging.h	9;"	d
+PAGE_WRITABLE	kernel/paging.h	8;"	d
+PAGE_WRITETHR	kernel/paging.h	10;"	d
+PRINT_FIELD	kernel/interrupts.c	32;"	d	file:
+PROC_EXISTS	kernel/multitasking.h	13;"	d
+PROC_MAX_QUEUES	kernel/multitasking.h	15;"	d
+PROC_MAX_STREAMS	kernel/config.h	15;"	d
+PROG	userspace/Makefile	/^PROG=$(subst .o,,$(OBJ))$/;"	m
+QUEUE_LEN	kernel/ipc.h	13;"	d
+RED	kernel/screen.c	/^	RED,$/;"	e	enum:ScreenColor	file:
+RED	mnt/srv_screen.c	/^	RED,$/;"	e	enum:ScreenColor	file:
+RED	userspace/srv_screen.c	/^	RED,$/;"	e	enum:ScreenColor	file:
+RSA_SIZE	kernel/memory.c	7;"	d	file:
+SCREEN_HEIGHT	kernel/screen.c	/^static const int SCREEN_HEIGHT = 25;$/;"	v	file:
+SCREEN_HEIGHT	mnt/srv_screen.c	/^static const int SCREEN_HEIGHT = 25;$/;"	v	file:
+SCREEN_HEIGHT	userspace/srv_screen.c	/^static const int SCREEN_HEIGHT = 25;$/;"	v	file:
+SCREEN_WIDTH	kernel/screen.c	/^static const int SCREEN_WIDTH = 80;$/;"	v	file:
+SCREEN_WIDTH	mnt/srv_screen.c	/^static const int SCREEN_WIDTH = 80;$/;"	v	file:
+SCREEN_WIDTH	userspace/srv_screen.c	/^static const int SCREEN_WIDTH = 80;$/;"	v	file:
+SRC	kernel/Makefile	/^SRC=$(wildcard *.[c,s])$/;"	m
+SRC	libc/Makefile	/^SRC=$(wildcard *.[c,s])$/;"	m
+SRC	userspace/Makefile	/^SRC=$(wildcard *.c)$/;"	m
+STACK_OFFSET	kernel/config.h	20;"	d
+SYS_CALL_CONNECT	kernel/system_calls.h	5;"	d
+SYS_CALL_DISCONNECT	kernel/system_calls.h	6;"	d
+SYS_CALL_EXIT	kernel/system_calls.h	4;"	d
+SYS_CALL_MMAP	kernel/system_calls.h	10;"	d
+SYS_CALL_QUERY	kernel/system_calls.h	12;"	d
+SYS_CALL_RECEIVE	kernel/system_calls.h	8;"	d
+SYS_CALL_REGISTER	kernel/system_calls.h	11;"	d
+SYS_CALL_SEND	kernel/system_calls.h	7;"	d
+SYS_CALL_WAIT	kernel/system_calls.h	9;"	d
+Scheduler	kernel/scheduler.c	/^struct Scheduler$/;"	s	file:
+ScreenColor	kernel/screen.c	/^enum ScreenColor{$/;"	g	file:
+ScreenColor	mnt/srv_screen.c	/^enum ScreenColor{$/;"	g	file:
+ScreenColor	userspace/srv_screen.c	/^enum ScreenColor{$/;"	g	file:
+TGT	kernel/Makefile	/^TGT=kernel.img$/;"	m
+TGT	libc/Makefile	/^TGT=libc.a$/;"	m
+THREAD_EXISTS	kernel/multitasking.h	9;"	d
+THREAD_IS_RDY	kernel/multitasking.h	10;"	d
+TMPDIR	Makefile	/^TMPDIR=mnt$/;"	m
+TMPFILE	Makefile	/^TMPFILE=$(IMG).tmp$/;"	m
+TOTAL_KEYS	mnt/srv_keyboard.c	/^	TOTAL_KEYS$/;"	e	enum:scancode	file:
+TOTAL_KEYS	userspace/srv_keyboard.c	/^	TOTAL_KEYS$/;"	e	enum:scancode	file:
+VGA_HIGH_CURSOR	kernel/ports.h	8;"	d
+VGA_LOW_CURSOR	kernel/ports.h	9;"	d
+VGA_PORT_PREPARE	kernel/ports.h	6;"	d
+VGA_PORT_SEND	kernel/ports.h	7;"	d
+VIRT	Makefile	/^VIRT=qemu-system-i386$/;"	m
+VIRT_TO_PHYS	kernel/config.h	18;"	d
+WHITE	kernel/screen.c	/^	WHITE$/;"	e	enum:ScreenColor	file:
+WHITE	mnt/srv_screen.c	/^	WHITE$/;"	e	enum:ScreenColor	file:
+WHITE	userspace/srv_screen.c	/^	WHITE$/;"	e	enum:ScreenColor	file:
+_CONFIG_H	kernel/config.h	2;"	d
+_CPU_H	kernel/cpu.h	2;"	d
+_DRIVERS_H	kernel/drivers.h	2;"	d
+_ELF_H	kernel/elf.h	2;"	d
+_GDT_H	kernel/gdt.h	2;"	d
+_INTERRUPTS_H	kernel/interrupts.h	2;"	d
+_IPC_H	kernel/ipc.h	2;"	d
+_KMALLOC_H	kernel/kmalloc.h	2;"	d
+_LOCKS_H	kernel/locks.h	2;"	d
+_MBOOT_H	kernel/mboot.h	2;"	d
+_MEMORY_H	kernel/memory.h	2;"	d
+_MULTITASKING_H	kernel/multitasking.h	2;"	d
+_PAGING_H	kernel/paging.h	2;"	d
+_PALLOC_H	kernel/palloc.h	2;"	d
+_PORTS_H	kernel/ports.h	2;"	d
+_SCHEDULER_H	kernel/scheduler.h	2;"	d
+_SCREEN_H	kernel/screen.h	2;"	d
+_STDLIB_H	libc/stdlib.h	2;"	d
+_SYSCALL	kernel/syscall.h	2;"	d
+_SYSTEM_CALLS_H	kernel/system_calls.h	2;"	d
+_UTIL_H	kernel/util.h	2;"	d
+_start	libc/entry.c	/^void _start(void)$/;"	f	signature:(void)
+access	kernel/gdt.c	/^	uint8 access;$/;"	m	struct:gdt_entry	file:	access:public
+addr	kernel/cpu.h	/^	uint32 addr;$/;"	m	struct:MP_ioapic_entry	access:public
+addr	kernel/kmalloc.c	/^	uint32 addr;$/;"	m	struct:mem_node	file:	access:public
+allocator	kernel/kmalloc.c	/^struct mem_allocator allocator;$/;"	v	typeref:struct:mem_allocator
+apic_init	kernel/interrupts.c	/^void apic_init()$/;"	f
+apic_init	kernel/interrupts.h	/^void apic_init();$/;"	p	signature:()
+base	kernel/gdt.c	/^	uint32 base;$/;"	m	struct:gdt	file:	access:public
+base	kernel/interrupts.c	/^	uint32 base;$/;"	m	struct:idt	file:	access:public
+base	kernel/interrupts.c	/^static int base = 0;$/;"	v	file:
+base_high	kernel/gdt.c	/^	uint8 base_high;$/;"	m	struct:gdt_entry	file:	access:public
+base_high	kernel/interrupts.c	/^	uint16 base_high;$/;"	m	struct:idt_entry	file:	access:public
+base_high	kernel/mboot.h	/^	uint32 base_high;$/;"	m	struct:mmap	access:public
+base_low	kernel/gdt.c	/^	uint16 base_low;$/;"	m	struct:gdt_entry	file:	access:public
+base_low	kernel/interrupts.c	/^	uint16 base_low;$/;"	m	struct:idt_entry	file:	access:public
+base_low	kernel/mboot.h	/^	uint32 base_low;$/;"	m	struct:mmap	access:public
+base_middle	kernel/gdt.c	/^	uint8 base_middle;$/;"	m	struct:gdt_entry	file:	access:public
+base_tab_len	kernel/cpu.h	/^	uint16 base_tab_len;$/;"	m	struct:MP_config	access:public
+boot_device	kernel/mboot.c	/^	uint32 boot_device;$/;"	m	struct:mboot	file:	access:public
+bss	kernel/multitasking.h	/^	struct proc_section bss;$/;"	m	struct:process	typeref:struct:process::proc_section	access:public
+buf	kernel/ipc.h	/^	uint8 buf[QUEUE_LEN];$/;"	m	struct:msg_queue	access:public
+call_kernel	kernel/entry.s	/^call_kernel:$/;"	l
+checksum	kernel/cpu.h	/^	uint8 checksum;$/;"	m	struct:MP_config	access:public
+checksum	kernel/cpu.h	/^	uint8 checksum;$/;"	m	struct:MP_float_ptr	access:public
+clear_line	kernel/screen.c	/^static void clear_line(uint8 lineno)$/;"	f	file:	signature:(uint8 lineno)
+clear_line	mnt/srv_screen.c	/^static void clear_line(uint8 lineno)$/;"	f	file:	signature:(uint8 lineno)
+clear_line	userspace/srv_screen.c	/^static void clear_line(uint8 lineno)$/;"	f	file:	signature:(uint8 lineno)
+cmdline	kernel/mboot.c	/^	uint32 cmdline;$/;"	m	struct:mboot	file:	access:public
+common_handler	kernel/interrupts.c	/^void common_handler(struct thread_state *regs)$/;"	f	signature:(struct thread_state *regs)
+config	kernel/cpu.h	/^	struct MP_config *config;$/;"	m	struct:MP_float_ptr	typeref:struct:MP_float_ptr::MP_config	access:public
+connect	libc/stdlib.h	/^stream connect(int pid);$/;"	p	signature:(int pid)
+connect	libc/syscalls.c	/^stream connect(int pid)$/;"	f	signature:(int pid)
+cpu_feat_flags	kernel/cpu.h	/^	uint32 cpu_feat_flags;$/;"	m	struct:MP_proc_entry	access:public
+cpu_flags	kernel/cpu.h	/^	uint8 cpu_flags;$/;"	m	struct:MP_proc_entry	access:public
+cpu_sig	kernel/cpu.h	/^	uint8 cpu_sig[4];$/;"	m	struct:MP_proc_entry	access:public
+cpuid	kernel/cpu.c	/^uint32 cpuid()$/;"	f
+cpuid	kernel/cpu.h	/^uint32 cpuid();$/;"	p	signature:()
+cr3	kernel/gdt.c	/^	uint32 cr3;$/;"	m	struct:tss_entry	file:	access:public
+cs	kernel/gdt.c	/^	uint32 cs;$/;"	m	struct:tss_entry	file:	access:public
+cs	kernel/interrupts.h	/^	uint32 eip, cs, eflags, useresp, ss;$/;"	m	struct:thread_state	access:public
+cur_style	kernel/screen.c	/^static uint8 cur_style = (BLACK << 4 | LIGHTGREY);$/;"	v	file:
+cur_style	mnt/srv_screen.c	/^static uint8 cur_style = (BLACK << 4 | LIGHTGREY);$/;"	v	file:
+cur_style	userspace/srv_screen.c	/^static uint8 cur_style = (BLACK << 4 | LIGHTGREY);$/;"	v	file:
+cur_thread	kernel/multitasking.h	/^	thread_id cur_thread;$/;"	m	struct:shed_data	access:public
+cur_x	kernel/screen.c	/^static uint8 cur_x = 0;$/;"	v	file:
+cur_x	mnt/srv_screen.c	/^static uint8 cur_x = 0;$/;"	v	file:
+cur_x	userspace/srv_screen.c	/^static uint8 cur_x = 0;$/;"	v	file:
+cur_y	kernel/screen.c	/^static uint8 cur_y = 0;$/;"	v	file:
+cur_y	mnt/srv_screen.c	/^static uint8 cur_y = 0;$/;"	v	file:
+cur_y	userspace/srv_screen.c	/^static uint8 cur_y = 0;$/;"	v	file:
+current_priority	kernel/multitasking.h	/^	uint32 current_priority;$/;"	m	struct:thread	access:public
+data	kernel/multitasking.h	/^	struct proc_section data;$/;"	m	struct:process	typeref:struct:process::proc_section	access:public
+driver	kernel/drivers.h	/^struct driver$/;"	s
+driver::name	kernel/drivers.h	/^	char name[32];$/;"	m	struct:driver	access:public
+driver::pid	kernel/drivers.h	/^	proc_id pid;$/;"	m	struct:driver	access:public
+drivers	kernel/drivers.c	/^struct driver drivers[128];$/;"	v	typeref:struct:driver
+drivers_init	kernel/drivers.c	/^void drivers_init()$/;"	f
+drivers_init	kernel/drivers.h	/^void drivers_init();$/;"	p	signature:()
+ds	kernel/gdt.c	/^	uint32 ds;$/;"	m	struct:tss_entry	file:	access:public
+ds	kernel/interrupts.h	/^	uint32 ds;$/;"	m	struct:thread_state	access:public
+dump_idt	kernel/interrupts.c	/^void dump_idt()$/;"	f
+e_ehsize	kernel/elf.h	/^	uint16 e_ehsize;$/;"	m	struct:elf_header	access:public
+e_entry	kernel/elf.h	/^	uint32 e_entry;$/;"	m	struct:elf_header	access:public
+e_flags	kernel/elf.h	/^	uint32 e_flags;$/;"	m	struct:elf_header	access:public
+e_ident	kernel/elf.h	/^	unsigned char e_ident[EI_NIDENT];$/;"	m	struct:elf_header	access:public
+e_machine	kernel/elf.h	/^	uint16 e_machine;$/;"	m	struct:elf_header	access:public
+e_phentsize	kernel/elf.h	/^	uint16 e_phentsize;$/;"	m	struct:elf_header	access:public
+e_phnum	kernel/elf.h	/^	uint16 e_phnum;$/;"	m	struct:elf_header	access:public
+e_phoff	kernel/elf.h	/^	uint32 e_phoff;$/;"	m	struct:elf_header	access:public
+e_shentsize	kernel/elf.h	/^	uint16 e_shentsize;$/;"	m	struct:elf_header	access:public
+e_shnum	kernel/elf.h	/^	uint16 e_shnum;$/;"	m	struct:elf_header	access:public
+e_shoff	kernel/elf.h	/^	uint32 e_shoff;$/;"	m	struct:elf_header	access:public
+e_shtrndx	kernel/elf.h	/^	uint16 e_shtrndx;$/;"	m	struct:elf_header	access:public
+e_type	kernel/elf.h	/^	uint16 e_type;$/;"	m	struct:elf_header	access:public
+e_version	kernel/elf.h	/^	uint32 e_version;$/;"	m	struct:elf_header	access:public
+eax	kernel/gdt.c	/^	uint32 eax;$/;"	m	struct:tss_entry	file:	access:public
+eax	kernel/interrupts.h	/^	uint32 edi, esi, ebp, esp, ebx, edx, ecx, eax;$/;"	m	struct:thread_state	access:public
+ebp	kernel/gdt.c	/^	uint32 ebp;$/;"	m	struct:tss_entry	file:	access:public
+ebp	kernel/interrupts.h	/^	uint32 edi, esi, ebp, esp, ebx, edx, ecx, eax;$/;"	m	struct:thread_state	access:public
+ebp	kernel/multitasking.h	/^	uint32 ebp;$/;"	m	struct:thread	access:public
+ebx	kernel/gdt.c	/^	uint32 ebx;$/;"	m	struct:tss_entry	file:	access:public
+ebx	kernel/interrupts.h	/^	uint32 edi, esi, ebp, esp, ebx, edx, ecx, eax;$/;"	m	struct:thread_state	access:public
+ecx	kernel/gdt.c	/^	uint32 ecx;$/;"	m	struct:tss_entry	file:	access:public
+ecx	kernel/interrupts.h	/^	uint32 edi, esi, ebp, esp, ebx, edx, ecx, eax;$/;"	m	struct:thread_state	access:public
+edi	kernel/gdt.c	/^	uint32 edi;$/;"	m	struct:tss_entry	file:	access:public
+edi	kernel/interrupts.h	/^	uint32 edi, esi, ebp, esp, ebx, edx, ecx, eax;$/;"	m	struct:thread_state	access:public
+edx	kernel/gdt.c	/^	uint32 edx;$/;"	m	struct:tss_entry	file:	access:public
+edx	kernel/interrupts.h	/^	uint32 edi, esi, ebp, esp, ebx, edx, ecx, eax;$/;"	m	struct:thread_state	access:public
+eflags	kernel/gdt.c	/^	uint32 eflags;$/;"	m	struct:tss_entry	file:	access:public
+eflags	kernel/interrupts.h	/^	uint32 eip, cs, eflags, useresp, ss;$/;"	m	struct:thread_state	access:public
+eip	kernel/gdt.c	/^	uint32 eip;$/;"	m	struct:tss_entry	file:	access:public
+eip	kernel/interrupts.h	/^	uint32 eip, cs, eflags, useresp, ss;$/;"	m	struct:thread_state	access:public
+eip	kernel/multitasking.h	/^	uint32 eip;$/;"	m	struct:thread	access:public
+elf_header	kernel/elf.h	/^struct elf_header{$/;"	s
+elf_header::e_ehsize	kernel/elf.h	/^	uint16 e_ehsize;$/;"	m	struct:elf_header	access:public
+elf_header::e_entry	kernel/elf.h	/^	uint32 e_entry;$/;"	m	struct:elf_header	access:public
+elf_header::e_flags	kernel/elf.h	/^	uint32 e_flags;$/;"	m	struct:elf_header	access:public
+elf_header::e_ident	kernel/elf.h	/^	unsigned char e_ident[EI_NIDENT];$/;"	m	struct:elf_header	access:public
+elf_header::e_machine	kernel/elf.h	/^	uint16 e_machine;$/;"	m	struct:elf_header	access:public
+elf_header::e_phentsize	kernel/elf.h	/^	uint16 e_phentsize;$/;"	m	struct:elf_header	access:public
+elf_header::e_phnum	kernel/elf.h	/^	uint16 e_phnum;$/;"	m	struct:elf_header	access:public
+elf_header::e_phoff	kernel/elf.h	/^	uint32 e_phoff;$/;"	m	struct:elf_header	access:public
+elf_header::e_shentsize	kernel/elf.h	/^	uint16 e_shentsize;$/;"	m	struct:elf_header	access:public
+elf_header::e_shnum	kernel/elf.h	/^	uint16 e_shnum;$/;"	m	struct:elf_header	access:public
+elf_header::e_shoff	kernel/elf.h	/^	uint32 e_shoff;$/;"	m	struct:elf_header	access:public
+elf_header::e_shtrndx	kernel/elf.h	/^	uint16 e_shtrndx;$/;"	m	struct:elf_header	access:public
+elf_header::e_type	kernel/elf.h	/^	uint16 e_type;$/;"	m	struct:elf_header	access:public
+elf_header::e_version	kernel/elf.h	/^	uint32 e_version;$/;"	m	struct:elf_header	access:public
+elf_load	kernel/elf.c	/^proc_id elf_load(uint8 *buf)$/;"	f	signature:(uint8 *buf)
+elf_load	kernel/elf.h	/^proc_id elf_load(uint8 *buf);$/;"	p	signature:(uint8 *buf)
+elf_section	kernel/elf.h	/^struct elf_section{$/;"	s
+elf_section::sh_addr	kernel/elf.h	/^	uint32 sh_addr;$/;"	m	struct:elf_section	access:public
+elf_section::sh_addralign	kernel/elf.h	/^	uint32 sh_addralign;$/;"	m	struct:elf_section	access:public
+elf_section::sh_entsize	kernel/elf.h	/^	uint32 sh_entsize;$/;"	m	struct:elf_section	access:public
+elf_section::sh_flags	kernel/elf.h	/^	uint32 sh_flags;$/;"	m	struct:elf_section	access:public
+elf_section::sh_info	kernel/elf.h	/^	uint32 sh_info;$/;"	m	struct:elf_section	access:public
+elf_section::sh_link	kernel/elf.h	/^	uint32 sh_link;$/;"	m	struct:elf_section	access:public
+elf_section::sh_name	kernel/elf.h	/^	uint32 sh_name;$/;"	m	struct:elf_section	access:public
+elf_section::sh_offset	kernel/elf.h	/^	uint32 sh_offset;$/;"	m	struct:elf_section	access:public
+elf_section::sh_size	kernel/elf.h	/^	uint32 sh_size;$/;"	m	struct:elf_section	access:public
+elf_section::sh_type	kernel/elf.h	/^	uint32 sh_type;$/;"	m	struct:elf_section	access:public
+enabled	kernel/cpu.h	/^	uint8 enabled;$/;"	m	struct:MP_ioapic_entry	access:public
+entry_count	kernel/cpu.h	/^	uint16 entry_count;$/;"	m	struct:MP_config	access:public
+err	kernel/interrupts.h	/^	uint32 int_id, err;$/;"	m	struct:thread_state	access:public
+es	kernel/gdt.c	/^	uint32 es;$/;"	m	struct:tss_entry	file:	access:public
+esi	kernel/gdt.c	/^	uint32 esi;$/;"	m	struct:tss_entry	file:	access:public
+esi	kernel/interrupts.h	/^	uint32 edi, esi, ebp, esp, ebx, edx, ecx, eax;$/;"	m	struct:thread_state	access:public
+esp	kernel/gdt.c	/^	uint32 esp;$/;"	m	struct:tss_entry	file:	access:public
+esp	kernel/interrupts.h	/^	uint32 edi, esi, ebp, esp, ebx, edx, ecx, eax;$/;"	m	struct:thread_state	access:public
+esp	kernel/multitasking.h	/^	uint32 esp;$/;"	m	struct:thread	access:public
+esp0	kernel/gdt.c	/^	uint32 esp0;$/;"	m	struct:tss_entry	file:	access:public
+esp1	kernel/gdt.c	/^	uint32 esp1;$/;"	m	struct:tss_entry	file:	access:public
+esp2	kernel/gdt.c	/^	uint32 esp2;$/;"	m	struct:tss_entry	file:	access:public
+exit	libc/stdlib.h	/^void exit(int error_code);$/;"	p	signature:(int error_code)
+exit	libc/syscalls.c	/^void exit(int error_code)$/;"	f	signature:(int error_code)
+ext_tab_checksum	kernel/cpu.h	/^	uint8 ext_tab_checksum;$/;"	m	struct:MP_config	access:public
+ext_tab_len	kernel/cpu.h	/^	uint16 ext_tab_len;$/;"	m	struct:MP_config	access:public
+f	Makefile	/^	dd if=\/dev\/zero of=$(TMPFILE) bs=512 count=40920$/;"	m
+fake_gdt	kernel/entry.s	/^fake_gdt:$/;"	l
+features	kernel/cpu.h	/^	uint8 features[2];$/;"	m	struct:MP_float_ptr	access:public
+find_next_pid	kernel/multitasking.c	/^proc_id find_next_pid()$/;"	f
+find_next_tid	kernel/multitasking.c	/^thread_id find_next_tid()$/;"	f
+flags	kernel/interrupts.c	/^	uint8 flags;$/;"	m	struct:idt_entry	file:	access:public
+flags	kernel/mboot.c	/^	uint32 flags;$/;"	m	struct:mboot	file:	access:public
+flush	kernel/gdt_asm.s	/^flush:$/;"	l
+fs	kernel/gdt.c	/^	uint32 fs;$/;"	m	struct:tss_entry	file:	access:public
+gdt	kernel/entry.s	/^gdt:$/;"	l
+gdt	kernel/gdt.c	/^static struct gdt_entry gdt[GDT_ENTRIES];$/;"	v	typeref:struct:gdt_entry	file:
+gdt	kernel/gdt.c	/^struct gdt$/;"	s	file:
+gdt::base	kernel/gdt.c	/^	uint32 base;$/;"	m	struct:gdt	file:	access:public
+gdt::size	kernel/gdt.c	/^	uint16 size;$/;"	m	struct:gdt	file:	access:public
+gdt_end	kernel/entry.s	/^gdt_end:$/;"	l
+gdt_entry	kernel/gdt.c	/^struct gdt_entry$/;"	s	file:
+gdt_entry::access	kernel/gdt.c	/^	uint8 access;$/;"	m	struct:gdt_entry	file:	access:public
+gdt_entry::base_high	kernel/gdt.c	/^	uint8 base_high;$/;"	m	struct:gdt_entry	file:	access:public
+gdt_entry::base_low	kernel/gdt.c	/^	uint16 base_low;$/;"	m	struct:gdt_entry	file:	access:public
+gdt_entry::base_middle	kernel/gdt.c	/^	uint8 base_middle;$/;"	m	struct:gdt_entry	file:	access:public
+gdt_entry::granularity	kernel/gdt.c	/^	uint8 granularity;$/;"	m	struct:gdt_entry	file:	access:public
+gdt_entry::size_low	kernel/gdt.c	/^	uint16 size_low;$/;"	m	struct:gdt_entry	file:	access:public
+gdt_flush	kernel/gdt.c	/^extern void gdt_flush(uint32 ptr);$/;"	p	file:	signature:(uint32 ptr)
+gdt_flush	kernel/gdt_asm.s	/^gdt_flush:$/;"	l
+gdt_init	kernel/gdt.c	/^void gdt_init()$/;"	f
+gdt_init	kernel/gdt.h	/^void gdt_init();$/;"	p	signature:()
+gdt_set	kernel/gdt.c	/^static void gdt_set(int32 id, uint32 base, uint32 limit, uint8 access, uint8 gran)$/;"	f	file:	signature:(int32 id, uint32 base, uint32 limit, uint8 access, uint8 gran)
+gdtr	kernel/gdt.c	/^static struct gdt gdtr;$/;"	v	typeref:struct:gdt	file:
+get_ascii_char	mnt/srv_keyboard.c	/^char get_ascii_char(char scancode)$/;"	f	signature:(char scancode)
+get_ascii_char	userspace/srv_keyboard.c	/^char get_ascii_char(char scancode)$/;"	f	signature:(char scancode)
+granularity	kernel/gdt.c	/^	uint8 granularity;$/;"	m	struct:gdt_entry	file:	access:public
+gs	kernel/gdt.c	/^	uint32 gs;$/;"	m	struct:tss_entry	file:	access:public
+handler	kernel/interrupts.h	/^typedef void (*handler)(struct thread_state regs);$/;"	t
+handlers	kernel/drivers.c	/^int handlers[128];$/;"	v
+head	kernel/multitasking.h	/^	thread_id head;$/;"	m	struct:shed_queue	access:public
+header	kernel/ipc.h	/^	struct msg_queue_header header;$/;"	m	struct:msg_queue	typeref:struct:msg_queue::msg_queue_header	access:public
+heads	kernel/kmalloc.c	/^	uint16 heads[ALOCATORS];$/;"	m	struct:mem_allocator	file:	access:public
+heap	kernel/memory.c	/^uint32 heap;$/;"	v
+id	kernel/cpu.h	/^	uint8 id;$/;"	m	struct:MP_ioapic_entry	access:public
+idt	kernel/interrupts.c	/^struct idt {$/;"	s	file:
+idt::base	kernel/interrupts.c	/^	uint32 base;$/;"	m	struct:idt	file:	access:public
+idt::size	kernel/interrupts.c	/^	uint16 size;$/;"	m	struct:idt	file:	access:public
+idt_entries	kernel/interrupts.c	/^static struct idt_entry idt_entries[256];$/;"	v	typeref:struct:idt_entry	file:
+idt_entry	kernel/interrupts.c	/^struct idt_entry{$/;"	s	file:
+idt_entry::base_high	kernel/interrupts.c	/^	uint16 base_high;$/;"	m	struct:idt_entry	file:	access:public
+idt_entry::base_low	kernel/interrupts.c	/^	uint16 base_low;$/;"	m	struct:idt_entry	file:	access:public
+idt_entry::flags	kernel/interrupts.c	/^	uint8 flags;$/;"	m	struct:idt_entry	file:	access:public
+idt_entry::selector	kernel/interrupts.c	/^	uint16 selector;$/;"	m	struct:idt_entry	file:	access:public
+idt_entry::zero	kernel/interrupts.c	/^	uint8 zero;$/;"	m	struct:idt_entry	file:	access:public
+idt_flush	kernel/gdt_asm.s	/^idt_flush:$/;"	l
+idt_flush	kernel/interrupts.c	/^extern void idt_flush(uint32 ptr);$/;"	p	file:	signature:(uint32 ptr)
+idt_init	kernel/interrupts.c	/^void idt_init()$/;"	f
+idt_init	kernel/interrupts.h	/^void idt_init();$/;"	p	signature:()
+idt_set	kernel/interrupts.c	/^void idt_set(uint16 id, uint32 base, uint8 flags)$/;"	f	signature:(uint16 id, uint32 base, uint8 flags)
+in_use	kernel/ipc.h	/^	uint8 in_use;$/;"	m	struct:queue_descr	access:public
+init	kernel/scheduler.c	/^static void init(struct Scheduler *this)$/;"	f	file:	signature:(struct Scheduler *this)
+int16	kernel/config.h	/^typedef signed short int16;$/;"	t
+int2str	kernel/util.c	/^int int2str(char *str, unsigned int n, int base) {$/;"	f	signature:(char *str, unsigned int n, int base)
+int2str	libc/stdlib.h	/^int int2str(char *str, unsigned int n, int base);$/;"	p	signature:(char *str, unsigned int n, int base)
+int2str	libc/utils.c	/^int int2str(char *str, unsigned int n, int base)$/;"	f	signature:(char *str, unsigned int n, int base)
+int32	kernel/config.h	/^typedef signed int int32;$/;"	t
+int8	kernel/config.h	/^typedef signed char int8;$/;"	t
+int_handler	kernel/interrupts.h	/^void int_handler(struct thread_state regs);$/;"	p	signature:(struct thread_state regs)
+int_id	kernel/interrupts.h	/^	uint32 int_id, err;$/;"	m	struct:thread_state	access:public
+ioapic_init	kernel/interrupts.c	/^void ioapic_init()$/;"	f
+ioapic_init	kernel/interrupts.h	/^void ioapic_init();$/;"	p	signature:()
+ioapic_map	kernel/interrupts.c	/^static void ioapic_map(uint32 irq, uint32 vector)$/;"	f	file:	signature:(uint32 irq, uint32 vector)
+ioapic_set	kernel/interrupts.c	/^static void ioapic_set(uint32 reg, uint32 value)$/;"	f	file:	signature:(uint32 reg, uint32 value)
+iomap_base	kernel/gdt.c	/^	uint16 iomap_base;$/;"	m	struct:tss_entry	file:	access:public
+ipc_connect	kernel/ipc.c	/^uint8 ipc_connect(proc_id p1, proc_id p2)$/;"	f	signature:(proc_id p1, proc_id p2)
+ipc_connect	kernel/ipc.h	/^uint8 ipc_connect(proc_id p1, proc_id p2);$/;"	p	signature:(proc_id p1, proc_id p2)
+ipc_empty	kernel/ipc.c	/^int ipc_empty(queue_id id)$/;"	f	signature:(queue_id id)
+ipc_empty	kernel/ipc.h	/^int ipc_empty(queue_id id);$/;"	p	signature:(queue_id id)
+ipc_receive	kernel/ipc.c	/^int ipc_receive(queue_id id, uint8 *ptr, uint16 size)$/;"	f	signature:(queue_id id, uint8 *ptr, uint16 size)
+ipc_receive	kernel/ipc.h	/^int ipc_receive(queue_id id, uint8 *ptr, uint16 size);$/;"	p	signature:(queue_id id, uint8 *ptr, uint16 size)
+ipc_send	kernel/ipc.c	/^int ipc_send(queue_id id, uint8 *ptr, uint16 size)$/;"	f	signature:(queue_id id, uint8 *ptr, uint16 size)
+ipc_send	kernel/ipc.h	/^int ipc_send(queue_id id, uint8 *ptr, uint16 size);$/;"	p	signature:(queue_id id, uint8 *ptr, uint16 size)
+iptr	kernel/interrupts.c	/^static volatile struct idt iptr;$/;"	v	typeref:struct:idt	file:
+irq_common	kernel/isr.s	/^irq_common:$/;"	l
+irq_handler	kernel/interrupts.c	/^void irq_handler(struct thread_state regs)$/;"	f	signature:(struct thread_state regs)
+irq_handler	kernel/interrupts.h	/^void irq_handler(struct thread_state regs);$/;"	p	signature:(struct thread_state regs)
+isr_common	kernel/isr.s	/^isr_common:$/;"	l
+isr_handler	kernel/interrupts.c	/^void isr_handler(struct thread_state regs)$/;"	f	signature:(struct thread_state regs)
+kbrk	kernel/memory.c	/^void *kbrk(uint32 pages)$/;"	f	signature:(uint32 pages)
+kbrk	kernel/memory.h	/^void *kbrk(uint32 pages);$/;"	p	signature:(uint32 pages)
+kernel_size	kernel/memory.h	/^inline uint32 kernel_size();$/;"	p	signature:()
+kernel_stack	kernel/multitasking.h	/^	uint32 kernel_stack;$/;"	m	struct:thread	access:public
+kmain	kernel/kmain.c	/^void kmain(struct mboot *mboot, unsigned int magic)$/;"	f	signature:(struct mboot *mboot, unsigned int magic)
+kmalloc	kernel/memory.c	/^void *kmalloc(uint32 size)$/;"	f	signature:(uint32 size)
+kmalloc	kernel/memory.h	/^void *kmalloc(uint32 size);$/;"	p	signature:(uint32 size)
+kmemcpy	kernel/util.c	/^void *kmemcpy(uint8 *destination, const uint8 *source, uint32 count)$/;"	f	signature:(uint8 *destination, const uint8 *source, uint32 count)
+kmemcpy	kernel/util.h	/^void *kmemcpy(uint8 *destination, const uint8 *source, uint32 count);$/;"	p	signature:(uint8 *destination, const uint8 *source, uint32 count)
+kmemset	kernel/util.c	/^void *kmemset(uint8 *ptr, uint8 value, uint32 count)$/;"	f	signature:(uint8 *ptr, uint8 value, uint32 count)
+kmemset	kernel/util.h	/^void *kmemset(uint8 *ptr, uint8 value, uint32 count);$/;"	p	signature:(uint8 *ptr, uint8 value, uint32 count)
+kmemset16	kernel/util.c	/^void *kmemset16(uint16 *ptr, uint16 value, uint32 count)$/;"	f	signature:(uint16 *ptr, uint16 value, uint32 count)
+kmemset16	kernel/util.h	/^void *kmemset16(uint16 *ptr, uint16 value, uint32 count);$/;"	p	signature:(uint16 *ptr, uint16 value, uint32 count)
+kmemset32	kernel/util.c	/^void *kmemset32(uint32 *ptr, uint32 value, uint32 count)$/;"	f	signature:(uint32 *ptr, uint32 value, uint32 count)
+kmemset32	kernel/util.h	/^void *kmemset32(uint32 *ptr, uint32 value, uint32 count);$/;"	p	signature:(uint32 *ptr, uint32 value, uint32 count)
+kpage_dir	kernel/entry.s	/^kpage_dir:$/;"	l
+kpage_table	kernel/entry.s	/^kpage_table:$/;"	l
+kprintf	kernel/util.c	/^char *kprintf(char *str, const char *format, ...) {$/;"	f	signature:(char *str, const char *format, ...)
+kprintf	kernel/util.h	/^char *kprintf(char *str, const char *format, ...);$/;"	p	signature:(char *str, const char *format, ...)
+kstrcmp	kernel/util.c	/^int kstrcmp(char *str1, char *str2){$/;"	f	signature:(char *str1, char *str2)
+kstrcmp	kernel/util.h	/^int kstrcmp(char *str1, char *str2);$/;"	p	signature:(char *str1, char *str2)
+kstrncpy	kernel/util.c	/^void *kstrncpy(uint8 *destination, const uint8 *source, uint32 count)$/;"	f	signature:(uint8 *destination, const uint8 *source, uint32 count)
+kstrncpy	kernel/util.h	/^void *kstrncpy(uint8 *destination, const uint8 *source, uint32 count);$/;"	p	signature:(uint8 *destination, const uint8 *source, uint32 count)
+lapic_addr	kernel/cpu.h	/^	uint32 lapic_addr;$/;"	m	struct:MP_config	access:public
+lapic_get	kernel/interrupts.c	/^int lapic_get(uint32 reg)$/;"	f	signature:(uint32 reg)
+lapic_get	kernel/interrupts.h	/^int lapic_get(uint32 reg);$/;"	p	signature:(uint32 reg)
+lapic_id	kernel/cpu.h	/^	uint8 lapic_id;$/;"	m	struct:MP_proc_entry	access:public
+lapic_init	kernel/interrupts.c	/^void lapic_init()$/;"	f
+lapic_set	kernel/interrupts.c	/^void lapic_set(uint32 reg, uint32 value)$/;"	f	signature:(uint32 reg, uint32 value)
+lapic_set	kernel/interrupts.h	/^void lapic_set(uint32 reg, uint32 value);$/;"	p	signature:(uint32 reg, uint32 value)
+lapic_ver	kernel/cpu.h	/^	uint8 lapic_ver;$/;"	m	struct:MP_proc_entry	access:public
+ldt	kernel/gdt.c	/^	uint32 ldt;$/;"	m	struct:tss_entry	file:	access:public
+length	kernel/cpu.h	/^	uint8 length;$/;"	m	struct:MP_float_ptr	access:public
+length_high	kernel/mboot.h	/^	uint32 length_high;$/;"	m	struct:mmap	access:public
+length_low	kernel/mboot.h	/^	uint32 length_low;$/;"	m	struct:mmap	access:public
+list_clean	kernel/kmalloc.c	/^static void list_clean(struct mem_allocator *alloc, uint8 list)$/;"	f	file:	signature:(struct mem_allocator *alloc, uint8 list)
+list_clean	kernel/kmalloc.c	/^static void list_clean(struct mem_allocator *alloc, uint8 list);$/;"	p	file:	signature:(struct mem_allocator *alloc, uint8 list)
+list_get	kernel/kmalloc.c	/^static uint32 list_get(struct mem_allocator *alloc, uint16 list)$/;"	f	file:	signature:(struct mem_allocator *alloc, uint16 list)
+list_put	kernel/kmalloc.c	/^static void list_put(struct mem_allocator *alloc, uint8 list, uint16 new_node)$/;"	f	file:	signature:(struct mem_allocator *alloc, uint8 list, uint16 new_node)
+list_size	kernel/kmalloc.c	/^static inline uint32 list_size(uint8 list)$/;"	f	file:	signature:(uint8 list)
+lock	kernel/interrupts.c	/^uint32 lock;$/;"	v
+loop	kernel/entry.s	/^loop:$/;"	l
+main	libc/entry.c	/^extern void main(void);$/;"	p	file:	signature:(void)
+main	mnt/srv_keyboard.c	/^int main()$/;"	f
+main	mnt/srv_keyboard2.c	/^int main()$/;"	f
+main	mnt/srv_loop.c	/^int main()$/;"	f
+main	mnt/srv_screen.c	/^int main()$/;"	f
+main	userspace/srv_keyboard.c	/^int main()$/;"	f
+main	userspace/srv_keyboard2.c	/^int main()$/;"	f
+main	userspace/srv_loop.c	/^int main()$/;"	f
+main	userspace/srv_screen.c	/^int main()$/;"	f
+mboot	kernel/entry.s	/^mboot:$/;"	l
+mboot	kernel/mboot.c	/^struct mboot {$/;"	s	file:
+mboot::boot_device	kernel/mboot.c	/^	uint32 boot_device;$/;"	m	struct:mboot	file:	access:public
+mboot::cmdline	kernel/mboot.c	/^	uint32 cmdline;$/;"	m	struct:mboot	file:	access:public
+mboot::flags	kernel/mboot.c	/^	uint32 flags;$/;"	m	struct:mboot	file:	access:public
+mboot::mem_lower	kernel/mboot.c	/^	uint32 mem_lower;$/;"	m	struct:mboot	file:	access:public
+mboot::mem_upper	kernel/mboot.c	/^	uint32 mem_upper;$/;"	m	struct:mboot	file:	access:public
+mboot::mmap_addr	kernel/mboot.c	/^	struct mmap *mmap_addr;$/;"	m	struct:mboot	typeref:struct:mboot::mmap	file:	access:public
+mboot::mmap_length	kernel/mboot.c	/^	uint32 mmap_length;$/;"	m	struct:mboot	file:	access:public
+mboot::mods_addr	kernel/mboot.c	/^	uint32 mods_addr;$/;"	m	struct:mboot	file:	access:public
+mboot::mods_count	kernel/mboot.c	/^	uint32 mods_count;$/;"	m	struct:mboot	file:	access:public
+mboot::syms	kernel/mboot.c	/^	uint32 syms[4];$/;"	m	struct:mboot	file:	access:public
+mboot_load_modules	kernel/mboot.c	/^void mboot_load_modules(struct mboot *mboot)$/;"	f	signature:(struct mboot *mboot)
+mboot_load_modules	kernel/mboot.h	/^void mboot_load_modules(struct mboot *mboot);$/;"	p	signature:(struct mboot *mboot)
+mboot_parse	kernel/mboot.c	/^void mboot_parse(struct mboot *mboot)$/;"	f	signature:(struct mboot *mboot)
+mboot_parse	kernel/mboot.h	/^void mboot_parse(struct mboot *mboot);$/;"	p	signature:(struct mboot *mboot)
+mem_alloc	kernel/kmalloc.c	/^void *mem_alloc(struct mem_allocator *alloc, uint32 size)$/;"	f	signature:(struct mem_allocator *alloc, uint32 size)
+mem_alloc	kernel/kmalloc.h	/^void *mem_alloc(struct mem_allocator *alloc, uint32 size);$/;"	p	signature:(struct mem_allocator *alloc, uint32 size)
+mem_allocator	kernel/kmalloc.c	/^struct mem_allocator$/;"	s	file:
+mem_allocator::heads	kernel/kmalloc.c	/^	uint16 heads[ALOCATORS];$/;"	m	struct:mem_allocator	file:	access:public
+mem_allocator::nodes	kernel/kmalloc.c	/^	struct mem_node nodes[NODES];$/;"	m	struct:mem_allocator	typeref:struct:mem_allocator::mem_node	file:	access:public
+mem_allocator_init	kernel/kmalloc.c	/^void mem_allocator_init(struct mem_allocator *aloc)$/;"	f	signature:(struct mem_allocator *aloc)
+mem_allocator_init	kernel/kmalloc.h	/^void mem_allocator_init(struct mem_allocator *aloc);$/;"	p	signature:(struct mem_allocator *aloc)
+mem_free	kernel/kmalloc.c	/^void mem_free(struct mem_allocator *alloc, void *addr, uint32 size)$/;"	f	signature:(struct mem_allocator *alloc, void *addr, uint32 size)
+mem_free	kernel/kmalloc.h	/^void mem_free(struct mem_allocator *alloc, void *addr, uint32 size);$/;"	p	signature:(struct mem_allocator *alloc, void *addr, uint32 size)
+mem_init	kernel/memory.c	/^void mem_init(struct mmap *mmap, uint32 length)$/;"	f	signature:(struct mmap *mmap, uint32 length)
+mem_init	kernel/memory.h	/^void mem_init(struct mmap *map, uint32 length);$/;"	p	signature:(struct mmap *map, uint32 length)
+mem_lower	kernel/mboot.c	/^	uint32 mem_lower;$/;"	m	struct:mboot	file:	access:public
+mem_node	kernel/kmalloc.c	/^struct mem_node$/;"	s	file:
+mem_node::addr	kernel/kmalloc.c	/^	uint32 addr;$/;"	m	struct:mem_node	file:	access:public
+mem_node::next	kernel/kmalloc.c	/^	uint16 next;$/;"	m	struct:mem_node	file:	access:public
+mem_phys_alloc	kernel/palloc.c	/^uint32 mem_phys_alloc()$/;"	f
+mem_phys_alloc	kernel/palloc.h	/^uint32 mem_phys_alloc();$/;"	p	signature:()
+mem_phys_dump	kernel/palloc.c	/^void mem_phys_dump()$/;"	f
+mem_phys_dump	kernel/palloc.h	/^void mem_phys_dump();$/;"	p	signature:()
+mem_phys_free	kernel/palloc.c	/^void mem_phys_free(uint32 addr)$/;"	f	signature:(uint32 addr)
+mem_phys_free	kernel/palloc.h	/^void mem_phys_free(uint32 addr);$/;"	p	signature:(uint32 addr)
+mem_phys_free_range	kernel/palloc.c	/^void mem_phys_free_range(uint32 addr, uint32 pages)$/;"	f	signature:(uint32 addr, uint32 pages)
+mem_phys_free_range	kernel/palloc.h	/^void mem_phys_free_range(uint32 addr, uint32 pages);$/;"	p	signature:(uint32 addr, uint32 pages)
+mem_phys_init	kernel/palloc.c	/^void mem_phys_init()$/;"	f
+mem_phys_init	kernel/palloc.h	/^void mem_phys_init();$/;"	p	signature:()
+mem_phys_reserve	kernel/palloc.c	/^void mem_phys_reserve(uint32 addr)$/;"	f	signature:(uint32 addr)
+mem_phys_reserve	kernel/palloc.h	/^void mem_phys_reserve(uint32 addr);$/;"	p	signature:(uint32 addr)
+mem_phys_reserve_range	kernel/palloc.c	/^void mem_phys_reserve_range(uint32 addr, uint32 pages)$/;"	f	signature:(uint32 addr, uint32 pages)
+mem_phys_reserve_range	kernel/palloc.h	/^void mem_phys_reserve_range(uint32 addr, uint32 pages);$/;"	p	signature:(uint32 addr, uint32 pages)
+mem_upper	kernel/mboot.c	/^	uint32 mem_upper;$/;"	m	struct:mboot	file:	access:public
+memcpy	libc/stdlib.h	/^void *memcpy(uint8 *dest, const uint8 *src, uint32 count);$/;"	p	signature:(uint8 *dest, const uint8 *src, uint32 count)
+memcpy	libc/utils.c	/^void *memcpy(uint8 *destination, const uint8 *source, uint32 count)$/;"	f	signature:(uint8 *destination, const uint8 *source, uint32 count)
+memory_map	kernel/palloc.c	/^static uint32 memory_map[ENTRIES + 1];$/;"	v	file:
+memset	libc/stdlib.h	/^void *memset(uint8 *dest, uint8 value, uint32 count);$/;"	p	signature:(uint8 *dest, uint8 value, uint32 count)
+memset	libc/utils.c	/^void *memset(uint8 *ptr, uint8 value, uint32 count)$/;"	f	signature:(uint8 *ptr, uint8 value, uint32 count)
+memset16	libc/stdlib.h	/^void *memset16(uint16 *ptr, uint16 value, uint32 count);$/;"	p	signature:(uint16 *ptr, uint16 value, uint32 count)
+memset16	libc/utils.c	/^void *memset16(uint16 *ptr, uint16 value, uint32 count)$/;"	f	signature:(uint16 *ptr, uint16 value, uint32 count)
+mmap	kernel/mboot.h	/^struct mmap {$/;"	s
+mmap	libc/stdlib.h	/^void *mmap(void *addr);$/;"	p	signature:(void *addr)
+mmap	libc/syscalls.c	/^void *mmap(void *addr)$/;"	f	signature:(void *addr)
+mmap::base_high	kernel/mboot.h	/^	uint32 base_high;$/;"	m	struct:mmap	access:public
+mmap::base_low	kernel/mboot.h	/^	uint32 base_low;$/;"	m	struct:mmap	access:public
+mmap::length_high	kernel/mboot.h	/^	uint32 length_high;$/;"	m	struct:mmap	access:public
+mmap::length_low	kernel/mboot.h	/^	uint32 length_low;$/;"	m	struct:mmap	access:public
+mmap::size	kernel/mboot.h	/^	uint32 size;$/;"	m	struct:mmap	access:public
+mmap::type	kernel/mboot.h	/^	uint32 type;$/;"	m	struct:mmap	access:public
+mmap_addr	kernel/mboot.c	/^	struct mmap *mmap_addr;$/;"	m	struct:mboot	typeref:struct:mboot::mmap	file:	access:public
+mmap_length	kernel/mboot.c	/^	uint32 mmap_length;$/;"	m	struct:mboot	file:	access:public
+mod_end	kernel/mboot.c	/^	uint32 mod_end;$/;"	m	struct:module_info	file:	access:public
+mod_start	kernel/mboot.c	/^	uint32 mod_start;$/;"	m	struct:module_info	file:	access:public
+mods_addr	kernel/mboot.c	/^	uint32 mods_addr;$/;"	m	struct:mboot	file:	access:public
+mods_count	kernel/mboot.c	/^	uint32 mods_count;$/;"	m	struct:mboot	file:	access:public
+module_info	kernel/mboot.c	/^struct module_info{$/;"	s	file:
+module_info::mod_end	kernel/mboot.c	/^	uint32 mod_end;$/;"	m	struct:module_info	file:	access:public
+module_info::mod_start	kernel/mboot.c	/^	uint32 mod_start;$/;"	m	struct:module_info	file:	access:public
+module_info::reserved	kernel/mboot.c	/^	uint32 reserved;$/;"	m	struct:module_info	file:	access:public
+module_info::string	kernel/mboot.c	/^	uint32 string;$/;"	m	struct:module_info	file:	access:public
+move_screen	kernel/screen.c	/^static void move_screen()$/;"	f	file:
+move_screen	mnt/srv_screen.c	/^static void move_screen()$/;"	f	file:
+move_screen	userspace/srv_screen.c	/^static void move_screen()$/;"	f	file:
+mp_find	kernel/cpu.c	/^struct MP_float_ptr *mp_find()$/;"	f
+mp_find	kernel/cpu.h	/^struct MP_float_ptr *mp_find();$/;"	p	signature:()
+mp_slide	kernel/cpu.c	/^static void *mp_slide(uint8 *from, uint8 *to)$/;"	f	file:	signature:(uint8 *from, uint8 *to)
+msg_queue	kernel/ipc.h	/^struct msg_queue$/;"	s
+msg_queue::buf	kernel/ipc.h	/^	uint8 buf[QUEUE_LEN];$/;"	m	struct:msg_queue	access:public
+msg_queue::header	kernel/ipc.h	/^	struct msg_queue_header header;$/;"	m	struct:msg_queue	typeref:struct:msg_queue::msg_queue_header	access:public
+msg_queue_header	kernel/ipc.h	/^struct msg_queue_header$/;"	s
+msg_queue_header::read	kernel/ipc.h	/^	uint16 read;$/;"	m	struct:msg_queue_header	access:public
+msg_queue_header::write	kernel/ipc.h	/^	uint16 write;$/;"	m	struct:msg_queue_header	access:public
+msg_queues	kernel/multitasking.h	/^	struct queue_descr msg_queues[PROC_MAX_QUEUES];$/;"	m	struct:process	typeref:struct:process::queue_descr	access:public
+mv_cur	kernel/screen.c	/^static void mv_cur(char c) {$/;"	f	file:	signature:(char c)
+mv_cur	mnt/srv_screen.c	/^static void mv_cur(char c) {$/;"	f	file:	signature:(char c)
+mv_cur	userspace/srv_screen.c	/^static void mv_cur(char c) {$/;"	f	file:	signature:(char c)
+name	kernel/drivers.h	/^	char name[32];$/;"	m	struct:driver	access:public
+next	kernel/ipc.c	/^static inline int next(int value)$/;"	f	file:	signature:(int value)
+next	kernel/kmalloc.c	/^	uint16 next;$/;"	m	struct:mem_node	file:	access:public
+next	kernel/multitasking.h	/^	thread_id next;$/;"	m	struct:thread	access:public
+node_free	kernel/kmalloc.c	/^static void node_free(struct mem_allocator *alloc, uint16 node)$/;"	f	file:	signature:(struct mem_allocator *alloc, uint16 node)
+node_new	kernel/kmalloc.c	/^static uint16 node_new(struct mem_allocator *alloc, uint32 addr)$/;"	f	file:	signature:(struct mem_allocator *alloc, uint32 addr)
+nodes	kernel/kmalloc.c	/^	struct mem_node nodes[NODES];$/;"	m	struct:mem_allocator	typeref:struct:mem_allocator::mem_node	file:	access:public
+oem_id	kernel/cpu.h	/^	uint8 oem_id[8];$/;"	m	struct:MP_config	access:public
+oem_table_ptr	kernel/cpu.h	/^	uint32 oem_table_ptr;$/;"	m	struct:MP_config	access:public
+oem_table_size	kernel/cpu.h	/^	uint16 oem_table_size;$/;"	m	struct:MP_config	access:public
+page_align	kernel/memory.c	/^inline uint32 page_align(uint32 addr)$/;"	f	signature:(uint32 addr)
+page_align	kernel/memory.h	/^inline uint32 page_align(uint32 addr);$/;"	p	signature:(uint32 addr)
+page_count	kernel/memory.c	/^inline uint32 page_count(uint32 bytes)$/;"	f	signature:(uint32 bytes)
+page_count	kernel/memory.h	/^uint32 page_count(uint32 bytes);$/;"	p	signature:(uint32 bytes)
+page_count	kernel/multitasking.h	/^	uint32 page_count;$/;"	m	struct:proc_section	access:public
+page_dir_index	kernel/paging.c	/^inline uint32 page_dir_index(uint32 addr)$/;"	f	signature:(uint32 addr)
+page_dir_index	kernel/paging.h	/^uint32 page_dir_index(uint32 addr);$/;"	p	signature:(uint32 addr)
+page_dir_switch	kernel/paging.c	/^void page_dir_switch(uint32 newpdir)$/;"	f	signature:(uint32 newpdir)
+page_dir_switch	kernel/paging.h	/^void page_dir_switch(uint32 newpdir);$/;"	p	signature:(uint32 newpdir)
+page_entry	kernel/paging.c	/^inline uint32 page_entry(uint32 addr, uint32 flags)$/;"	f	signature:(uint32 addr, uint32 flags)
+page_entry	kernel/paging.h	/^uint32 page_entry(uint32 addr, uint32 flags);$/;"	p	signature:(uint32 addr, uint32 flags)
+page_table_index	kernel/paging.c	/^inline uint32 page_table_index(uint32 addr)$/;"	f	signature:(uint32 addr)
+page_table_index	kernel/paging.h	/^uint32 page_table_index(uint32 addr);$/;"	p	signature:(uint32 addr)
+page_table_virt_addr	kernel/paging.c	/^inline uint32 *page_table_virt_addr(int id)$/;"	f	signature:(int id)
+page_table_virt_addr	kernel/paging.h	/^uint32 *page_table_virt_addr(int id);$/;"	p	signature:(int id)
+paging_get_phys	kernel/paging.c	/^uint32 paging_get_phys(uint32 addr)$/;"	f	signature:(uint32 addr)
+paging_get_phys	kernel/paging.h	/^uint32 paging_get_phys(uint32 addr);$/;"	p	signature:(uint32 addr)
+paging_is_mapped	kernel/paging.c	/^uint8 paging_is_mapped(uint32 virt)$/;"	f	signature:(uint32 virt)
+paging_is_mapped	kernel/paging.h	/^uint8 paging_is_mapped(uint32 virt);$/;"	p	signature:(uint32 virt)
+paging_map	kernel/paging.c	/^void paging_map(uint32 virt, uint32 phys, uint32 flags)$/;"	f	signature:(uint32 virt, uint32 phys, uint32 flags)
+paging_map	kernel/paging.h	/^void paging_map(uint32 virt, uint32 phys, uint32 flags);$/;"	p	signature:(uint32 virt, uint32 phys, uint32 flags)
+parent	kernel/multitasking.h	/^	proc_id parent;$/;"	m	struct:thread	access:public
+pdir	kernel/multitasking.h	/^	uint32 pdir;$/;"	m	struct:process	access:public
+phys_addr	kernel/multitasking.h	/^	uint32 phys_addr;$/;"	m	struct:proc_section	access:public
+pid	kernel/drivers.h	/^	proc_id pid;$/;"	m	struct:driver	access:public
+port_read8	libc/ports.c	/^uint8 port_read8(uint16 port){$/;"	f	signature:(uint16 port)
+port_read8	libc/stdlib.h	/^uint8 port_read8(uint16 port);$/;"	p	signature:(uint16 port)
+port_read_16	kernel/ports.h	/^inline static uint16 port_read_16(uint16 port){$/;"	f	signature:(uint16 port)
+port_read_8	kernel/ports.h	/^inline static uint8 port_read_8(uint16 port){$/;"	f	signature:(uint16 port)
+port_write	kernel/ports.h	/^inline static void port_write(uint16 port, uint8 value){$/;"	f	signature:(uint16 port, uint8 value)
+port_write8	libc/ports.c	/^void port_write8(uint16 port, uint8 value){$/;"	f	signature:(uint16 port, uint8 value)
+port_write8	libc/stdlib.h	/^void port_write8(uint16 port, uint8 value);$/;"	p	signature:(uint16 port, uint8 value)
+prev_tss	kernel/gdt.c	/^	uint32 prev_tss;$/;"	m	struct:tss_entry	file:	access:public
+printf	libc/stdlib.h	/^char *printf(char *str, const char *format, ...);$/;"	p	signature:(char *str, const char *format, ...)
+printf	libc/utils.c	/^char *printf(char *str, const char *format, ...)$/;"	f	signature:(char *str, const char *format, ...)
+priorities	kernel/multitasking.h	/^	struct shed_queue priorities[MAX_PRIORITIES];$/;"	m	struct:shed_data	typeref:struct:shed_data::shed_queue	access:public
+proc_create	kernel/multitasking.c	/^proc_id proc_create(struct proc_section text, struct proc_section data, struct proc_section bss, uint32 entry)$/;"	f	signature:(struct proc_section text, struct proc_section data, struct proc_section bss, uint32 entry)
+proc_create	kernel/multitasking.h	/^proc_id proc_create(struct proc_section text, struct proc_section data, struct proc_section bss, uint32 entry);$/;"	p	signature:(struct proc_section text, struct proc_section data, struct proc_section bss, uint32 entry)
+proc_cur	kernel/multitasking.c	/^proc_id proc_cur()$/;"	f
+proc_cur	kernel/multitasking.h	/^proc_id proc_cur();$/;"	p	signature:()
+proc_find_queue	kernel/multitasking.c	/^int proc_find_queue(proc_id pid)$/;"	f	signature:(proc_id pid)
+proc_find_queue	kernel/multitasking.h	/^int proc_find_queue(proc_id pid);$/;"	p	signature:(proc_id pid)
+proc_get_descr	kernel/multitasking.c	/^struct queue_descr proc_get_descr(proc_id pid, queue_id qid)$/;"	f	signature:(proc_id pid, queue_id qid)
+proc_get_descr	kernel/multitasking.h	/^struct queue_descr proc_get_descr(proc_id pid, queue_id qid);$/;"	p	signature:(proc_id pid, queue_id qid)
+proc_id	kernel/config.h	/^typedef uint16 proc_id;$/;"	t
+proc_map_queue	kernel/multitasking.c	/^uint8 proc_map_queue(proc_id pid, queue_id send_to, queue_id receive_from)$/;"	f	signature:(proc_id pid, queue_id send_to, queue_id receive_from)
+proc_map_queue	kernel/multitasking.h	/^uint8 proc_map_queue(proc_id pid, queue_id send_to, queue_id receive_from);$/;"	p	signature:(proc_id pid, queue_id send_to, queue_id receive_from)
+proc_query	libc/stdlib.h	/^stream proc_query(char *str);$/;"	p	signature:(char *str)
+proc_query	libc/syscalls.c	/^stream proc_query(char *str)$/;"	f	signature:(char *str)
+proc_register	libc/stdlib.h	/^stream proc_register(char *str, int irq);$/;"	p	signature:(char *str, int irq)
+proc_register	libc/syscalls.c	/^stream proc_register(char *str, int irq)$/;"	f	signature:(char *str, int irq)
+proc_section	kernel/multitasking.h	/^struct proc_section$/;"	s
+proc_section::page_count	kernel/multitasking.h	/^	uint32 page_count;$/;"	m	struct:proc_section	access:public
+proc_section::phys_addr	kernel/multitasking.h	/^	uint32 phys_addr;$/;"	m	struct:proc_section	access:public
+proc_section::virt_addr	kernel/multitasking.h	/^	uint32 virt_addr;$/;"	m	struct:proc_section	access:public
+process	kernel/multitasking.h	/^struct process$/;"	s
+process::bss	kernel/multitasking.h	/^	struct proc_section bss;$/;"	m	struct:process	typeref:struct:process::proc_section	access:public
+process::data	kernel/multitasking.h	/^	struct proc_section data;$/;"	m	struct:process	typeref:struct:process::proc_section	access:public
+process::msg_queues	kernel/multitasking.h	/^	struct queue_descr msg_queues[PROC_MAX_QUEUES];$/;"	m	struct:process	typeref:struct:process::queue_descr	access:public
+process::pdir	kernel/multitasking.h	/^	uint32 pdir;$/;"	m	struct:process	access:public
+process::text	kernel/multitasking.h	/^	struct proc_section text;$/;"	m	struct:process	typeref:struct:process::proc_section	access:public
+processes	kernel/multitasking.c	/^struct process *processes[MAX_PROCESSES];$/;"	v	typeref:struct:process
+prod_id	kernel/cpu.h	/^	uint8 prod_id[12];$/;"	m	struct:MP_config	access:public
+queue_create	kernel/ipc.c	/^queue_id queue_create()$/;"	f
+queue_create	kernel/ipc.h	/^queue_id queue_create();$/;"	p	signature:()
+queue_descr	kernel/ipc.h	/^struct queue_descr$/;"	s
+queue_descr::in_use	kernel/ipc.h	/^	uint8 in_use;$/;"	m	struct:queue_descr	access:public
+queue_descr::rec_from	kernel/ipc.h	/^	queue_id rec_from;$/;"	m	struct:queue_descr	access:public
+queue_descr::send_to	kernel/ipc.h	/^	queue_id send_to;$/;"	m	struct:queue_descr	access:public
+queue_id	kernel/config.h	/^typedef uint16 queue_id;$/;"	t
+queues	kernel/ipc.c	/^static struct msg_queue *queues[MAX_QUEUES];$/;"	v	typeref:struct:msg_queue	file:
+read	kernel/ipc.h	/^	uint16 read;$/;"	m	struct:msg_queue_header	access:public
+rec_from	kernel/ipc.h	/^	queue_id rec_from;$/;"	m	struct:queue_descr	access:public
+receive	libc/stdlib.h	/^stream receive(int *from, char *buf, int length);$/;"	p	signature:(int *from, char *buf, int length)
+receive	libc/syscalls.c	/^stream receive(int *from, char *buf, int length)$/;"	f	signature:(int *from, char *buf, int length)
+regs_init	kernel/interrupts.c	/^void regs_init(struct thread_state *regs, uint32 stack, uint32 entry)$/;"	f	signature:(struct thread_state *regs, uint32 stack, uint32 entry)
+regs_init	kernel/interrupts.h	/^void regs_init(struct thread_state *regs, uint32 stack, uint32 entry);$/;"	p	signature:(struct thread_state *regs, uint32 stack, uint32 entry)
+regs_print	kernel/interrupts.c	/^void regs_print(struct thread_state *regs)$/;"	f	signature:(struct thread_state *regs)
+regs_print	kernel/interrupts.h	/^void regs_print(struct thread_state *regs);$/;"	p	signature:(struct thread_state *regs)
+reserved	kernel/cpu.h	/^	uint8 reserved[3];$/;"	m	struct:MP_float_ptr	access:public
+reserved	kernel/mboot.c	/^	uint32 reserved;$/;"	m	struct:module_info	file:	access:public
+scancode	mnt/srv_keyboard.c	/^enum scancode$/;"	g	file:
+scancode	userspace/srv_keyboard.c	/^enum scancode$/;"	g	file:
+sched_current	kernel/scheduler.c	/^struct Scheduler *sched_current()$/;"	f
+sched_current	kernel/scheduler.h	/^struct Scheduler *sched_current();$/;"	p	signature:()
+sched_init_all	kernel/scheduler.c	/^void sched_init_all()$/;"	f
+sched_init_all	kernel/scheduler.h	/^void sched_init_all();$/;"	p	signature:()
+sched_tick	kernel/scheduler.c	/^void sched_tick(struct Scheduler *this)$/;"	f	signature:(struct Scheduler *this)
+sched_tick	kernel/scheduler.h	/^void sched_tick(struct Scheduler *this);$/;"	p	signature:(struct Scheduler *this)
+schedulers	kernel/scheduler.c	/^struct Scheduler schedulers[MAX_CPU];$/;"	v	typeref:struct:Scheduler
+screen_clear	kernel/screen.c	/^void screen_clear()$/;"	f
+screen_clear	kernel/screen.h	/^void screen_clear();$/;"	p	signature:()
+screen_clear	mnt/srv_screen.c	/^void screen_clear()$/;"	f
+screen_clear	userspace/srv_screen.c	/^void screen_clear()$/;"	f
+screen_getstyle	kernel/screen.c	/^static uint8 screen_getstyle(enum ScreenColor bg, enum ScreenColor fg)$/;"	f	file:	signature:(enum ScreenColor bg, enum ScreenColor fg)
+screen_getstyle	mnt/srv_screen.c	/^static uint8 screen_getstyle(enum ScreenColor bg, enum ScreenColor fg)$/;"	f	file:	signature:(enum ScreenColor bg, enum ScreenColor fg)
+screen_getstyle	userspace/srv_screen.c	/^static uint8 screen_getstyle(enum ScreenColor bg, enum ScreenColor fg)$/;"	f	file:	signature:(enum ScreenColor bg, enum ScreenColor fg)
+screen_putchar	kernel/screen.c	/^static void screen_putchar(char c, uint8 style)$/;"	f	file:	signature:(char c, uint8 style)
+screen_putchar	mnt/srv_screen.c	/^static void screen_putchar(char c, uint8 style)$/;"	f	file:	signature:(char c, uint8 style)
+screen_putchar	userspace/srv_screen.c	/^static void screen_putchar(char c, uint8 style)$/;"	f	file:	signature:(char c, uint8 style)
+screen_putstr	kernel/screen.c	/^void screen_putstr(char *c)$/;"	f	signature:(char *c)
+screen_putstr	kernel/screen.h	/^void screen_putstr(char * buf);$/;"	p	signature:(char * buf)
+screen_putstr	mnt/srv_screen.c	/^void screen_putstr(char *c)$/;"	f	signature:(char *c)
+screen_putstr	userspace/srv_screen.c	/^void screen_putstr(char *c)$/;"	f	signature:(char *c)
+screen_set_bg	kernel/screen.c	/^void screen_set_bg(uint8 color)$/;"	f	signature:(uint8 color)
+screen_set_bg	mnt/srv_screen.c	/^void screen_set_bg(uint8 color)$/;"	f	signature:(uint8 color)
+screen_set_bg	userspace/srv_screen.c	/^void screen_set_bg(uint8 color)$/;"	f	signature:(uint8 color)
+screen_set_fg	kernel/screen.c	/^void screen_set_fg(uint8 color)$/;"	f	signature:(uint8 color)
+screen_set_fg	mnt/srv_screen.c	/^void screen_set_fg(uint8 color)$/;"	f	signature:(uint8 color)
+screen_set_fg	userspace/srv_screen.c	/^void screen_set_fg(uint8 color)$/;"	f	signature:(uint8 color)
+section_enter	kernel/locks.c	/^void section_enter(uint32 *lock)$/;"	f	signature:(uint32 *lock)
+section_enter	kernel/locks.h	/^void section_enter(uint32 *lock);$/;"	p	signature:(uint32 *lock)
+section_leave	kernel/locks.c	/^void section_leave(uint32 *lock)$/;"	f	signature:(uint32 *lock)
+section_leave	kernel/locks.h	/^void section_leave(uint32 *lock);$/;"	p	signature:(uint32 *lock)
+selector	kernel/interrupts.c	/^	uint16 selector;$/;"	m	struct:idt_entry	file:	access:public
+send	libc/stdlib.h	/^int send(stream str, char *buf, int length);$/;"	p	signature:(stream str, char *buf, int length)
+send	libc/syscalls.c	/^int send(stream str, char *buf, int length)$/;"	f	signature:(stream str, char *buf, int length)
+send_to	kernel/ipc.h	/^	queue_id send_to;$/;"	m	struct:queue_descr	access:public
+server_get	kernel/drivers.c	/^int server_get(char *name)$/;"	f	signature:(char *name)
+server_get	kernel/drivers.h	/^int server_get(char *name);$/;"	p	signature:(char *name)
+server_irq_notify	kernel/drivers.c	/^void server_irq_notify(int irq)$/;"	f	signature:(int irq)
+server_irq_notify	kernel/drivers.h	/^void server_irq_notify(int irq);$/;"	p	signature:(int irq)
+server_set	kernel/drivers.c	/^int server_set(proc_id pid, char *name, int irq)$/;"	f	signature:(proc_id pid, char *name, int irq)
+server_set	kernel/drivers.h	/^int server_set(proc_id pid, char *name, int irq);$/;"	p	signature:(proc_id pid, char *name, int irq)
+sh_addr	kernel/elf.h	/^	uint32 sh_addr;$/;"	m	struct:elf_section	access:public
+sh_addralign	kernel/elf.h	/^	uint32 sh_addralign;$/;"	m	struct:elf_section	access:public
+sh_entsize	kernel/elf.h	/^	uint32 sh_entsize;$/;"	m	struct:elf_section	access:public
+sh_flags	kernel/elf.h	/^	uint32 sh_flags;$/;"	m	struct:elf_section	access:public
+sh_info	kernel/elf.h	/^	uint32 sh_info;$/;"	m	struct:elf_section	access:public
+sh_link	kernel/elf.h	/^	uint32 sh_link;$/;"	m	struct:elf_section	access:public
+sh_name	kernel/elf.h	/^	uint32 sh_name;$/;"	m	struct:elf_section	access:public
+sh_offset	kernel/elf.h	/^	uint32 sh_offset;$/;"	m	struct:elf_section	access:public
+sh_size	kernel/elf.h	/^	uint32 sh_size;$/;"	m	struct:elf_section	access:public
+sh_type	kernel/elf.h	/^	uint32 sh_type;$/;"	m	struct:elf_section	access:public
+shed_data	kernel/multitasking.h	/^struct shed_data$/;"	s
+shed_data::cur_thread	kernel/multitasking.h	/^	thread_id cur_thread;$/;"	m	struct:shed_data	access:public
+shed_data::priorities	kernel/multitasking.h	/^	struct shed_queue priorities[MAX_PRIORITIES];$/;"	m	struct:shed_data	typeref:struct:shed_data::shed_queue	access:public
+shed_data::thread_count	kernel/multitasking.h	/^	uint32 thread_count;$/;"	m	struct:shed_data	access:public
+shed_queue	kernel/multitasking.h	/^struct shed_queue$/;"	s
+shed_queue::head	kernel/multitasking.h	/^	thread_id head;$/;"	m	struct:shed_queue	access:public
+shed_queue::tail	kernel/multitasking.h	/^	thread_id tail;$/;"	m	struct:shed_queue	access:public
+shed_queue_dequeue	kernel/multitasking.c	/^thread_id shed_queue_dequeue(struct shed_queue *queue)$/;"	f	signature:(struct shed_queue *queue)
+shed_queue_enqueue	kernel/multitasking.c	/^void shed_queue_enqueue(struct shed_queue *queue, thread_id thread)$/;"	f	signature:(struct shed_queue *queue, thread_id thread)
+sheduler_enqueue	kernel/multitasking.c	/^void sheduler_enqueue(thread_id thread)$/;"	f	signature:(thread_id thread)
+sheduler_enqueue	kernel/multitasking.h	/^void sheduler_enqueue(thread_id thread);$/;"	p	signature:(thread_id thread)
+sheduler_info	kernel/multitasking.c	/^struct shed_data sheduler_info[MAX_CPU];$/;"	v	typeref:struct:shed_data
+sheduler_tick	kernel/multitasking.c	/^void sheduler_tick(struct thread_state *state)$/;"	f	signature:(struct thread_state *state)
+sheduler_tick	kernel/multitasking.h	/^void sheduler_tick(struct thread_state *cur_state);$/;"	p	signature:(struct thread_state *cur_state)
+signature	kernel/cpu.h	/^	uint8 signature[4];$/;"	m	struct:MP_config	access:public
+signature	kernel/cpu.h	/^	uint8 signature[4];$/;"	m	struct:MP_float_ptr	access:public
+size	kernel/gdt.c	/^	uint16 size;$/;"	m	struct:gdt	file:	access:public
+size	kernel/interrupts.c	/^	uint16 size;$/;"	m	struct:idt	file:	access:public
+size	kernel/mboot.h	/^	uint32 size;$/;"	m	struct:mmap	access:public
+size_low	kernel/gdt.c	/^	uint16 size_low;$/;"	m	struct:gdt_entry	file:	access:public
+size_t	kernel/config.h	/^typedef uint32 size_t;$/;"	t
+specRev	kernel/cpu.h	/^	uint8 specRev;$/;"	m	struct:MP_config	access:public
+ss	kernel/gdt.c	/^	uint32 ss;$/;"	m	struct:tss_entry	file:	access:public
+ss	kernel/interrupts.h	/^	uint32 eip, cs, eflags, useresp, ss;$/;"	m	struct:thread_state	access:public
+ss0	kernel/gdt.c	/^	uint32 ss0;$/;"	m	struct:tss_entry	file:	access:public
+ss1	kernel/gdt.c	/^	uint32 ss1;$/;"	m	struct:tss_entry	file:	access:public
+ss2	kernel/gdt.c	/^	uint32 ss2;$/;"	m	struct:tss_entry	file:	access:public
+stack	kernel/entry.s	/^stack:$/;"	l
+start	kernel/entry.s	/^start:$/;"	l
+starting_priority	kernel/multitasking.h	/^	uint32 starting_priority;$/;"	m	struct:thread	access:public
+stream	libc/stdlib.h	/^typedef int stream;$/;"	t
+string	kernel/mboot.c	/^	uint32 string;$/;"	m	struct:module_info	file:	access:public
+strlen	libc/stdlib.h	/^int strlen(char *str);$/;"	p	signature:(char *str)
+strlen	libc/utils.c	/^int strlen(char *str)$/;"	f	signature:(char *str)
+switch_stack	kernel/scheduler.c	/^static void switch_stack(uint32 addr)$/;"	f	file:	signature:(uint32 addr)
+syms	kernel/mboot.c	/^	uint32 syms[4];$/;"	m	struct:mboot	file:	access:public
+syscall	kernel/syscall.c	/^void syscall(struct thread_state *state)$/;"	f	signature:(struct thread_state *state)
+syscall	kernel/syscall.h	/^void syscall(struct thread_state *state);$/;"	p	signature:(struct thread_state *state)
+syscall	libc/syscalls.c	/^static int syscall(int number)$/;"	f	file:	signature:(int number)
+tail	kernel/multitasking.h	/^	thread_id tail;$/;"	m	struct:shed_queue	access:public
+task_switch	kernel/multitasking.c	/^void task_switch(struct thread_state *cur_state, thread_id from_thread, thread_id to_thread)$/;"	f	signature:(struct thread_state *cur_state, thread_id from_thread, thread_id to_thread)
+task_switch	kernel/multitasking.h	/^void task_switch(struct thread_state *cur_state, thread_id from_thread, thread_id to_thread);$/;"	p	signature:(struct thread_state *cur_state, thread_id from_thread, thread_id to_thread)
+text	kernel/multitasking.h	/^	struct proc_section text;$/;"	m	struct:process	typeref:struct:process::proc_section	access:public
+thread	kernel/multitasking.h	/^struct thread$/;"	s
+thread::current_priority	kernel/multitasking.h	/^	uint32 current_priority;$/;"	m	struct:thread	access:public
+thread::ebp	kernel/multitasking.h	/^	uint32 ebp;$/;"	m	struct:thread	access:public
+thread::eip	kernel/multitasking.h	/^	uint32 eip;$/;"	m	struct:thread	access:public
+thread::esp	kernel/multitasking.h	/^	uint32 esp;$/;"	m	struct:thread	access:public
+thread::kernel_stack	kernel/multitasking.h	/^	uint32 kernel_stack;$/;"	m	struct:thread	access:public
+thread::next	kernel/multitasking.h	/^	thread_id next;$/;"	m	struct:thread	access:public
+thread::parent	kernel/multitasking.h	/^	proc_id parent;$/;"	m	struct:thread	access:public
+thread::starting_priority	kernel/multitasking.h	/^	uint32 starting_priority;$/;"	m	struct:thread	access:public
+thread_count	kernel/multitasking.h	/^	uint32 thread_count;$/;"	m	struct:shed_data	access:public
+thread_create	kernel/multitasking.c	/^thread_id thread_create(proc_id parent, uint32 entry)$/;"	f	signature:(proc_id parent, uint32 entry)
+thread_create	kernel/multitasking.h	/^thread_id thread_create(proc_id parent, uint32 entry);$/;"	p	signature:(proc_id parent, uint32 entry)
+thread_id	kernel/config.h	/^typedef uint16 thread_id;$/;"	t
+thread_state	kernel/interrupts.h	/^struct thread_state{$/;"	s
+thread_state::cs	kernel/interrupts.h	/^	uint32 eip, cs, eflags, useresp, ss;$/;"	m	struct:thread_state	access:public
+thread_state::ds	kernel/interrupts.h	/^	uint32 ds;$/;"	m	struct:thread_state	access:public
+thread_state::eax	kernel/interrupts.h	/^	uint32 edi, esi, ebp, esp, ebx, edx, ecx, eax;$/;"	m	struct:thread_state	access:public
+thread_state::ebp	kernel/interrupts.h	/^	uint32 edi, esi, ebp, esp, ebx, edx, ecx, eax;$/;"	m	struct:thread_state	access:public
+thread_state::ebx	kernel/interrupts.h	/^	uint32 edi, esi, ebp, esp, ebx, edx, ecx, eax;$/;"	m	struct:thread_state	access:public
+thread_state::ecx	kernel/interrupts.h	/^	uint32 edi, esi, ebp, esp, ebx, edx, ecx, eax;$/;"	m	struct:thread_state	access:public
+thread_state::edi	kernel/interrupts.h	/^	uint32 edi, esi, ebp, esp, ebx, edx, ecx, eax;$/;"	m	struct:thread_state	access:public
+thread_state::edx	kernel/interrupts.h	/^	uint32 edi, esi, ebp, esp, ebx, edx, ecx, eax;$/;"	m	struct:thread_state	access:public
+thread_state::eflags	kernel/interrupts.h	/^	uint32 eip, cs, eflags, useresp, ss;$/;"	m	struct:thread_state	access:public
+thread_state::eip	kernel/interrupts.h	/^	uint32 eip, cs, eflags, useresp, ss;$/;"	m	struct:thread_state	access:public
+thread_state::err	kernel/interrupts.h	/^	uint32 int_id, err;$/;"	m	struct:thread_state	access:public
+thread_state::esi	kernel/interrupts.h	/^	uint32 edi, esi, ebp, esp, ebx, edx, ecx, eax;$/;"	m	struct:thread_state	access:public
+thread_state::esp	kernel/interrupts.h	/^	uint32 edi, esi, ebp, esp, ebx, edx, ecx, eax;$/;"	m	struct:thread_state	access:public
+thread_state::int_id	kernel/interrupts.h	/^	uint32 int_id, err;$/;"	m	struct:thread_state	access:public
+thread_state::ss	kernel/interrupts.h	/^	uint32 eip, cs, eflags, useresp, ss;$/;"	m	struct:thread_state	access:public
+thread_state::useresp	kernel/interrupts.h	/^	uint32 eip, cs, eflags, useresp, ss;$/;"	m	struct:thread_state	access:public
+threads	kernel/multitasking.c	/^struct thread *threads[MAX_THREADS];$/;"	v	typeref:struct:thread
+tmp_page_dir	kernel/entry.s	/^tmp_page_dir:$/;"	l
+trap	kernel/gdt.c	/^	uint16 trap;$/;"	m	struct:tss_entry	file:	access:public
+tss	kernel/gdt.c	/^static struct tss_entry tss[MAX_CPU];$/;"	v	typeref:struct:tss_entry	file:
+tss_entry	kernel/gdt.c	/^struct tss_entry$/;"	s	file:
+tss_entry::cr3	kernel/gdt.c	/^	uint32 cr3;$/;"	m	struct:tss_entry	file:	access:public
+tss_entry::cs	kernel/gdt.c	/^	uint32 cs;$/;"	m	struct:tss_entry	file:	access:public
+tss_entry::ds	kernel/gdt.c	/^	uint32 ds;$/;"	m	struct:tss_entry	file:	access:public
+tss_entry::eax	kernel/gdt.c	/^	uint32 eax;$/;"	m	struct:tss_entry	file:	access:public
+tss_entry::ebp	kernel/gdt.c	/^	uint32 ebp;$/;"	m	struct:tss_entry	file:	access:public
+tss_entry::ebx	kernel/gdt.c	/^	uint32 ebx;$/;"	m	struct:tss_entry	file:	access:public
+tss_entry::ecx	kernel/gdt.c	/^	uint32 ecx;$/;"	m	struct:tss_entry	file:	access:public
+tss_entry::edi	kernel/gdt.c	/^	uint32 edi;$/;"	m	struct:tss_entry	file:	access:public
+tss_entry::edx	kernel/gdt.c	/^	uint32 edx;$/;"	m	struct:tss_entry	file:	access:public
+tss_entry::eflags	kernel/gdt.c	/^	uint32 eflags;$/;"	m	struct:tss_entry	file:	access:public
+tss_entry::eip	kernel/gdt.c	/^	uint32 eip;$/;"	m	struct:tss_entry	file:	access:public
+tss_entry::es	kernel/gdt.c	/^	uint32 es;$/;"	m	struct:tss_entry	file:	access:public
+tss_entry::esi	kernel/gdt.c	/^	uint32 esi;$/;"	m	struct:tss_entry	file:	access:public
+tss_entry::esp	kernel/gdt.c	/^	uint32 esp;$/;"	m	struct:tss_entry	file:	access:public
+tss_entry::esp0	kernel/gdt.c	/^	uint32 esp0;$/;"	m	struct:tss_entry	file:	access:public
+tss_entry::esp1	kernel/gdt.c	/^	uint32 esp1;$/;"	m	struct:tss_entry	file:	access:public
+tss_entry::esp2	kernel/gdt.c	/^	uint32 esp2;$/;"	m	struct:tss_entry	file:	access:public
+tss_entry::fs	kernel/gdt.c	/^	uint32 fs;$/;"	m	struct:tss_entry	file:	access:public
+tss_entry::gs	kernel/gdt.c	/^	uint32 gs;$/;"	m	struct:tss_entry	file:	access:public
+tss_entry::iomap_base	kernel/gdt.c	/^	uint16 iomap_base;$/;"	m	struct:tss_entry	file:	access:public
+tss_entry::ldt	kernel/gdt.c	/^	uint32 ldt;$/;"	m	struct:tss_entry	file:	access:public
+tss_entry::prev_tss	kernel/gdt.c	/^	uint32 prev_tss;$/;"	m	struct:tss_entry	file:	access:public
+tss_entry::ss	kernel/gdt.c	/^	uint32 ss;$/;"	m	struct:tss_entry	file:	access:public
+tss_entry::ss0	kernel/gdt.c	/^	uint32 ss0;$/;"	m	struct:tss_entry	file:	access:public
+tss_entry::ss1	kernel/gdt.c	/^	uint32 ss1;$/;"	m	struct:tss_entry	file:	access:public
+tss_entry::ss2	kernel/gdt.c	/^	uint32 ss2;$/;"	m	struct:tss_entry	file:	access:public
+tss_entry::trap	kernel/gdt.c	/^	uint16 trap;$/;"	m	struct:tss_entry	file:	access:public
+tss_set_stack	kernel/gdt.c	/^void tss_set_stack(uint32 cpu, uint32 stack)$/;"	f	signature:(uint32 cpu, uint32 stack)
+tss_set_stack	kernel/gdt.h	/^void tss_set_stack(uint32 cpu, uint32 stack);$/;"	p	signature:(uint32 cpu, uint32 stack)
+type	kernel/cpu.h	/^	uint8 type;$/;"	m	struct:MP_ioapic_entry	access:public
+type	kernel/cpu.h	/^	uint8 type;$/;"	m	struct:MP_proc_entry	access:public
+type	kernel/mboot.h	/^	uint32 type;$/;"	m	struct:mmap	access:public
+uint16	kernel/config.h	/^typedef unsigned short uint16;$/;"	t
+uint16	libc/stdlib.h	/^typedef unsigned short uint16;$/;"	t
+uint32	kernel/config.h	/^typedef unsigned int uint32;$/;"	t
+uint32	libc/stdlib.h	/^typedef unsigned int uint32;$/;"	t
+uint8	kernel/config.h	/^typedef unsigned char uint8;$/;"	t
+uint8	libc/stdlib.h	/^typedef unsigned char uint8;$/;"	t
+useresp	kernel/interrupts.h	/^	uint32 eip, cs, eflags, useresp, ss;$/;"	m	struct:thread_state	access:public
+ver	kernel/cpu.h	/^	uint8 ver;$/;"	m	struct:MP_ioapic_entry	access:public
+version	kernel/cpu.h	/^	uint8 version;$/;"	m	struct:MP_float_ptr	access:public
+videomem	kernel/screen.c	/^unsigned short *videomem = (unsigned short*)0xB8000;$/;"	v
+videomem	mnt/srv_screen.c	/^unsigned short *videomem;$/;"	v
+videomem	userspace/srv_screen.c	/^unsigned short *videomem;$/;"	v
+virt_addr	kernel/multitasking.h	/^	uint32 virt_addr;$/;"	m	struct:proc_section	access:public
+write	kernel/ipc.h	/^	uint16 write;$/;"	m	struct:msg_queue_header	access:public
+zero	kernel/interrupts.c	/^	uint8 zero;$/;"	m	struct:idt_entry	file:	access:public
