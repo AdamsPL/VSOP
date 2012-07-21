@@ -1,0 +1,4 @@
+*.o
+mnt/*
+*.a
+disk.img
