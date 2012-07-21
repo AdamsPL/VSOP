@@ -1,0 +1,3 @@
+CFLAGS=-m32 -ggdb -nostdlib -nostdinc -fno-builtin -fno-stack-protector -pipe -march=native
+ASFLAGS=--32
+LDFLAGS=-melf_i386

@@ -4,8 +4,10 @@ CORES=4
 DEV=/dev/loop0
 IMG=disk.img
 TMPFILE=$(IMG).tmp
-TMPDIR=mnt
+TMPDIR=mnt/
 VIRT=qemu-system-i386
+USER=adams
+GROUP=users
 
 .PHONY: run mount unmount
 
@@ -13,28 +15,29 @@ all: run
 
 $(IMG):
 	@echo "***creating temporary file...***"
-	dd if=/dev/zero of=$(TMPFILE) bs=512 count=40920
+	dd if=/dev/zero of=$(TMPFILE) bs=512 count=409200
+	sync
 	@echo "***partitioning...***"
-	fdisk $(TMPFILE) < fdisk.in
-	@echo "***mounting...***"
-	losetup $(DEV) $(TMPFILE) --offset 1048576
+	echo -e "p\n\n\nw\n" | fdisk $(TMPFILE)
+	sync
 	@echo "***creating filesystem...***"
-	mkfs.ext2 $(DEV)
+	sudo losetup $(DEV) $(TMPFILE) --offset 1048576
+	sync
+	sudo mkfs.ext3 $(DEV)
+	sync
+	@echo "***mounting...***"
 	mkdir -p $(TMPDIR)
 	sudo mount $(DEV) $(TMPDIR)
+	sudo chown -R $(USER):$(GROUP) $(TMPDIR)
 	mkdir -p $(TMPDIR)/boot/grub/
 	cp /boot/grub/stage1 /boot/grub/stage2 $(TMPDIR)/boot/grub/
-	echo "device (hd0) "$(shell pwd)/$(TMPFILE) > grub.in
-	echo "root (hd0,0)" >> grub.in
-	echo "setup (hd0)" >> grub.in
-	grub --device-map=/dev/null < grub.in
+	echo -e "device (hd0) "$(shell pwd)/$(TMPFILE)"\nroot (hd0,0)\nsetup (hd0)\n" | grub --device-map=/dev/null
 	@echo "***unmounting...***"
 	sync
 	sudo umount $(DEV)
-	losetup -d $(DEV)
+	sudo losetup -d $(DEV)
 	@echo "**finishing and cleaning***"
 	mv $(TMPFILE) $(IMG)
-	rm grub.in
 
 run: $(IMG)
 	make -C kernel
@@ -49,12 +52,12 @@ run: $(IMG)
 	$(VIRT) -cpu coreduo -m $(MEMORY) -smp ${CORES} -s $(IMG) -monitor stdio
 
 mount:
-	losetup $(DEV) $(IMG) --offset 1048576
+	sudo losetup $(DEV) $(IMG) --offset 1048576
 	sudo mount $(DEV) $(TMPDIR)
 
 umount:
 	sudo umount $(DEV)
-	losetup -d $(DEV)
+	sudo losetup -d $(DEV)
 
 $(TMPDIR)/kernel.img: kernel/kernel.img
 	cp kernel/kernel.img $@
