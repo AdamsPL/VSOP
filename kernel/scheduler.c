@@ -33,8 +33,6 @@ struct Scheduler *sched_current()
 
 static void switch_stack(uint32 addr)
 {
-	asm volatile("movl %0, %%ebp" :: "r"(addr));
-	asm ("hlt");
 }
 
 void sched_tick(struct Scheduler *this)
