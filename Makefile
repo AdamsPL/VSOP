@@ -9,25 +9,28 @@ VIRT=qemu-system-i386
 USER=adams
 GROUP=users
 
-.PHONY: run mount unmount clean
+.PHONY: run unmount clean build
 
-all: run
+all: build
 
-run: $(TMPDIR)/boot/grub/menu.lst
+build:
 	make -C kernel
-	cp kernel/kernel.img $(TMPDIR)/
 	make -C libc
 	make -C userspace
+
+run: $(TMPDIR)/boot/grub/menu.lst build
+	cp kernel/kernel.img $(TMPDIR)/
 	cp userspace/srv* $(TMPDIR)
+	$(VIRT) -cpu coreduo -m $(MEMORY) -smp ${CORES} -s $(IMG) -monitor stdio
+
+$(TMPDIR)/boot/grub/menu.lst : $(TMPDIR)
 	cp menu.lst $(TMPDIR)/boot/grub/
 	cat userspace/modfile >> $(TMPDIR)/boot/grub/menu.lst
 	echo -e "boot\n" >> $(TMPDIR)/boot/grub/menu.lst
 	sync
-	$(VIRT) -cpu coreduo -m $(MEMORY) -smp ${CORES} -s $(IMG) -monitor stdio
 
-$(TMPDIR)/boot/grub/menu.lst : mount
-
-mount: $(IMG)
+$(TMPDIR):
+	mkdir -p $(TMPDIR)
 	sudo losetup $(DEV) $(IMG) --offset 1048576
 	sudo mount $(DEV) $(TMPDIR)
 	sudo chown -R adams:users $(TMPDIR)
@@ -35,6 +38,7 @@ mount: $(IMG)
 umount:
 	sudo umount $(DEV)
 	sudo losetup -d $(DEV)
+	rm -rvf $(TMPDIR)
 
 $(TMPDIR)/kernel.img: kernel/kernel.img
 	cp kernel/kernel.img $@
