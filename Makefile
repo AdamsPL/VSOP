@@ -9,7 +9,7 @@ VIRT=qemu-system-i386
 USER=adams
 GROUP=users
 
-.PHONY: run unmount clean build
+.PHONY: run mount umount clean build
 
 all: build
 
@@ -21,6 +21,7 @@ build:
 run: $(TMPDIR)/boot/grub/menu.lst build
 	cp kernel/kernel.img $(TMPDIR)/
 	cp userspace/srv* $(TMPDIR)
+	sync
 	$(VIRT) -cpu coreduo -m $(MEMORY) -smp ${CORES} -s $(IMG) -monitor stdio
 
 $(TMPDIR)/boot/grub/menu.lst : $(TMPDIR)
@@ -30,14 +31,16 @@ $(TMPDIR)/boot/grub/menu.lst : $(TMPDIR)
 	sync
 
 $(TMPDIR):
-	mkdir -p $(TMPDIR)
-	sudo losetup $(DEV) $(IMG) --offset 1048576
-	sudo mount $(DEV) $(TMPDIR)
+	mkdir -p $(TMPDIR) || true
+	sudo losetup $(DEV) $(IMG) --offset 1048576 || true
+	sudo mount $(DEV) $(TMPDIR) || true
 	sudo chown -R adams:users $(TMPDIR)
 
+mount: $(TMPDIR)
+
 umount:
-	sudo umount $(DEV)
-	sudo losetup -d $(DEV)
+	sudo umount $(DEV) || true
+	sudo losetup -d $(DEV) || true
 	rm -rvf $(TMPDIR)
 
 $(TMPDIR)/kernel.img: kernel/kernel.img
@@ -47,7 +50,8 @@ $(TMPDIR)/kernel.img: kernel/kernel.img
 kernel/kernel.img:
 	make -C kernel
 
-clean:
+clean: umount
 	make -C kernel clean
 	make -C libc clean
 	make -C userspace clean
+	rm -rvf ${TMPDIR}

@@ -6,6 +6,7 @@ PART=/dev/loop1
 IMG=disk.img
 TMPFILE=${IMG}.tmp
 TMPDIR=mnt/
+SIZE=109200
 
 function create_loop_dev
 {
@@ -24,7 +25,7 @@ function close_loop_dev
 
 echo "***creating temporary file...***"
 close_loop_dev
-dd if=/dev/zero of=${TMPFILE} bs=512 count=409200
+dd if=/dev/zero of=${TMPFILE} bs=512 count=${SIZE}
 create_loop_dev
 sync
 
@@ -58,3 +59,5 @@ sync
 echo "**finishing and cleaning up***"
 mv ${TMPFILE} ${IMG}
 sudo chown adams:users ${IMG}
+rm -rvf ${TMPDIR}
+sync
