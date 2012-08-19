@@ -50,8 +50,7 @@ $(TMPDIR)/kernel.img: kernel/kernel.img
 kernel/kernel.img:
 	make -C kernel
 
-clean: umount
+clean:
 	make -C kernel clean
 	make -C libc clean
 	make -C userspace clean
-	rm -rvf ${TMPDIR}
