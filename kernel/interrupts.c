@@ -39,6 +39,7 @@ static volatile struct idt iptr;
 #define PRINT_FIELD(x) screen_putstr(kprintf(buf, #x":%x ", regs->x));
 
 static int base = 0;
+static uint32 cr2 = 0;
 
 void dump_idt()
 {
@@ -52,7 +53,7 @@ void dump_idt()
 
 void regs_print(struct thread_state *regs)
 {
-	char buf[32];
+	char buf[256];
 	PRINT_FIELD(ds);
 	PRINT_FIELD(edi);
 	PRINT_FIELD(esi);
@@ -180,13 +181,8 @@ void apic_init()
 static uint8 unhandled_interrupt_handler(struct thread_state *state)
 {
 	char buf[256];
-	uint32 cr2 = 0;
-	asm volatile("movl %%cr2, %0" : "=a"(cr2));
-	screen_putstr(kprintf(buf, "unhandled int! pid:%i cr2: %x cpu:%i\n", proc_cur(), cr2, cpuid()));
+	screen_putstr(kprintf(buf, "unhandled int(%x)! pid:%i cr2: %x cpu:%i\n", state->int_id, proc_cur(), cr2, cpuid()));
 	regs_print(state);
-	while(1){
-		asm("hlt");
-	}
 	return INT_OK;
 }
 
@@ -195,7 +191,7 @@ static void common_handler(struct thread_state *regs)
 	char buf[256];
 	struct int_handler_elem *elem;
 
-	screen_putstr(kprintf(buf, "common handler\n"));
+	asm volatile("movl %%cr2, %0" : "=a"(cr2));
 	thread_save_state(sched_current_thread(), regs);
 
 	elem = int_handlers[regs->int_id];

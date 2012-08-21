@@ -98,11 +98,9 @@ static void sched_switch(struct thread_state *context, struct task *to_task)
 {
 	struct scheduler *this = sched_current();
 
-	regs_print(context);
-	regs_print(&to_task->thread->state);
-
 	this->current_task = to_task;
 	thread_restore_state(to_task->thread, context);
+	tss_set_stack(cpuid(), to_task->thread->kernel_stack);
 	page_dir_switch(to_task->thread->parent->pdir);
 }
 
@@ -128,7 +126,6 @@ static uint8 sched_tick(struct thread_state *state)
 			break;
 		}
 	}
-	screen_putstr(kprintf(buf, "%x tock!\n", this));
 	//section_enter(ready_list.lock);
 	if (ready_list.head && ready_list.head->thread->priority < prio)
 	{
@@ -139,7 +136,7 @@ static uint8 sched_tick(struct thread_state *state)
 	this->current_prio = prio;
 	//section_leave(ready_list.lock);
 
-	screen_putstr(kprintf(buf, "sched: switching from %x to %x!\n", this->current_task, task));
+//	screen_putstr(kprintf(buf, "sched: switching from %x to %x!\n", this->current_task, task));
 	sched_switch(state, task);
 	return INT_OK;
 }
@@ -166,7 +163,7 @@ void sched_init_all()
 
 	lapic_set(0x320, 0x20080);
 	lapic_set(0x3E0, 0xB);
-	lapic_set(0x380, 0x43000000);
+	lapic_set(0x380, 0x13000000);
 
 	interrupts_register_handler(INT_SCHED_TICK, sched_tick);
 }
