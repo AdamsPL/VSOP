@@ -24,9 +24,7 @@ int server_get(char *name)
 	return drivers[i].pid;
 }
 
-
-
-int server_set(proc_id pid, char *name, int irq)
+int server_set(pid_t pid, char *name, int irq)
 {
 	int i = 0;
 	int descr;

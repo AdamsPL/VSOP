@@ -25,7 +25,7 @@ struct queue_descr
 	uint8 in_use;
 };
 
-uint8 ipc_connect(proc_id p1, proc_id p2);
+uint8 ipc_connect(pid_t p1, pid_t p2);
 int ipc_send(queue_id id, uint8 *ptr, uint16 size);
 int ipc_receive(queue_id id, uint8 *ptr, uint16 size);
 int ipc_empty(queue_id id);

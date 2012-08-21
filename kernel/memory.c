@@ -70,3 +70,8 @@ void *kmalloc(uint32 size)
 	kmemset(buf, 0x00, size);
 	return buf;
 }
+
+void kfree(void *ptr, uint32 size)
+{
+	mem_free(&allocator, ptr, size);
+}

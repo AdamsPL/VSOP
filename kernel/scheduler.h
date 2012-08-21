@@ -2,11 +2,10 @@
 #define _SCHEDULER_H
 
 #include "config.h"
-
-struct Scheduler;
+#include "thread.h"
 
 void sched_init_all();
-void sched_tick(struct Scheduler *this);
-struct Scheduler *sched_current();
+void sched_thread_ready(struct thread *thread);
+struct thread *sched_current_thread();
 
 #endif 

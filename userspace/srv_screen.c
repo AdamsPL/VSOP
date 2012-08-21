@@ -124,7 +124,14 @@ int main()
 	cur_x = 0;
 	cur_y = 0;
 
-	proc_register("sys.drivers.screen", -1);
+	screen_clear();
+	while(1)
+	{
+		printf(out, "%c", i++);
+		screen_putstr(out);
+		asm("hlt");
+	}
+	/*proc_register("sys.drivers.screen", -1);
 	screen_clear();
 	while(1){
 		if ((len = receive(&stream, buf, 32))){
@@ -135,5 +142,6 @@ int main()
 			}
 		}
 	}
+	*/
 	return 0;
 }

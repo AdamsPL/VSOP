@@ -18,12 +18,15 @@ void kmain(struct mboot *mboot, unsigned int magic)
 
 	mboot_parse(mboot);
 
-	idt_init();
-	apic_init();
-
 	screen_clear();
 
+	interrupts_init();
+
 	drivers_init();
+
+	sched_init_all();
+
+	interrupts_start();
 
 	mboot_load_modules(mboot);
 /*
@@ -47,7 +50,5 @@ void kmain(struct mboot *mboot, unsigned int magic)
 			break;
 	}
 */
-	sched_init_all();
-	asm("sti");
 	while(1);
 }

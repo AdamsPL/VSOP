@@ -17,6 +17,10 @@
 #define LAPIC_BASE         0xFEE00000
 #define IOAPIC_BASE        0xFEC00000
 
+#define INT_OK 1
+#define INT_ERROR 0
+#define INT_SCHED_TICK 128
+
 struct thread_state{
 	uint32 ds;
 	uint32 edi, esi, ebp, esp, ebx, edx, ecx, eax;
@@ -27,17 +31,13 @@ struct thread_state{
 void regs_init(struct thread_state *regs, uint32 stack, uint32 entry);
 void regs_print(struct thread_state *regs);
 
-void idt_init();
-
-void ioapic_init();
-
-void apic_init();
 void lapic_set(uint32 reg, uint32 value);
 int lapic_get(uint32 reg);
 
-void int_handler(struct thread_state regs);
-void irq_handler(struct thread_state regs);
+typedef uint8 (*interrupt_handler)(struct thread_state *state);
 
-typedef void (*handler)(struct thread_state regs);
+void interrupts_init();
+void interrupts_register_handler(uint8 int_id, interrupt_handler handler);
+void interrupts_start();
 
 #endif

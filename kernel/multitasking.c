@@ -6,72 +6,11 @@
 #include "cpu.h"
 #include "palloc.h"
 
-#include "interrupts.h"
-
-struct shed_data sheduler_info[MAX_CPU];
-
-struct process *processes[MAX_PROCESSES];
-struct thread *threads[MAX_THREADS];
-
-#include "screen.h"
-#include "util.h"
-
-void task_switch(struct thread_state *cur_state, thread_id from_thread, thread_id to_thread)
+#include "process.h"
+/*
+pid_t proc_create(struct proc_section text, struct proc_section data, struct proc_section bss, uint32 entry)
 {
-	uint32 cpu = cpuid();
-	uint32 esp, ebp, eip;
-
-	if (from_thread == to_thread)
-		return;
-
-	asm volatile("movl %%esp, %0" : "=r"(esp));
-	asm volatile("movl %%ebp, %0" : "=r"(ebp));
-
-	threads[from_thread]->esp = esp;
-	threads[from_thread]->ebp = ebp;
-	threads[from_thread]->eip = eip;
-
-	tss_set_stack(cpu, threads[to_thread]->kernel_stack);
-
-	sheduler_info[cpu].cur_thread = to_thread;
-
-	if (threads[from_thread]->parent != threads[to_thread]->parent){
-		page_dir_switch(processes[threads[to_thread]->parent]->pdir);
-	}
-
-	esp = threads[to_thread]->esp;
-	eip = threads[to_thread]->eip;
-	ebp = threads[to_thread]->ebp;
-
-}
-
-thread_id find_next_tid()
-{
-	uint32 i = 0;
-	for (i = 1; i < MAX_THREADS; ++i)
-	{
-		if (threads[i])
-			continue;
-		return i;
-	}
-	return NULL_PROCESS;
-}
-
-proc_id find_next_pid()
-{
-	uint32 i;
-	for (i = 1; i < MAX_PROCESSES; ++i)
-	{
-		if (processes[i])
-			continue;
-		return i;
-	}
-	return NULL_PROCESS;
-}
-
-proc_id proc_create(struct proc_section text, struct proc_section data, struct proc_section bss, uint32 entry)
-{
-	proc_id pid = find_next_pid();
+	pid_t pid = find_next_pid();
 	uint32 *new_dir;
 	uint32 new_dir_phys;
 
@@ -98,8 +37,9 @@ proc_id proc_create(struct proc_section text, struct proc_section data, struct p
 	page_dir_switch(KERNEL_PAGE_DIR_PHYS);
 	return pid;
 }
-
-thread_id thread_create(proc_id parent, uint32 entry)
+*/
+/*
+thread_id thread_create(pid_t parent, uint32 entry)
 {
 	thread_id tid = find_next_tid();
 	uint32 stack = 0xa00000;
@@ -118,68 +58,9 @@ thread_id thread_create(proc_id parent, uint32 entry)
 	threads[tid]->eip = entry;
 	return tid;
 }
-
-void shed_queue_enqueue(struct shed_queue *queue, thread_id thread)
-{
-	thread_id last = queue->tail;
-	threads[thread]->next = NULL_THREAD;
-
-	if (thread == NULL_THREAD)
-		return;
-
-	if (last == NULL_THREAD){
-		queue->tail = thread;
-		queue->head = thread;
-	}else{
-		threads[last]->next = thread;
-		queue->tail = thread;
-	}
-}
-
-thread_id shed_queue_dequeue(struct shed_queue *queue)
-{
-	thread_id result = queue->head;
-	if (result == NULL_THREAD)
-		return result;
-	queue->head = threads[result]->next;
-	if (queue->tail == result)
-		queue->tail = queue->head;
-	threads[result]->next = NULL_THREAD;
-	return result;
-}
-
-void sheduler_enqueue(thread_id thread)
-{
-	uint8 cpu = cpuid();
-
-	shed_queue_enqueue(&sheduler_info[cpu].priorities[threads[thread]->starting_priority], thread);
-	sheduler_info[cpu].thread_count++;
-}
-
-void sheduler_tick(struct thread_state *state)
-{
-	uint8 cpu = cpuid();
-	thread_id cur_thread = sheduler_info[cpu].cur_thread;
-	uint32 i;
-	thread_id next_thread;
-
-	threads[cur_thread]->current_priority++;
-	if (threads[cur_thread]->current_priority >= MAX_PRIORITIES)
-		shed_queue_enqueue(&sheduler_info[cpu].priorities[MAX_PRIORITIES-1], cur_thread);
-	else
-		shed_queue_enqueue(&sheduler_info[cpu].priorities[threads[cur_thread]->current_priority], cur_thread);
-	
-	for (i = 0; i < MAX_PRIORITIES; ++i){
-		next_thread = shed_queue_dequeue(&sheduler_info[cpu].priorities[i]);
-		if (next_thread != NULL_THREAD){
-			sheduler_info[cpu].cur_thread = NULL_THREAD;
-			task_switch(state, cur_thread, next_thread);
-			return;
-		}
-	}
-}
-
-uint8 proc_map_queue(proc_id pid, queue_id send_to, queue_id receive_from)
+*/
+/*
+uint8 proc_map_queue(pid_t pid, queue_id send_to, queue_id receive_from)
 {
 	uint8 qid = 0;
 	struct queue_descr *queues = processes[pid]->msg_queues;
@@ -191,8 +72,30 @@ uint8 proc_map_queue(proc_id pid, queue_id send_to, queue_id receive_from)
 	queues[qid].send_to = send_to;
 	return qid;
 }
+*/
+uint8 proc_map_queue(pid_t pid, queue_id send_to, queue_id receive_from)
+{
+	return 0;
+}
 
-proc_id proc_cur()
+pid_t proc_cur()
+{
+	return 0;
+}
+
+struct queue_descr proc_get_descr(pid_t pid, queue_id qid)
+{
+	struct queue_descr res;
+	return res;
+}
+
+int proc_find_queue(pid_t pid)
+{
+	return 0;
+}
+
+/*
+pid_t proc_cur()
 {
 	uint8 cpu = cpuid();
 	thread_id tid = sheduler_info[cpu].cur_thread;
@@ -202,12 +105,12 @@ proc_id proc_cur()
 	return threads[tid]->parent;
 }
 
-struct queue_descr proc_get_descr(proc_id pid, queue_id qid)
+struct queue_descr proc_get_descr(pid_t pid, queue_id qid)
 {
 	return processes[pid]->msg_queues[qid];
 }
 
-int proc_find_queue(proc_id pid)
+int proc_find_queue(pid_t pid)
 {
 	int i;
 	for (i = 0; i < 16; ++i){
@@ -217,3 +120,4 @@ int proc_find_queue(proc_id pid)
 	}
 	return -1;
 }
+*/

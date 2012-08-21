@@ -35,6 +35,6 @@ struct elf_section{
 	uint32 sh_entsize;
 };
 
-proc_id elf_load(uint8 *buf);
+pid_t elf_load(uint8 *buf);
 
 #endif

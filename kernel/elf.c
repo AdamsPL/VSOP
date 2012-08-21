@@ -4,8 +4,10 @@
 #include "util.h"
 #include "memory.h"
 #include "multitasking.h"
+#include "process.h"
+#include "thread.h"
 
-proc_id elf_load(uint8 *buf)
+pid_t elf_load(uint8 *buf)
 {
 	struct elf_header *hdr = (struct elf_header *)buf;
 	struct elf_section *sections = (struct elf_section*)(buf + hdr->e_shoff);
@@ -34,6 +36,9 @@ proc_id elf_load(uint8 *buf)
 			data.phys_addr = page_align((uint32)(buf + sections[i].sh_offset));
 		}
 	}
-	proc_create(text, data, bss, hdr->e_entry);
+	struct process *proc = proc_create(text, data, bss);
+	struct thread *thread = thread_create(proc, hdr->e_entry);
+	shed_thread_ready(thread);
+
 	return 0;
 }

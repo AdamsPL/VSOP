@@ -17,7 +17,7 @@ queue_id queue_create()
 	return 0;
 }
 
-uint8 ipc_connect(proc_id p1, proc_id p2)
+uint8 ipc_connect(pid_t p1, pid_t p2)
 {
 	queue_id q1, q2;
 	q1 = queue_create();

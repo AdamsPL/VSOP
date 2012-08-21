@@ -5,7 +5,7 @@ DEV=/dev/loop1
 IMG=disk.img
 TMPFILE=$(IMG).tmp
 TMPDIR=mnt/
-VIRT=qemu-system-i386
+VIRT=qemu-system-i386 -sdl
 USER=adams
 GROUP=users
 

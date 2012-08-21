@@ -26,9 +26,9 @@ typedef signed short int16;
 typedef unsigned int uint32;
 typedef signed int int32;
 
-typedef uint16 thread_id;
-typedef uint16 proc_id;
+typedef uint16 pid_t;
 typedef uint16 queue_id;
-
 typedef uint32 size_t;
+typedef uint32 *lock_t;
+
 #endif

@@ -6,10 +6,9 @@
 #include "drivers.h"
 #include "cpu.h"
 #include "locks.h"
+#include "memory.h"
 
 #define IOAPIC_DISABLE     0x10000
-
-uint32 lock;
 
 struct idt_entry{
 	uint16 base_low;
@@ -24,12 +23,20 @@ struct idt {
 	uint32 base;
 }__attribute__((packed));
 
+struct int_handler_elem
+{
+	interrupt_handler handler;
+	struct int_handler_elem *next;
+};
+
+struct int_handler_elem *int_handlers[256];
+
 static struct idt_entry idt_entries[256];
 static volatile struct idt iptr;
 
 #include "screen.h"
 
-#define PRINT_FIELD(x) screen_putstr(kprintf(buf, #x":%x\n", regs->x));
+#define PRINT_FIELD(x) screen_putstr(kprintf(buf, #x":%x ", regs->x));
 
 static int base = 0;
 
@@ -62,6 +69,7 @@ void regs_print(struct thread_state *regs)
 	PRINT_FIELD(eflags);
 	PRINT_FIELD(useresp);
 	PRINT_FIELD(ss);
+	screen_putstr(kprintf(buf, "\n"));
 }
 
 void idt_set(uint16 id, uint32 base, uint8 flags)
@@ -169,12 +177,33 @@ void apic_init()
 	lapic_init();
 }
 
-void common_handler(struct thread_state *regs)
+static uint8 unhandled_interrupt_handler(struct thread_state *state)
 {
 	char buf[256];
 	uint32 cr2 = 0;
 	asm volatile("movl %%cr2, %0" : "=a"(cr2));
+	screen_putstr(kprintf(buf, "unhandled int! pid:%i cr2: %x cpu:%i\n", proc_cur(), cr2, cpuid()));
+	regs_print(state);
+	while(1){
+		asm("hlt");
+	}
+	return INT_OK;
+}
 
+static void common_handler(struct thread_state *regs)
+{
+	char buf[256];
+	struct int_handler_elem *elem;
+
+	screen_putstr(kprintf(buf, "common handler\n"));
+	thread_save_state(sched_current_thread(), regs);
+
+	elem = int_handlers[regs->int_id];
+
+	while(elem && elem->handler(regs) != INT_OK)
+		elem = elem->next;
+
+	/*
 	switch(regs->int_id){
 		case 128:
 			sched_tick(sched_current());
@@ -189,12 +218,8 @@ void common_handler(struct thread_state *regs)
 			screen_putstr(kprintf(buf, "SPUR!\n"));
 			break;
 		default:
-			screen_putstr(kprintf(buf, "PANIC! pid:%i cr2: %x cpu:%i\n", proc_cur(), cr2, cpuid()));
-			regs_print(regs);
-			while(1){
-				asm("hlt");
-			}
 	}
+	*/
 }
 
 void isr_handler(struct thread_state regs)
@@ -356,4 +381,31 @@ void regs_init(struct thread_state *regs, uint32 stack, uint32 entry)
 	regs->ebp = (uint32)stack;
 	regs->useresp = (uint32)stack;
 	regs->esp = (uint32)stack;
+}
+
+void interrupts_register_handler(uint8 int_id, interrupt_handler handler)
+{
+	struct int_handler_elem *elem = NEW(struct int_handler_elem);
+	elem->handler = handler;
+	elem->next = int_handlers[int_id];
+	int_handlers[int_id] = elem;
+}
+
+void interrupts_init()
+{
+	int i;
+	idt_init();
+	apic_init();
+	for (i = 0; i < 256; ++i)
+		interrupts_register_handler(i, unhandled_interrupt_handler);
+}
+
+void interrupts_start()
+{
+	asm("sti");
+}
+
+void interrupts_stop()
+{
+	asm("cli");
 }
