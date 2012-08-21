@@ -57,3 +57,4 @@ clean:
 
 stats:
 	 wc -l `find -regex '.*\.[chs]$$' -or -name "Makefile*"`
+	 du -sh kernel/kernel.img

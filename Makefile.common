@@ -1,3 +1,18 @@
-CFLAGS=-m32 -ggdb -nostdlib -nostdinc -fno-builtin -fno-stack-protector -pipe -march=native
-ASFLAGS=--32
-LDFLAGS=-melf_i386
+#debug/size/speed
+OPT_LVL=debug
+
+ifeq ($(OPT_LVL),debug)
+	CFLAGS=-ggdb
+endif
+ifeq ($(OPT_LVL),size)
+	CFLAGS=-Os
+	LDFLAGS=-s
+endif
+ifeq ($(OPT_LVL),speed)
+	CFLAGS=-O2
+	LDFLAGS=-s
+endif
+
+CFLAGS+=-m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector -pipe -march=native
+ASFLAGS+=--32
+LDFLAGS+=-melf_i386
