@@ -54,3 +54,6 @@ clean:
 	make -C kernel clean
 	make -C libc clean
 	make -C userspace clean
+
+stats:
+	 wc -l `find -regex '.*\.[chs]$$' -or -name "Makefile*"`
