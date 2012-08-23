@@ -40,4 +40,7 @@ void interrupts_init();
 void interrupts_register_handler(uint8 int_id, interrupt_handler handler);
 void interrupts_start();
 
+void isr_init();
+void idt_set(uint16 id, uint32 base, uint8 flags);
+
 #endif

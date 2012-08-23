@@ -54,6 +54,8 @@ static struct gdt_entry gdt[GDT_ENTRIES];
 static struct gdt gdtr;
 static struct tss_entry tss[MAX_CPU];
 
+extern void gdt_flush(uint32 ptr);
+
 static void gdt_set(int32 id, uint32 base, uint32 limit, uint8 access, uint8 gran)
 {
 	gdt[id].base_low = (base & 0xFFFF);
@@ -67,7 +69,16 @@ static void gdt_set(int32 id, uint32 base, uint32 limit, uint8 access, uint8 gra
 	gdt[id].access = access;
 }
 
-extern void gdt_flush(uint32 ptr);
+
+void tss_flush()
+{
+	uint8 id = cpuid();
+	id += 5;
+	id *= 8;
+	id |= 0x03;
+	asm("movl %0, %%eax" :: "m"(id) : "%eax");
+	asm("ltr %ax");
+}
 
 void gdt_init()
 {
@@ -92,9 +103,7 @@ void gdt_init()
 	}
 
 	gdt_flush((uint32)&gdtr);
-
-	asm("movl $0x2b, %eax");
-	asm("ltr %ax");
+	tss_flush();
 }
 
 void tss_set_stack(uint32 cpu, uint32 stack)

@@ -1,4 +1,3 @@
-
 .macro ISR_NEC id
 	.global _isr\id
 	_isr\id:
@@ -11,20 +10,19 @@
 .macro ISR_EC id
 	.global _isr\id
 	_isr\id:
+		cli
 		push $\id
 		jmp isr_common
 .endm
 
+.global _isr_null
 
-.macro IRQ id
-	.global _irq\id
-	_irq\id:
-		push $0
-		push $\id
-		jmp irq_common
-.endm
+_isr_null:
+	iret
 
-.macro INT_ENTER
+.extern irq_common
+
+isr_common:
 	pusha
 	mov %ds, %ax
 	push %eax
@@ -34,9 +32,9 @@
 	mov %ax, %es
 	mov %ax, %fs
 	mov %ax, %gs
-.endm
 
-.macro INT_LEAVE
+	call irq_handler
+
 	pop %eax
 	mov %ax, %ds
 	mov %ax, %es
@@ -46,7 +44,6 @@
 	popa
 	add $8, %esp
 	iret
-.endm
 
 ISR_NEC 0
 ISR_NEC 1
@@ -67,54 +64,26 @@ ISR_NEC 15
 ISR_NEC 16
 ISR_NEC 17
 ISR_NEC 18
-ISR_NEC 19
-ISR_NEC 20
-ISR_NEC 21
-ISR_NEC 22
-ISR_NEC 23
-ISR_NEC 24
-ISR_NEC 25
-ISR_NEC 26
-ISR_NEC 27
-ISR_NEC 28
-ISR_NEC 29
-ISR_NEC 30
-ISR_NEC 31
 
-ISR_NEC 80
+ISR_NEC 128
 
-IRQ 219
-IRQ 218
-IRQ 217
-IRQ 216
-IRQ 215
-IRQ 214
-IRQ 213
-IRQ 212
-IRQ 211
-IRQ 210
-IRQ 209
-IRQ 208
-IRQ 207
-IRQ 206
-IRQ 205
-IRQ 204
-IRQ 203
-IRQ 202
-IRQ 201
-IRQ 200
-
-IRQ 128
-
-.extern isr_handler
-.extern irq_handler
-
-isr_common:
-	INT_ENTER
-	call isr_handler
-	INT_LEAVE
-
-irq_common:
-	INT_ENTER
-	call irq_handler
-	INT_LEAVE
+ISR_NEC 200
+ISR_NEC 201
+ISR_NEC 202
+ISR_NEC 203
+ISR_NEC 204
+ISR_NEC 205
+ISR_NEC 206
+ISR_NEC 207
+ISR_NEC 208
+ISR_NEC 209
+ISR_NEC 210
+ISR_NEC 211
+ISR_NEC 212
+ISR_NEC 213
+ISR_NEC 214
+ISR_NEC 215
+ISR_NEC 216
+ISR_NEC 217
+ISR_NEC 218
+ISR_NEC 219

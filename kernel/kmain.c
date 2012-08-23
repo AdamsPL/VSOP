@@ -15,26 +15,20 @@
 void kmain(struct mboot *mboot, unsigned int magic)
 {
 	gdt_init();
-
-	mboot_parse(mboot);
-
 	screen_clear();
-
+	mboot_parse(mboot);
 	interrupts_init();
-
 	drivers_init();
-
 	sched_init_all();
+
+	port_write(0x70, 0x0B);
+	char prev = port_read_8(0x71);
+	port_write(0x70, 0x0B);
+	port_write(0x71, prev | 0x40);
 
 	interrupts_start();
 
 	mboot_load_modules(mboot);
-/*
-	port_write(0x70, 0x0B);
-	prev = port_read_8(0x71);
-	port_write(0x70, 0x0B);
-	port_write(0x71, prev | 0x40);
-*/
 
 /*
 	mpc = mp_find()->config;
@@ -50,5 +44,6 @@ void kmain(struct mboot *mboot, unsigned int magic)
 			break;
 	}
 */
-	while(1);
+	while(1)
+		asm("hlt");
 }

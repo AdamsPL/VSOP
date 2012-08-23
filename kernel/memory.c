@@ -4,6 +4,8 @@
 #include "interrupts.h"
 #include "palloc.h"
 
+#include "screen.h"
+
 #define RSA_SIZE 0x2000
 
 extern uint32 end;
@@ -66,12 +68,16 @@ void mem_init(struct mmap *mmap, uint32 length)
 
 void *kmalloc(uint32 size)
 {
+	//char ptr[128];
 	uint8 *buf = (uint8*)mem_alloc(&allocator, size);
 	kmemset(buf, 0x00, size);
+	//screen_putstr(kprintf(ptr, "kmalloc: %x => %x\n", size, buf));
 	return buf;
 }
 
 void kfree(void *ptr, uint32 size)
 {
+	char buf[128];
+	screen_putstr(kprintf(buf, "kfree: %x %x\n", ptr, size));
 	mem_free(&allocator, ptr, size);
 }

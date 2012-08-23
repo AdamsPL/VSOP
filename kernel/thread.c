@@ -24,10 +24,14 @@ struct thread *thread_create(struct process *parent, uint32 entry)
 
 void thread_restore_state(struct thread *this, struct thread_state *state)
 {
+	if (!this || !state)
+		return;
 	kmemcpy((uint8*)state, (uint8*)&this->state, sizeof(*state));
 }
 
 void thread_save_state(struct thread *this, struct thread_state *state)
 {
+	if (!this || !state)
+		return;
 	kmemcpy((uint8*)&this->state, (uint8*)state, sizeof(*state));
 }

@@ -6,7 +6,7 @@ PART=/dev/loop1
 IMG=disk.img
 TMPFILE=${IMG}.tmp
 TMPDIR=mnt/
-SIZE=109200
+SIZE=59200
 
 function create_loop_dev
 {

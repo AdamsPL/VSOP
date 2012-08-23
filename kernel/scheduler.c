@@ -48,10 +48,12 @@ static void task_delete(struct task *task)
 
 static struct task *task_list_pop(struct task_list *list)
 {
-	struct task *ptr = list->head;
+	struct task *ptr;
 
-	if (!ptr)
+	if (!list || !list->head)
 		return 0;
+
+	ptr = list->head;
 
 	if (list->head == list->tail)
 		list->tail = 0;
@@ -80,7 +82,6 @@ static void init(struct scheduler *this)
 	ZEROS(this);
 }
 
-
 struct scheduler *sched_current()
 {
 	return schedulers + cpuid();
@@ -98,10 +99,12 @@ static void sched_switch(struct thread_state *context, struct task *to_task)
 {
 	struct scheduler *this = sched_current();
 
-	this->current_task = to_task;
+	//if (this->current_task == to_task)
+	//	return;
+
 	thread_restore_state(to_task->thread, context);
-	tss_set_stack(cpuid(), to_task->thread->kernel_stack);
 	page_dir_switch(to_task->thread->parent->pdir);
+	tss_set_stack(cpuid(), to_task->thread->kernel_stack);
 }
 
 static uint8 sched_tick(struct thread_state *state)
@@ -113,11 +116,11 @@ static uint8 sched_tick(struct thread_state *state)
 	int prio = 0;
 
 	screen_putstr(kprintf(buf, "%x tick!\n", this));
-
 	if (this->current_task)
 	{
 		task_list_push(this->prio_queues + get_lower_prio(this->current_prio), this->current_task);
 	}
+
 	for (prio = 0; prio < MAX_PRIORITY; ++prio)
 	{
 		if (this->prio_queues[prio].head)
@@ -129,15 +132,23 @@ static uint8 sched_tick(struct thread_state *state)
 	//section_enter(ready_list.lock);
 	if (ready_list.head && ready_list.head->thread->priority < prio)
 	{
+		screen_putstr(kprintf(buf, "picking from ready list!\n"));
 		prio = ready_list.head->thread->priority;
 		list = &ready_list;
 	}
+
+	if (!list)
+		return INT_OK;
+	screen_putstr(kprintf(buf, "list OK!\n"));
+
 	task = task_list_pop(list);
+	screen_putstr(kprintf(buf, "pop OK!\n"));
 	this->current_prio = prio;
+	screen_putstr(kprintf(buf, "sched: switching from %x to %x!\n", this->current_task, task));
+	sched_switch(state, task);
+	screen_putstr(kprintf(buf, "sched: ready to go!\n"));
 	//section_leave(ready_list.lock);
 
-//	screen_putstr(kprintf(buf, "sched: switching from %x to %x!\n", this->current_task, task));
-	sched_switch(state, task);
 	return INT_OK;
 }
 
