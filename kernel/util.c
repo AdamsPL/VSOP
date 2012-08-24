@@ -73,27 +73,19 @@ int kstrcmp(char *str1, char *str2){
 		return 1;
 }
 
-void *kmemset(uint8 *ptr, uint8 value, uint32 count)
-{
-	while(count--)
-		*ptr++ = value;
-	return ptr;
+#define KMEMSET_IMPL(name, type) void *name(type *ptr, type value, uint32 count) \
+{                       \
+	type *tmp = ptr;    \
+	while(count--)      \
+		*tmp++ = value; \
+	return ptr;         \
 }
 
-void *kmemset16(uint16 *ptr, uint16 value, uint32 count)
-{
-	while(count--)
-		*ptr++ = value;
-	return ptr;
-}
+KMEMSET_IMPL(kmemset, uint8)
+KMEMSET_IMPL(kmemset16, uint16)
+KMEMSET_IMPL(kmemset32, uint32)
 
-void *kmemset32(uint32 *ptr, uint32 value, uint32 count)
-{
-	while(count--){
-		*ptr++ = value;
-	}
-	return ptr;
-}
+#undef KMEMSET_IMPL
 
 void *kmemcpy(uint8 *destination, const uint8 *source, uint32 count)
 {

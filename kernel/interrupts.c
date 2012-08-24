@@ -36,7 +36,7 @@ static volatile struct idt iptr;
 
 #include "screen.h"
 
-#define PRINT_FIELD(x) screen_putstr(kprintf(buf, #x":%x\n", regs->x));
+#define PRINT_FIELD(x) screen_putstr(kprintf(buf, #x":%x|", regs->x));
 
 static int base = 0;
 static uint32 cr2 = 0;
@@ -93,6 +93,12 @@ static void ioapic_map(uint32 irq, uint32 vector)
 	ioapic_set(reg_low, vector);
 }
 
+uint8 keyboard_handler(struct thread_state *state)
+{
+	char buf[32];
+	screen_putstr(kprintf(buf, "keyboard!:\n"));
+	return INT_OK;
+}
 
 uint8 rtc_timer_handler(struct thread_state *state)
 {
@@ -196,8 +202,8 @@ static uint8 unhandled_interrupt_handler(struct thread_state *state)
 		screen_putstr(kprintf(buf, "unhandled int(%x)! pid:%i cr2: %x cpu:%i\n", state->int_id, proc_cur(), cr2, cpuid()));
 		regs_print(state);
 	//}
-	++unhandled_flags[state->int_id];
 	asm("hlt");
+	++unhandled_flags[state->int_id];
 	return INT_OK;
 }
 
@@ -214,7 +220,7 @@ void irq_handler(struct thread_state regs)
 	while(elem && elem->handler(&regs) != INT_OK)
 		elem = elem->next;
 
-	if (regs.int_id > 40)
+	if (regs.int_id >= 200)
 		lapic_set(LAPIC_EOI, 0x01);
 }
 
@@ -263,6 +269,7 @@ void interrupts_init()
 	for (i = 0; i < 256; ++i)
 		interrupts_register_handler(i, unhandled_interrupt_handler);
 	interrupts_register_handler(211, rtc_timer_handler);
+	interrupts_register_handler(218, keyboard_handler);
 }
 
 void interrupts_start()
