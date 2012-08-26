@@ -1,3 +1,2 @@
-#modulenounzip /srv_screen
-#modulenounzip /srv_keyboard
-modulenounzip /srv_loop
+srv_loop
+srv_loop

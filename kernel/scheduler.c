@@ -105,6 +105,7 @@ static void sched_switch(struct thread_state *context, struct task *to_task)
 	thread_restore_state(to_task->thread, context);
 	page_dir_switch(to_task->thread->parent->pdir);
 	tss_set_stack(cpuid(), to_task->thread->kernel_stack);
+	this->current_task = to_task;
 }
 
 static uint8 sched_tick(struct thread_state *state)
@@ -115,9 +116,10 @@ static uint8 sched_tick(struct thread_state *state)
 	struct task *task = 0;
 	int prio = 0;
 
-	screen_putstr(kprintf(buf, "%x tick!\n", this));
+	//screen_putstr(kprintf(buf, "%x tick!\n", this));
 	if (this->current_task)
 	{
+		//screen_putstr(kprintf(buf, "putting back task:%x to queue: %i\n", this->current_task, this->current_prio));
 		task_list_push(this->prio_queues + get_lower_prio(this->current_prio), this->current_task);
 	}
 
@@ -132,21 +134,21 @@ static uint8 sched_tick(struct thread_state *state)
 	//section_enter(ready_list.lock);
 	if (ready_list.head && ready_list.head->thread->priority < prio)
 	{
-		screen_putstr(kprintf(buf, "picking from ready list!\n"));
+		//screen_putstr(kprintf(buf, "picking from ready list!\n"));
 		prio = ready_list.head->thread->priority;
 		list = &ready_list;
 	}
 
 	if (!list)
 		return INT_OK;
-	screen_putstr(kprintf(buf, "list OK!\n"));
+	//screen_putstr(kprintf(buf, "list OK!\n"));
 
 	task = task_list_pop(list);
-	screen_putstr(kprintf(buf, "pop OK!\n"));
+	//screen_putstr(kprintf(buf, "pop OK!\n"));
 	this->current_prio = prio;
-	screen_putstr(kprintf(buf, "sched: switching from %x to %x!\n", this->current_task, task));
+	screen_putstr(kprintf(buf, "%x to %x!\n", this->current_task, task));
 	sched_switch(state, task);
-	screen_putstr(kprintf(buf, "sched: ready to go!\n"));
+	//screen_putstr(kprintf(buf, "sched: ready to go!\n"));
 	//section_leave(ready_list.lock);
 
 	return INT_OK;
@@ -174,7 +176,7 @@ void sched_init_all()
 
 	lapic_set(0x320, 0x20080);
 	lapic_set(0x3E0, 0xB);
-	lapic_set(0x380, 0x13000000);
+	lapic_set(0x380, 0x2000000);
 
 	interrupts_register_handler(INT_SCHED_TICK, sched_tick);
 }

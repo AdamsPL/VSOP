@@ -1,16 +1,21 @@
-include ../Makefile.common
 SRC=$(wildcard *.[c,s])
 OBJ=$(subst .s,.o,$(SRC:.c=.o))
 TGT=libc.a
+RELPATH=..
+include $(RELPATH)/Makefile.top
 
-.PHONY: clean run
+.PHONY: clean install build
 
-all: $(TGT)
+all: build
+
+build: $(TGT)
 
 $(TGT): $(OBJ)
 	ar -rcs $(TGT) $(OBJ)
+
 clean:
 	rm -rvf $(OBJ) $(TGT)
 
-run: all
-	make -C ..
+install:
+
+include $(RELPATH)/Makefile.bot

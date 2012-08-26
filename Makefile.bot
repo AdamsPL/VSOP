@@ -1,0 +1,12 @@
+$(MOUNTCANARY):
+	mkdir -p $(MNTDIR) || true
+	sudo losetup $(DEV) $(IMG) --offset 1048576 || true
+	sudo mount $(DEV) $(MNTDIR) || true
+	sudo chown -R `whoami` $(MNTDIR)
+
+mount: $(MOUNTCANARY)
+
+umount:
+	sudo umount $(DEV) || true
+	sudo losetup -d $(DEV) || true
+	rm -rvf $(MNTDIR)

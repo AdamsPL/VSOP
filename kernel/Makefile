@@ -1,17 +1,23 @@
-include ../Makefile.common
 LDFLAGS+=-Tlink.ld -nostdlib -nodefaultlibs
 SRC=$(wildcard *.[c,s])
 OBJ=$(subst .s,.o,$(SRC:.c=.o))
 TGT=kernel.img
+RELPATH=..
+include $(RELPATH)/Makefile.top
 
-.PHONY: clean run
+.PHONY: clean install build
 
-all: $(TGT)
+all: build
+
+build: $(TGT)
 
 $(TGT): $(OBJ)
 	ld $(LDFLAGS) -o $@ $(OBJ)
-clean:
-	rm -rvf $(OBJ) $(TGT)
 
-run: all
-	make -C ..
+install: $(TGT)
+	cp $< $(DIST)/$<
+
+clean:
+	rm -rf $(OBJ) $(TGT)
+
+include $(RELPATH)/Makefile.bot

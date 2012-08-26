@@ -191,19 +191,12 @@ void apic_init()
 	lapic_init();
 }
 
-uint32 unhandled_flags[256] = {0};
-
 static uint8 unhandled_interrupt_handler(struct thread_state *state)
 {
 	char buf[256];
-
-	//if (unhandled_flags[state->int_id] % 128 == 0)
-	//{
-		screen_putstr(kprintf(buf, "unhandled int(%x)! pid:%i cr2: %x cpu:%i\n", state->int_id, proc_cur(), cr2, cpuid()));
-		regs_print(state);
-	//}
+	screen_putstr(kprintf(buf, "unhandled int(%x)! pid:%i cr2: %x cpu:%i\n", state->int_id, proc_cur(), cr2, cpuid()));
+	regs_print(state);
 	asm("hlt");
-	++unhandled_flags[state->int_id];
 	return INT_OK;
 }
 
@@ -220,8 +213,7 @@ void irq_handler(struct thread_state regs)
 	while(elem && elem->handler(&regs) != INT_OK)
 		elem = elem->next;
 
-	if (regs.int_id >= 200)
-		lapic_set(LAPIC_EOI, 0x01);
+	lapic_set(LAPIC_EOI, 0x01);
 }
 
 void idt_init()

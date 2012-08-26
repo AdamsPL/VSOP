@@ -1,5 +1,5 @@
 *.o
-mnt/*
+mount/*
 *.a
 disk.img
 tags
