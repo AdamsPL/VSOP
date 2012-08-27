@@ -20,6 +20,7 @@
 #define INT_OK 1
 #define INT_ERROR 0
 #define INT_SCHED_TICK 128
+#define INT_RTC 211
 
 struct thread_state{
 	uint32 ds;

@@ -7,6 +7,7 @@
 #include "cpu.h"
 #include "locks.h"
 #include "memory.h"
+#include "timer.h"
 
 #define IOAPIC_DISABLE     0x10000
 
@@ -96,23 +97,8 @@ static void ioapic_map(uint32 irq, uint32 vector)
 uint8 keyboard_handler(struct thread_state *state)
 {
 	char buf[32];
-	screen_putstr(kprintf(buf, "keyboard!:\n"));
-	return INT_OK;
-}
-
-uint8 rtc_timer_handler(struct thread_state *state)
-{
-	static uint32 ticks = 0;
-	static uint32 seconds = 0;
-	char buf[32];
-
-	++ticks;
-	if (ticks > 1023)
-	{
-		ticks = 0;
-		++seconds;
-		screen_putstr(kprintf(buf, "CLOCK!: %i\n", seconds));
-	}
+	struct time_t uptime = timer_uptime();
+	screen_putstr(kprintf(buf, "keyboard!: d:%i h:%i m:%i s:%i ms:%i\n", uptime.days, uptime.hours, uptime.minutes, uptime.sec, uptime.milisec));
 	return INT_OK;
 }
 
@@ -260,7 +246,6 @@ void interrupts_init()
 	apic_init();
 	for (i = 0; i < 256; ++i)
 		interrupts_register_handler(i, unhandled_interrupt_handler);
-	interrupts_register_handler(211, rtc_timer_handler);
 	interrupts_register_handler(218, keyboard_handler);
 }
 

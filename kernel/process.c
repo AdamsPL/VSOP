@@ -42,7 +42,26 @@ struct process *proc_create(struct proc_section text, struct proc_section data, 
 
 	page_dir_switch(KERNEL_PAGE_DIR_PHYS);
 
-
 	return processes[pid];
 }
 
+struct process *proc_get_by_pid(pid_t pid)
+{
+	return processes[pid];
+}
+
+struct process *proc_get_by_name(char *name)
+{
+	int i = 1;
+	for (i = 1; i < MAX_PROCESSES; ++i)
+		if (processes[i] && !kstrcmp(name, processes[i]->name))
+			return processes + i;
+	return 0;
+}
+
+uint8 proc_register(struct process *proc, char *name)
+{
+	//TODO: Race conditions!!!
+	kstrncpy(proc->name, name, PROC_MAX_NAME_LEN);
+	return 0;
+}

@@ -146,7 +146,7 @@ static uint8 sched_tick(struct thread_state *state)
 	task = task_list_pop(list);
 	//screen_putstr(kprintf(buf, "pop OK!\n"));
 	this->current_prio = prio;
-	screen_putstr(kprintf(buf, "%x to %x!\n", this->current_task, task));
+	//screen_putstr(kprintf(buf, "%x to %x!\n", this->current_task, task));
 	sched_switch(state, task);
 	//screen_putstr(kprintf(buf, "sched: ready to go!\n"));
 	//section_leave(ready_list.lock);
