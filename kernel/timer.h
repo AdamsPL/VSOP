@@ -15,5 +15,6 @@ struct time_t
 
 void timer_init();
 struct time_t timer_uptime();
+void timer_manage_thread(struct thread *thread);
 
 #endif

@@ -154,7 +154,7 @@ static uint8 sched_tick(struct thread_state *state)
 	return INT_OK;
 }
 
-void shed_thread_ready(struct thread *thread)
+void sched_thread_ready(struct thread *thread)
 {
 	struct task *task = task_create(thread);
 	task_list_push(&ready_list, task);

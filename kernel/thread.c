@@ -35,3 +35,8 @@ void thread_save_state(struct thread *this, struct thread_state *state)
 		return;
 	kmemcpy((uint8*)&this->state, (uint8*)state, sizeof(*state));
 }
+
+void thread_wait(struct thread *this, uint64 time)
+{
+	this->wait_time = time;
+}
