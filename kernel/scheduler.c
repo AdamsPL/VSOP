@@ -99,8 +99,8 @@ static void sched_switch(struct thread_state *context, struct task *to_task)
 {
 	struct scheduler *this = sched_current();
 
-	//if (this->current_task == to_task)
-	//	return;
+	if (this->current_task == to_task)
+		return;
 
 	thread_restore_state(to_task->thread, context);
 	page_dir_switch(to_task->thread->parent->pdir);
