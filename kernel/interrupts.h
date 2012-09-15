@@ -43,11 +43,13 @@ int lapic_get(uint32 reg);
 
 typedef uint8 (*interrupt_handler)(struct thread_state *state);
 
-void interrupts_init();
+void interrupts_init(void);
 void interrupts_register_handler(uint8 int_id, interrupt_handler handler);
-void interrupts_start();
+void interrupts_start(void);
 
-void isr_init();
+void isr_init(void);
 void idt_set(uint16 id, uint32 base, uint8 flags);
+
+void eoi(void);
 
 #endif

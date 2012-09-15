@@ -1,3 +1,9 @@
+.extern eoi
+.extern irq_common
+
+.global _leave_kernel
+.global _isr_null
+
 .macro ISR_NEC id
 	.global _isr\id
 	_isr\id:
@@ -15,12 +21,10 @@
 		jmp isr_common
 .endm
 
-.global _isr_null
 
 _isr_null:
 	iret
 
-.extern irq_common
 
 isr_common:
 	pusha
@@ -35,6 +39,19 @@ isr_common:
 
 	call irq_handler
 
+	pop %eax
+	mov %ax, %ds
+	mov %ax, %es
+	mov %ax, %fs
+	mov %ax, %gs
+
+	popa
+	add $8, %esp
+	iret
+
+
+_leave_kernel:
+	call eoi
 	pop %eax
 	mov %ax, %ds
 	mov %ax, %es

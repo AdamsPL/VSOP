@@ -44,3 +44,8 @@ uint32 cpuid()
 	return 0;
 	/*return lapic_get(LAPIC_ID);*/
 }
+
+uint32 esp(void)
+{
+	asm("movl %esp, %eax");
+}

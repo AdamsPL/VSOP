@@ -187,20 +187,24 @@ static uint8 unhandled_interrupt_handler(struct thread_state *state)
 	return INT_OK;
 }
 
+void eoi(void)
+{
+	lapic_set(LAPIC_EOI, 0x01);
+}
+
 void irq_handler(struct thread_state regs)
 {
 	char buf[256];
 	struct int_handler_elem *elem;
 
 	asm volatile("movl %%cr2, %0" : "=a"(cr2));
-	thread_save_state(sched_current_thread(), &regs);
 
 	elem = int_handlers[regs.int_id];
 
 	while(elem && elem->handler(&regs) != INT_OK)
 		elem = elem->next;
 
-	lapic_set(LAPIC_EOI, 0x01);
+	eoi();
 }
 
 void idt_init()
@@ -213,12 +217,7 @@ void idt_init()
 
 void regs_init(struct thread_state *regs, uint32 stack, uint32 entry, enum thread_flags flags)
 {
-	uint32 eflags;
 	stack += PAGE_SIZE;
-
-	asm("pushf");
-	asm("pop %eax");
-	asm("movl %%eax, %0" : "=a"(eflags));
 
 	kmemset((void*)regs, 0, sizeof(struct thread_state));
 
@@ -234,7 +233,7 @@ void regs_init(struct thread_state *regs, uint32 stack, uint32 entry, enum threa
 		regs->cs = 0x08;
 	}
 	regs->ss = regs->ds;
-	regs->eflags = eflags;
+	regs->eflags = FLAGS_INT_ENABLE;
 	regs->ebp = (uint32)stack;
 	regs->useresp = (uint32)stack;
 	regs->esp = (uint32)stack;

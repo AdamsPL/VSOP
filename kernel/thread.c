@@ -2,14 +2,17 @@
 #include "memory.h"
 #include "paging.h"
 
+void _leave_kernel(void);
+
 struct thread *thread_create(struct process *parent, uint32 entry, enum thread_flags flags)
 {
+	char buf[128];
 	struct thread *new = NEW(struct thread);
 	/*TODO:FIXME*/
 	/*When creating a second stack for a second thread we will overwrite the pagedir associated with the first one!!!*/
 	uint32 stack = 0;
 	new->parent = parent;
-	new->kernel_stack = (uint32)kmalloc(PAGE_SIZE) + PAGE_SIZE;
+	new->kernel_stack = (uint32)kmalloc(PAGE_SIZE);
 
 	if (flags && THREAD_USERSPACE)
 	{
@@ -23,24 +26,16 @@ struct thread *thread_create(struct process *parent, uint32 entry, enum thread_f
 		stack = (uint32)kmalloc(PAGE_SIZE);
 	}
 
-	regs_init(&new->state, stack, entry, flags);
-	new->stack = new->state.esp;
+	new->eip = (uint32)_leave_kernel;
+	new->esp = new->kernel_stack +PAGE_SIZE - sizeof(struct thread_state);
+
+	regs_init((struct thread_state*)new->esp, stack, entry, flags);
+	new->stack = stack;
+
+	screen_putstr(kprintf(buf, "kstack: %x\n", new->kernel_stack));
+
 
 	return new;
-}
-
-void thread_restore_state(struct thread *this, struct thread_state *state)
-{
-	if (!this || !state)
-		return;
-	kmemcpy((uint8*)state, (uint8*)&this->state, sizeof(*state));
-}
-
-void thread_save_state(struct thread *this, struct thread_state *state)
-{
-	if (!this || !state)
-		return;
-	kmemcpy((uint8*)&this->state, (uint8*)state, sizeof(*state));
 }
 
 void thread_wait(struct thread *this, uint64 time)

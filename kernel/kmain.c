@@ -15,15 +15,15 @@
 #include "process.h"
 #include "thread.h"
 
-char buf[128];
 
 void dumper()
 {
+	char buf[128];
 	uint32 esp;
 	while(1)
 	{
 		asm("movl %%esp, %0" : "=a"(esp));
-		screen_putstr(kprintf(buf, "dump! %x | ", esp));
+		screen_putstr(kprintf(buf, "dump! %x\n", esp));
 		asm("hlt");
 	}
 }
@@ -33,6 +33,7 @@ void kmain(struct mboot *mboot, unsigned int magic)
 	struct thread *thread;
 	uint32 esp;
 	uint32 eflags;
+	char buf[128];
 
 	gdt_init();
 	screen_clear();
@@ -54,10 +55,10 @@ void kmain(struct mboot *mboot, unsigned int magic)
 	//mboot_load_modules(mboot);
 
 	thread = thread_create(proc_create_kernel_proc(), (uint32)dumper, THREAD_KERNEL);
-	screen_putstr(kprintf(buf, "kthread: %x kstack:%x stack:%x! esp:%x\n", thread, thread->kernel_stack, thread->stack, thread->state.esp));
+	//screen_putstr(kprintf(buf, "kthread: %x kstack:%x stack:%x! esp:%x\n", thread, thread->kernel_stack, thread->stack, thread->state.esp));
 	sched_thread_ready(thread);
 	thread = thread_create(proc_create_kernel_proc(), (uint32)dumper, THREAD_KERNEL);
-	screen_putstr(kprintf(buf, "kthread: %x kstack:%x stack:%x! esp:%x\n", thread, thread->kernel_stack, thread->stack, thread->state.esp));
+	//screen_putstr(kprintf(buf, "kthread: %x kstack:%x stack:%x! esp:%x\n", thread, thread->kernel_stack, thread->stack, thread->state.esp));
 	sched_thread_ready(thread);
 
 /*

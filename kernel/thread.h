@@ -12,12 +12,11 @@ struct thread
 	uint32 kernel_stack;
 	struct thread *next;
 	uint64 wait_time;
-	struct thread_state state;
+	uint32 esp;
+	uint32 eip;
 };
 
 struct thread *thread_create(struct process *parent, uint32 entry, enum thread_flags flags);
-void thread_restore_state(struct thread *this, struct thread_state *state);
-void thread_save_state(struct thread *this, struct thread_state *state);
 void thread_wait(struct thread *this, uint64 time);
 
 #endif

@@ -29,6 +29,7 @@ struct scheduler
 	struct task *current_task;
 	uint8 current_prio;
 	struct task_list prio_queues[MAX_PRIORITIES];
+	struct task *idle_task;
 };
 
 struct scheduler schedulers[MAX_CPU];
@@ -82,6 +83,11 @@ static void task_list_push(struct task_list *list, struct task *task)
 static void init(struct scheduler *this)
 {
 	ZEROS(this);
+	struct thread *idle_thread = NEW(struct thread);
+	struct task *idle_task = task_create(idle_thread);
+	idle_thread->parent = proc_create_kernel_proc();
+	this->current_task = idle_task;
+	this->idle_task = idle_task;
 }
 
 struct scheduler *sched_current()
@@ -97,17 +103,50 @@ static uint8 get_lower_prio(uint8 prio)
 	return prio;
 }
 
+void _task_switch(void)
+{
+}
+
 static void sched_switch(struct thread_state *context, struct task *to_task)
 {
 	struct scheduler *this = sched_current();
+	struct thread *from_thread = this->current_task->thread;
+	struct thread *to_thread = to_task->thread;
+
+	char buf[128];
 
 	if (this->current_task == to_task)
 		return;
 
-	thread_restore_state(to_task->thread, context);
+	//screen_putstr(kprintf(buf, "from_task: %x to_task: %x\n", this->current_task, to_task));
+	//screen_putstr(kprintf(buf, "from_thread: %x to_thread: %x\n", from_thread, to_thread));
+	//screen_putstr(kprintf(buf, "from_esp: %x to_esp: %x\n", from_thread->esp, to_thread->esp));
+	//screen_putstr(kprintf(buf, "from_parent: %x to_parent: %x\n", from_thread->parent, to_thread->parent));
+
 	page_dir_switch(to_task->thread->parent->pdir);
 	tss_set_stack(cpuid(), to_task->thread->kernel_stack);
 	this->current_task = to_task;
+
+	asm volatile(\
+			"pushl %%esi\n" 			\
+			"pushl %%edi\n" 			\
+			"pushl %%ebp\n" 			\
+			"movl %%esp, %0\n" 		\
+			"movl %2, %%esp\n" 		\
+			"movl $1f, %1\n" 			\
+			"pushl %3\n" 				\
+			"jmp _task_switch\n" 	\
+			"1:\n" 					\
+			"popl %%ebp\n" 			\
+			"popl %%edi\n" 			\
+			"popl %%esi\n" 			\
+			: 						\
+		   	"=m" (from_thread->esp),\
+			"=m" (from_thread->eip) \
+			: 						\
+			"m" (to_thread->esp), 	\
+			"m" (to_thread->eip) 	\
+			);
 }
 
 static uint8 sched_tick(struct thread_state *state)
@@ -118,8 +157,8 @@ static uint8 sched_tick(struct thread_state *state)
 	struct task *task = 0;
 	int prio = 0;
 
-	//screen_putstr(kprintf(buf, "%x tick!\n", this));
-	if (this->current_task)
+	screen_putstr(kprintf(buf, "cur: %x idle:%x!\n", this->current_task, this->idle_task));
+	if (this->current_task != this->idle_task)
 	{
 		//screen_putstr(kprintf(buf, "putting back task:%x to queue: %i\n", this->current_task, this->current_prio));
 		task_list_push(this->prio_queues + get_lower_prio(this->current_prio), this->current_task);
@@ -148,7 +187,7 @@ static uint8 sched_tick(struct thread_state *state)
 	task = task_list_pop(list);
 	//screen_putstr(kprintf(buf, "pop OK!\n"));
 	this->current_prio = prio;
-	screen_putstr(kprintf(buf, "%x to %x!\n", this->current_task, task));
+	screen_putstr(kprintf(buf, "%x to %x! esp:%x prio:%x\n", this->current_task, task, esp(), this->current_prio));
 	sched_switch(state, task);
 	//screen_putstr(kprintf(buf, "sched: ready to go!\n"));
 	//section_leave(ready_list.lock);
@@ -178,7 +217,7 @@ void sched_init_all()
 
 	lapic_set(0x320, 0x20080);
 	lapic_set(0x3E0, 0xB);
-	lapic_set(0x380, 0xa000000);
+	lapic_set(0x380, 0xaa000000);
 
 	interrupts_register_handler(INT_SCHED_TICK, sched_tick);
 }

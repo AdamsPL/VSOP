@@ -3,6 +3,8 @@
 
 #include "config.h"
 
+#define FLAGS_INT_ENABLE (1 << 9)
+
 struct MP_proc_entry{
 	uint8 type;
 	uint8 lapic_id;
@@ -45,8 +47,10 @@ struct MP_float_ptr{
 	uint8 reserved[3];
 };
 
+
 struct MP_float_ptr *mp_find();
 
-uint32 cpuid();
+uint32 cpuid(void);
+uint32 esp(void);
 
 #endif
