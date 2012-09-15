@@ -8,6 +8,7 @@
 #include "locks.h"
 #include "memory.h"
 #include "timer.h"
+#include "scheduler.h"
 
 #define IOAPIC_DISABLE     0x10000
 
@@ -210,22 +211,30 @@ void idt_init()
 	idt_flush((uint32)&iptr);
 }
 
-void regs_init(struct thread_state *regs, uint32 stack, uint32 entry)
+void regs_init(struct thread_state *regs, uint32 stack, uint32 entry, enum thread_flags flags)
 {
-	uint32 flags;
+	uint32 eflags;
 	stack += PAGE_SIZE;
 
 	asm("pushf");
 	asm("pop %eax");
-	asm("movl %%eax, %0" : "=a"(flags));
+	asm("movl %%eax, %0" : "=a"(eflags));
 
 	kmemset((void*)regs, 0, sizeof(struct thread_state));
 
 	regs->eip = entry;
-	regs->ds = 0x23;
-	regs->cs = 0x1b;
+	if (flags && THREAD_USERSPACE)
+	{
+		regs->ds = 0x23;
+		regs->cs = 0x1b;
+	}
+	else
+	{
+		regs->ds = 0x10;
+		regs->cs = 0x08;
+	}
 	regs->ss = regs->ds;
-	regs->eflags = flags;
+	regs->eflags = eflags;
 	regs->ebp = (uint32)stack;
 	regs->useresp = (uint32)stack;
 	regs->esp = (uint32)stack;

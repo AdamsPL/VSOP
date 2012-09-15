@@ -55,7 +55,7 @@ struct process *proc_get_by_name(char *name)
 	int i = 1;
 	for (i = 1; i < MAX_PROCESSES; ++i)
 		if (processes[i] && !kstrcmp(name, processes[i]->name))
-			return processes + i;
+			return processes[i];
 	return 0;
 }
 
@@ -65,3 +65,20 @@ uint8 proc_register(struct process *proc, char *name)
 	kstrncpy(proc->name, name, PROC_MAX_NAME_LEN);
 	return 0;
 }
+
+struct process *proc_create_kernel_proc()
+{
+	struct process *new;
+   
+	if (processes[0])
+		return processes[0];
+
+	new = NEW(struct process);
+
+	processes[0] = new;
+	new->pid = 0;
+	new->pdir = KERNEL_PAGE_DIR_PHYS;
+
+	return new;
+}
+

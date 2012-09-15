@@ -29,7 +29,13 @@ struct thread_state{
 	uint32 eip, cs, eflags, useresp, ss;
 };
 
-void regs_init(struct thread_state *regs, uint32 stack, uint32 entry);
+enum thread_flags
+{
+	THREAD_KERNEL = 0,
+	THREAD_USERSPACE
+};
+
+void regs_init(struct thread_state *regs, uint32 stack, uint32 entry, enum thread_flags flags);
 void regs_print(struct thread_state *regs);
 
 void lapic_set(uint32 reg, uint32 value);

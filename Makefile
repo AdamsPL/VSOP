@@ -14,6 +14,7 @@ build:
 
 install: build $(MOUNTCANARY)
 	$(foreach dir, $(SUBDIRS), make -C $(dir) install;)
+	sync
 
 clean:
 	$(foreach dir, $(SUBDIRS), make -C $(dir) clean;)

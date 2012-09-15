@@ -108,5 +108,8 @@ void gdt_init()
 
 void tss_set_stack(uint32 cpu, uint32 stack)
 {
+	tss[cpu].esp = stack;
 	tss[cpu].esp0 = stack;
+	tss[cpu].esp1 = stack;
+	tss[cpu].esp2 = stack;
 }

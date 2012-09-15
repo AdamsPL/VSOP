@@ -36,8 +36,10 @@ struct task_list ready_list;
 
 static struct task *task_create(struct thread *thread)
 {
+	char buf[128];
 	struct task *ptr = NEW(struct task);
 	ptr->thread = thread;
+	screen_putstr(kprintf(buf, "NEW task:%x thread:%x!\n", ptr, thread));
 	return ptr;
 }
 
@@ -146,7 +148,7 @@ static uint8 sched_tick(struct thread_state *state)
 	task = task_list_pop(list);
 	//screen_putstr(kprintf(buf, "pop OK!\n"));
 	this->current_prio = prio;
-	//screen_putstr(kprintf(buf, "%x to %x!\n", this->current_task, task));
+	screen_putstr(kprintf(buf, "%x to %x!\n", this->current_task, task));
 	sched_switch(state, task);
 	//screen_putstr(kprintf(buf, "sched: ready to go!\n"));
 	//section_leave(ready_list.lock);
@@ -176,7 +178,7 @@ void sched_init_all()
 
 	lapic_set(0x320, 0x20080);
 	lapic_set(0x3E0, 0xB);
-	lapic_set(0x380, 0x2000000);
+	lapic_set(0x380, 0xa000000);
 
 	interrupts_register_handler(INT_SCHED_TICK, sched_tick);
 }

@@ -30,8 +30,8 @@ struct process
 };
 
 struct process *proc_create(struct proc_section text, struct proc_section data, struct proc_section bss);
+struct process *proc_create_kernel_proc();
 struct process *proc_get_by_pid(pid_t pid);
 struct process *proc_get_by_name(char *name);
 uint8 proc_register(struct process *proc, char *name);
-
 #endif

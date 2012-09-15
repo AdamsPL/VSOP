@@ -37,7 +37,7 @@ pid_t elf_load(uint8 *buf)
 		}
 	}
 	struct process *proc = proc_create(text, data, bss);
-	struct thread *thread = thread_create(proc, hdr->e_entry);
+	struct thread *thread = thread_create(proc, hdr->e_entry, THREAD_USERSPACE);
 	sched_thread_ready(thread);
 
 	return 0;

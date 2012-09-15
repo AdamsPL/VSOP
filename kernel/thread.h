@@ -15,7 +15,7 @@ struct thread
 	struct thread_state state;
 };
 
-struct thread *thread_create(struct process *parent, uint32 entry);
+struct thread *thread_create(struct process *parent, uint32 entry, enum thread_flags flags);
 void thread_restore_state(struct thread *this, struct thread_state *state);
 void thread_save_state(struct thread *this, struct thread_state *state);
 void thread_wait(struct thread *this, uint64 time);

@@ -11,18 +11,54 @@
 #include "gdt.h"
 #include "elf.h"
 #include "drivers.h"
+#include "screen.h"
+#include "process.h"
+#include "thread.h"
+
+char buf[128];
+
+void dumper()
+{
+	uint32 esp;
+	while(1)
+	{
+		asm("movl %%esp, %0" : "=a"(esp));
+		screen_putstr(kprintf(buf, "dump! %x | ", esp));
+		asm("hlt");
+	}
+}
 
 void kmain(struct mboot *mboot, unsigned int magic)
 {
+	struct thread *thread;
+	uint32 esp;
+	uint32 eflags;
+
 	gdt_init();
 	screen_clear();
 	mboot_parse(mboot);
 	interrupts_init();
 	drivers_init();
 	sched_init_all();
-	timer_init();
+	asm("pushf");
+	asm("pop %eax");
+	asm("movl %%eax, %0" : "=a"(eflags));
+	eflags |= 1 << 14;
+	asm("movl %0, %%eax" :: "m"(eflags));
+	asm("push %eax");
+	asm("popf");
+	//timer_init();
+		asm("movl %%esp, %0" : "=a"(esp));
+		screen_putstr(kprintf(buf, "ORIG kstack! %x | ", esp));
 	interrupts_start();
-	mboot_load_modules(mboot);
+	//mboot_load_modules(mboot);
+
+	thread = thread_create(proc_create_kernel_proc(), (uint32)dumper, THREAD_KERNEL);
+	screen_putstr(kprintf(buf, "kthread: %x kstack:%x stack:%x! esp:%x\n", thread, thread->kernel_stack, thread->stack, thread->state.esp));
+	sched_thread_ready(thread);
+	thread = thread_create(proc_create_kernel_proc(), (uint32)dumper, THREAD_KERNEL);
+	screen_putstr(kprintf(buf, "kthread: %x kstack:%x stack:%x! esp:%x\n", thread, thread->kernel_stack, thread->stack, thread->state.esp));
+	sched_thread_ready(thread);
 
 /*
 	mpc = mp_find()->config;
