@@ -3,6 +3,12 @@
 
 #include "config.h"
 
+struct gdt
+{
+	uint16 size;
+	uint32 base;
+}__attribute__((packed));
+
 void gdt_init();
 void tss_set_stack(uint32 cpu, uint32 stack);
 

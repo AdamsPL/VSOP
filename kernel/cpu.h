@@ -5,7 +5,8 @@
 
 #define FLAGS_INT_ENABLE (1 << 9)
 
-struct MP_proc_entry{
+struct MP_proc_entry
+{
 	uint8 type;
 	uint8 lapic_id;
 	uint8 lapic_ver;
@@ -14,7 +15,8 @@ struct MP_proc_entry{
 	uint32 cpu_feat_flags;
 };
 
-struct MP_ioapic_entry{
+struct MP_ioapic_entry
+{	
 	uint8 type;
 	uint8 id;
 	uint8 ver;
@@ -22,10 +24,11 @@ struct MP_ioapic_entry{
 	uint32 addr;
 };
 
-struct MP_config{
+struct MP_config
+{
 	uint8 signature[4];
 	uint16 base_tab_len;
-	uint8 specRev;
+	uint8 spec_rev;
 	uint8 checksum;
 	uint8 oem_id[8];
 	uint8 prod_id[12];
@@ -37,7 +40,8 @@ struct MP_config{
 	uint8 ext_tab_checksum;
 };
 
-struct MP_float_ptr{
+struct MP_float_ptr
+{
 	uint8 signature[4];
 	struct MP_config *config;
 	uint8 length;
@@ -49,6 +53,9 @@ struct MP_float_ptr{
 
 
 struct MP_float_ptr *mp_find();
+
+void cpu_find();
+void cpu_wake_all();
 
 uint32 cpuid(void);
 uint32 esp(void);

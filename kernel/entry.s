@@ -33,7 +33,7 @@ mboot:
 
 start:
 	cli
-	lgdt (fake_gdt - 0xC0000000)
+	lgdt (fake_gdt_ptr - 0xC0000000)
 	movl $0x10, %ecx
 	movw %cx, %ds
 	movw %cx, %es
@@ -81,15 +81,17 @@ loop:
 call_kernel:
 	call kmain
 
-fake_gdt:
-	.word gdt_end - gdt - 1
-	.long gdt - 0xC0000000
+.global fake_gdt_ptr
+.global fake_gdt_end
 
-gdt:
+fake_gdt_ptr:
+	.word fake_gdt_end - fake_gdt - 1
+	.long fake_gdt - 0xC0000000
+fake_gdt:
 	.long 0, 0
 	.byte 0xFF, 0xFF, 0x0, 0x0, 0x0, 0x9A, 0xCF, 0x40
 	.byte 0xFF, 0xFF, 0x0, 0x0, 0x0, 0x92, 0xCF, 0x40
-gdt_end:
+fake_gdt_end:
 
 .section .data
 

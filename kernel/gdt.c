@@ -13,11 +13,6 @@ struct gdt_entry
 	uint8 base_high;
 } __attribute__((packed));
 
-struct gdt
-{
-	uint16 size;
-	uint32 base;
-}__attribute__((packed));
 
 struct tss_entry
 {
@@ -51,7 +46,7 @@ struct tss_entry
 } __attribute__((packed));
 
 static struct gdt_entry gdt[GDT_ENTRIES];
-static struct gdt gdtr;
+struct gdt gdtr;
 static struct tss_entry tss[MAX_CPU];
 
 extern void gdt_flush(uint32 ptr);
