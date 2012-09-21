@@ -109,3 +109,9 @@ void timer_manage_thread(struct thread *thread)
 {
 	_wait_list_add(thread);
 }
+
+void timer_active_wait(uint32 wtime)
+{
+	wtime += ticks;
+	while(ticks < wtime);
+}

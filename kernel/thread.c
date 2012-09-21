@@ -32,9 +32,6 @@ struct thread *thread_create(struct process *parent, uint32 entry, enum thread_f
 	regs_init((struct thread_state*)new->esp, stack, entry, flags);
 	new->stack = stack;
 
-	screen_putstr(kprintf(buf, "kstack: %x\n", new->kernel_stack));
-
-
 	return new;
 }
 

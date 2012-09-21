@@ -5,7 +5,6 @@
 #define MAX_PROCESSES (1 << 16)
 #define MAX_QUEUES (1 << 16)
 #define MAX_CPU 8
-#define MAX_PRIORITIES 4
 #define DEFAULT_PRIORITY 1
 
 #define PAGE_SHIFT 12
