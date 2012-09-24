@@ -34,7 +34,7 @@ struct int_handler_elem
 struct int_handler_elem *int_handlers[256];
 
 static struct idt_entry idt_entries[256];
-static volatile struct idt iptr;
+volatile struct idt iptr;
 
 #include "screen.h"
 

@@ -65,9 +65,8 @@ static void gdt_set(int32 id, uint32 base, uint32 limit, uint8 access, uint8 gra
 }
 
 
-void tss_flush()
+void tss_flush(uint32 id)
 {
-	uint8 id = cpuid();
 	id += 5;
 	id *= 8;
 	id |= 0x03;
@@ -96,9 +95,10 @@ void gdt_init()
 		tss[i].cs = 0x0b;
 		tss[i].ss = tss[i].ds = tss[i].es = tss[i].fs = tss[i].gs = 0x13;
 	}
-
 	gdt_flush((uint32)&gdtr);
-	tss_flush();
+	for (i = 0; i < MAX_CPU; ++i)
+		tss_flush(i);
+
 }
 
 void tss_set_stack(uint32 cpu, uint32 stack)

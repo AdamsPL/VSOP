@@ -42,8 +42,7 @@ struct MP_float_ptr *mp_find()
 
 uint32 cpuid()
 {
-	return 0;
-	//return lapic_get(LAPIC_ID) >> 24;
+	return lapic_get(LAPIC_ID) >> 24;
 }
 
 uint32 esp(void)

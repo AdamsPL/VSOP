@@ -31,9 +31,10 @@ void hello_world(void)
 {
 	char buf[128];
 	screen_putstr(kprintf(buf, "Hello world(%x)! esp:%x\n", lapic_get(LAPIC_ID) >> 24, esp()));
-	screen_putstr(kprintf(buf, "Hello world(%x)! esp:%x\n", lapic_get(LAPIC_ID) >> 24, esp()));
 	lapic_init();
 	interrupts_start();
+	tss_flush(cpuid());
+	sched_init();
 }
 
 void kmain(struct mboot *mboot, unsigned int magic)
@@ -48,7 +49,6 @@ void kmain(struct mboot *mboot, unsigned int magic)
 	mboot_parse(mboot);
 	interrupts_init();
 	drivers_init();
-	sched_init_all();
 	asm("pushf");
 	asm("pop %eax");
 	asm("movl %%eax, %0" : "=a"(eflags));
@@ -61,6 +61,8 @@ void kmain(struct mboot *mboot, unsigned int magic)
 
 	cpu_find();
 	cpu_wake_all();
+
+	sched_init();
 
 	while(1)
 		asm("hlt");

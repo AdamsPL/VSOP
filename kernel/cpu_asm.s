@@ -7,6 +7,7 @@
 .extern kpage_dir
 .extern cpu_stack
 .extern hello_world
+.extern iptr
 
 _cpu_trampoline:
 	xor %ax, %ax
@@ -51,6 +52,8 @@ bootstrap:
 	movl %eax, %cr0
 	movl $gdtr, %eax
 	lgdt (%eax)
+	movl $iptr, %eax
+	lidt (%eax)
 	mov $0x10, %ax
 	mov %ax, %ds
 	mov %ax, %es
@@ -66,5 +69,5 @@ orig_gdt:
 	call hello_world
 ready_loop:
 	hlt
-	jmpl ready_loop
+	jmpl *ready_loop
 _cpu_trampoline_end:

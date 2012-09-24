@@ -96,7 +96,8 @@ static void init(struct scheduler *this)
 
 struct scheduler *sched_current()
 {
-	return schedulers;
+	int cpu = lapic_get(LAPIC_ID) >> 24;
+	return schedulers + cpu;
 }
 
 static int get_lower_prio(int prio)
@@ -225,6 +226,8 @@ static uint8 sched_tick(struct thread_state *state)
 	struct scheduler *this = sched_current();
 	char buf[128];
 
+	screen_putstr(kprintf(buf, "sched id: %x\n", lapic_get(LAPIC_ID) >> 24));
+
 	sched_put_back(this);
 	sched_move_down(this);
 	sched_move_up(this);
@@ -245,15 +248,14 @@ struct thread *sched_current_thread()
 	return this->current_thread;
 }
 
-void sched_init_all()
+void sched_init()
 {
-	int i;
-	for (i = 0; i < MAX_CPU; ++i)
-		init(schedulers + i);
+	int cpu = lapic_get(LAPIC_ID) >> 24;
+	init(schedulers + cpu);
+
+	interrupts_register_handler(INT_SCHED_TICK, sched_tick);
 
 	lapic_set(0x320, 0x20080);
 	lapic_set(0x3E0, 0xB);
-	lapic_set(0x380, 0x6000000);
-
-	interrupts_register_handler(INT_SCHED_TICK, sched_tick);
+	lapic_set(0x380, 0xF6000000);
 }

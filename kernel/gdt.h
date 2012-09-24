@@ -11,6 +11,7 @@ struct gdt
 
 void gdt_init();
 void tss_set_stack(uint32 cpu, uint32 stack);
+void tss_flush(uint32 id);
 
 #endif 
 

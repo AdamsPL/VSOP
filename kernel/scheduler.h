@@ -4,7 +4,7 @@
 #include "config.h"
 #include "thread.h"
 
-void sched_init_all();
+void sched_init();
 void sched_thread_ready(struct thread *thread);
 struct thread *sched_current_thread();
 
