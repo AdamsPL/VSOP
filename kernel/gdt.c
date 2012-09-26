@@ -1,5 +1,6 @@
 #include "gdt.h"
 #include "util.h"
+#include "interrupts.h"
 
 #define GDT_ENTRIES (6 + MAX_CPU)
 
@@ -64,7 +65,6 @@ static void gdt_set(int32 id, uint32 base, uint32 limit, uint8 access, uint8 gra
 	gdt[id].access = access;
 }
 
-
 void tss_flush(uint32 id)
 {
 	id += 5;
@@ -72,6 +72,15 @@ void tss_flush(uint32 id)
 	id |= 0x03;
 	asm("movl %0, %%eax" :: "m"(id) : "%eax");
 	asm("ltr %ax");
+}
+
+static void tss_init(uint8 id)
+{
+	gdt_set(5 + id, VIRT_TO_PHYS(&tss[id]), VIRT_TO_PHYS(&tss[id + 1]), 0xE9, 0x00);
+	tss[id].ss0 = 0x10;
+	tss[id].esp0 = 0xDEADC0DE;
+	tss[id].cs = 0x0b;
+	tss[id].ss = tss[id].ds = tss[id].es = tss[id].fs = tss[id].gs = 0x13;
 }
 
 void gdt_init()
@@ -88,23 +97,13 @@ void gdt_init()
 	gdt_set(3, 0, 0xFFFFFFFF, 0xFA, 0xCF);
 	gdt_set(4, 0, 0xFFFFFFFF, 0xF2, 0xCF);
 	
-	for (i = 0; i < MAX_CPU; ++i) {
-		gdt_set(5 + i, VIRT_TO_PHYS(tss + i), VIRT_TO_PHYS(tss + i) + sizeof(struct tss_entry), 0xE9, 0x00);
-		tss[i].ss0 = 0x10;
-		tss[i].esp0 = 0xDEADC0DE;
-		tss[i].cs = 0x0b;
-		tss[i].ss = tss[i].ds = tss[i].es = tss[i].fs = tss[i].gs = 0x13;
-	}
-	gdt_flush((uint32)&gdtr);
 	for (i = 0; i < MAX_CPU; ++i)
-		tss_flush(i);
+		tss_init(i);
 
+	gdt_flush((uint32)&gdtr);
 }
 
 void tss_set_stack(uint32 cpu, uint32 stack)
 {
-	tss[cpu].esp = stack;
 	tss[cpu].esp0 = stack;
-	tss[cpu].esp1 = stack;
-	tss[cpu].esp2 = stack;
 }

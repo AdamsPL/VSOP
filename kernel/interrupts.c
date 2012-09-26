@@ -259,6 +259,7 @@ void interrupts_init()
 
 void interrupts_start()
 {
+	tss_flush(cpuid());
 	asm("sti");
 }
 

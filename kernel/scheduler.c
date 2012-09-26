@@ -10,6 +10,7 @@
 
 #define MAX_PRIORITY 8
 
+static lock_t lock = 0;
 
 struct thread_list
 {
@@ -18,26 +19,25 @@ struct thread_list
 	lock_t lock;
 };
 
-struct scheduler
-{
-	struct thread_list prio_queues[MAX_PRIORITY];
-	struct thread *idle_thread;
-	struct thread *current_thread;
-};
+struct thread_list prio_queues[MAX_PRIORITY];
+struct thread *idle_thread[MAX_CPU];
+struct thread *current_thread[MAX_CPU];
 
-struct scheduler schedulers[MAX_CPU];
-
-static void sched_print(struct scheduler *this)
+static void sched_print()
 {
 	struct thread *thread;
-	int pri;
+	int pri, i;
 	char buf[128];
 
-	screen_putstr(kprintf(buf, "cur: %x\n", this->current_thread));
+	for (i = 0; i < cpu_count(); ++i)
+	{
+		screen_putstr(kprintf(buf, "cpu: %i cur: %x is_idle: %i\n", i, current_thread[i], current_thread[i] == idle_thread[i]));
+	}
+
 	for (pri = 0; pri < MAX_PRIORITY; ++pri)
 	{
-		screen_putstr(kprintf(buf, "[%i h:%x t:%x]: ", pri, this->prio_queues[pri].head, this->prio_queues[pri].tail));
-		thread = this->prio_queues[pri].head;
+		screen_putstr(kprintf(buf, "[%i h:%x t:%x]: ", pri, prio_queues[pri].head, prio_queues[pri].tail));
+		thread = prio_queues[pri].head;
 		while(thread)
 		{
 			screen_putstr(kprintf(buf, "%x[->%x], ", thread, thread->next));
@@ -86,18 +86,8 @@ static void idle_loop(void)
 	}
 }
 
-static void init(struct scheduler *this)
+static void init()
 {
-	ZEROS(this);
-	struct thread *idle_thread = thread_create(proc_create_kernel_proc(), (uint32)idle_loop, THREAD_KERNEL);
-	this->current_thread = idle_thread;
-	this->idle_thread = idle_thread;
-}
-
-struct scheduler *sched_current()
-{
-	int cpu = lapic_get(LAPIC_ID) >> 24;
-	return schedulers + cpu;
 }
 
 static int get_lower_prio(int prio)
@@ -114,26 +104,27 @@ static int get_higher_prio(int prio)
 
 void _task_switch(void)
 {
+	section_leave(&lock);
 }
 
-static sched_put_back(struct scheduler *this)
+static sched_put_back()
 {
-	struct thread *thread = this->current_thread;
-	if (thread == this->idle_thread)
+	struct thread *thread = current_thread[cpuid()];
+	if (thread == idle_thread[cpuid()])
 		return;
 	++thread->sched_exec_ticks;
 	thread->sched_wait_ticks = 0;
-	thread_list_push(this->prio_queues + thread->priority, thread);
+	thread_list_push(prio_queues + thread->priority, thread);
 }
 
-static sched_move_down(struct scheduler *this)
+static sched_move_down()
 {
 	struct thread *thread;
 	int pri;
 	char buf[128];
 	for (pri = 0; pri < MAX_PRIORITY; ++pri)
 	{
-		thread = this->prio_queues[pri].head;
+		thread = prio_queues[pri].head;
 		if (!thread)
 			continue;
 		if (thread->sched_exec_ticks >= (1 << thread->priority))
@@ -142,20 +133,20 @@ static sched_move_down(struct scheduler *this)
 			thread->sched_exec_ticks = 0;
 			thread->sched_wait_ticks = 0;
 			thread->priority = get_lower_prio(thread->priority);
-			thread_list_pop(this->prio_queues + pri);
-			thread_list_push(this->prio_queues + thread->priority, thread);
+			thread_list_pop(prio_queues + pri);
+			thread_list_push(prio_queues + thread->priority, thread);
 		}
 	}
 }
 
-static sched_move_up(struct scheduler *this)
+static sched_move_up()
 {
 	struct thread *thread;
 	int pri;
 	char buf[128];
 	for (pri = 0; pri < MAX_PRIORITY; ++pri)
 	{
-		thread = this->prio_queues[pri].head;
+		thread = prio_queues[pri].head;
 		if (!thread)
 			continue;
 		++thread->sched_wait_ticks;
@@ -165,15 +156,15 @@ static sched_move_up(struct scheduler *this)
 			thread->sched_exec_ticks = 0;
 			thread->sched_wait_ticks = 0;
 			thread->priority = get_higher_prio(thread->priority);
-			thread_list_pop(this->prio_queues + pri);
-			thread_list_push(this->prio_queues + thread->priority, thread);
+			thread_list_pop(prio_queues + pri);
+			thread_list_push(prio_queues + thread->priority, thread);
 		}
 	}
 }
 
-static sched_switch(struct scheduler *this, struct thread *from_thread, struct thread *to_thread)
+static sched_switch(struct thread *from_thread, struct thread *to_thread)
 {
-	this->current_thread = to_thread;
+	current_thread[cpuid()] = to_thread;
 
 	if (from_thread == to_thread)
 		return;
@@ -182,7 +173,7 @@ static sched_switch(struct scheduler *this, struct thread *from_thread, struct t
 		page_dir_switch(to_thread->parent->pdir);
 
 	tss_set_stack(cpuid(), to_thread->kernel_stack);
-	this->current_thread = to_thread;
+	current_thread[cpuid()] = to_thread;
 
 	asm volatile(\
 			"pushl %%esi\n" 			\
@@ -206,56 +197,60 @@ static sched_switch(struct scheduler *this, struct thread *from_thread, struct t
 			);
 }
 
-static sched_pick(struct scheduler *this)
+static sched_pick()
 {
 	struct thread *thread;
 	int pri;
 	for (pri = 0; pri < MAX_PRIORITY; ++pri)
 	{
-		thread = thread_list_pop(this->prio_queues + pri);
+		thread = thread_list_pop(prio_queues + pri);
 		if (!thread)
 			continue;
-		sched_switch(this, this->current_thread, thread);
+		sched_switch(current_thread[cpuid()], thread);
 		return;
 	}
-	sched_switch(this, this->current_thread, this->idle_thread);
+	sched_switch(current_thread[cpuid()], idle_thread[cpuid()]);
 }
+
 
 static uint8 sched_tick(struct thread_state *state)
 {
-	struct scheduler *this = sched_current();
-	char buf[128];
 
-	screen_putstr(kprintf(buf, "sched id: %x\n", lapic_get(LAPIC_ID) >> 24));
+	section_enter(&lock);
 
-	sched_put_back(this);
-	sched_move_down(this);
-	sched_move_up(this);
-	sched_pick(this);
+	//sched_print();
+
+	sched_put_back();
+	sched_move_down();
+	sched_move_up();
+	sched_pick();
+
+	section_leave(&lock);
 
 	return INT_OK;
 }
 
 void sched_thread_ready(struct thread *thread)
 {
-	struct scheduler *this = sched_current();
-	thread_list_push(this->prio_queues + thread->priority, thread);
-}
-
-struct thread *sched_current_thread()
-{
-	struct scheduler *this = sched_current();
-	return this->current_thread;
+	section_enter(&lock);
+	thread_list_push(prio_queues + thread->priority, thread);
+	section_leave(&lock);
 }
 
 void sched_init()
 {
-	int cpu = lapic_get(LAPIC_ID) >> 24;
-	init(schedulers + cpu);
+	section_leave(&lock);
+
+	struct thread *new_thread = thread_create(proc_create_kernel_proc(), (uint32)idle_loop, THREAD_KERNEL);
+
+	current_thread[cpuid()] = new_thread;
+	idle_thread[cpuid()] = new_thread;
 
 	interrupts_register_handler(INT_SCHED_TICK, sched_tick);
 
 	lapic_set(0x320, 0x20080);
 	lapic_set(0x3E0, 0xB);
-	lapic_set(0x380, 0xF6000000);
+	lapic_set(0x380, 0x06000000);
+
+	section_leave(&lock);
 }

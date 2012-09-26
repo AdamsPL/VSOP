@@ -15,6 +15,7 @@
 #include "process.h"
 #include "thread.h"
 
+lock_t lock;
 
 void dumper()
 {
@@ -23,18 +24,15 @@ void dumper()
 	while(1)
 	{
 		asm("movl %%esp, %0" : "=a"(esp));
-		screen_putstr(kprintf(buf, "dump! %x\n", esp));
+		screen_putstr(kprintf(buf, "dump! %x cpu:%x\n", esp, cpuid()));
 	}
 }
 
 void hello_world(void)
 {
-	char buf[128];
-	screen_putstr(kprintf(buf, "Hello world(%x)! esp:%x\n", lapic_get(LAPIC_ID) >> 24, esp()));
 	lapic_init();
-	interrupts_start();
-	tss_flush(cpuid());
 	sched_init();
+	interrupts_start();
 }
 
 void kmain(struct mboot *mboot, unsigned int magic)
@@ -47,6 +45,7 @@ void kmain(struct mboot *mboot, unsigned int magic)
 	gdt_init();
 	screen_clear();
 	mboot_parse(mboot);
+	cpu_find();
 	interrupts_init();
 	drivers_init();
 	asm("pushf");
@@ -56,26 +55,29 @@ void kmain(struct mboot *mboot, unsigned int magic)
 	asm("movl %0, %%eax" :: "m"(eflags));
 	asm("push %eax");
 	asm("popf");
+
+	sched_init();
 	timer_init();
 	interrupts_start();
 
-	cpu_find();
 	cpu_wake_all();
-
-	sched_init();
-
-	while(1)
-		asm("hlt");
-
+	
+	thread = thread_create(proc_create_kernel_proc(), (uint32)dumper, THREAD_KERNEL);
+	sched_thread_ready(thread);
+	thread = thread_create(proc_create_kernel_proc(), (uint32)dumper, THREAD_KERNEL);
+	sched_thread_ready(thread);
+	thread = thread_create(proc_create_kernel_proc(), (uint32)dumper, THREAD_KERNEL);
+	sched_thread_ready(thread);
+	thread = thread_create(proc_create_kernel_proc(), (uint32)dumper, THREAD_KERNEL);
+	sched_thread_ready(thread);
+	thread = thread_create(proc_create_kernel_proc(), (uint32)dumper, THREAD_KERNEL);
+	sched_thread_ready(thread);
+	thread = thread_create(proc_create_kernel_proc(), (uint32)dumper, THREAD_KERNEL);
+	sched_thread_ready(thread);
+	
 	mboot_load_modules(mboot);
 
-	thread = thread_create(proc_create_kernel_proc(), (uint32)dumper, THREAD_KERNEL);
-	sched_thread_ready(thread);
-	thread = thread_create(proc_create_kernel_proc(), (uint32)dumper, THREAD_KERNEL);
-	sched_thread_ready(thread);
-	thread = thread_create(proc_create_kernel_proc(), (uint32)dumper, THREAD_KERNEL);
-	sched_thread_ready(thread);
-
 	while(1)
 		asm("hlt");
+
 }

@@ -6,6 +6,8 @@
 #include "screen.h"
 #include "ports.h"
 
+static num_of_cpu = -1;
+
 static void *mp_slide(uint8 *from, uint8 *to)
 {
 	while(from < to)
@@ -50,14 +52,14 @@ uint32 esp(void)
 	asm("movl %esp, %eax");
 }
 
-uint32 cpu_count = 1;
-
 void cpu_find()
 {
 	char buf[256];
 	struct MP_config *mpc = mp_find()->config;
 	uint8 *ptr;
 	int i;
+
+	num_of_cpu = 0;
 
 	ptr = (uint8*)mpc + sizeof(*mpc);
 	for (i = 0; i < mpc->entry_count; ++i) {
@@ -66,7 +68,7 @@ void cpu_find()
 			screen_putstr(kprintf(buf, "lapic id:%i ", pe_ptr->lapic_id));
 			screen_putstr(kprintf(buf, "cpu_flags:%x\n", pe_ptr->cpu_flags));
 			ptr += 20;
-			++cpu_count;
+			++num_of_cpu;
 		}else
 			break;
 	}
@@ -111,10 +113,10 @@ void cpu_wake_all()
 	screen_putstr(kprintf(buf, "fake_gdt_len @ %x\n", fake_gdt_len));
 
 	cpu_stack = 0xB00B1E50;
-	for (cpu = 1; cpu < cpu_count; ++cpu)
+	for (cpu = 1; cpu < cpu_count(); ++cpu)
 	{
 		cpu_stack = (uint32)kmalloc(PAGE_SIZE);
-		screen_putstr(kprintf(buf, "cpu %i stack: %x\n", cpu, cpu_stack));
+		screen_putstr(kprintf(buf, "wake! cpu %i stack: %x\n", cpu, cpu_stack));
 		lapic_set(LAPIC_ICR_HIGH, cpu << 24);
 		lapic_set(LAPIC_ICR_LOW, INIT | LEVEL | ASSERT);
 		timer_active_wait(200);
@@ -123,4 +125,9 @@ void cpu_wake_all()
 		lapic_set(LAPIC_ICR_LOW, STARTUP | (addr >> 12));
 	}
 	return;
+}
+
+int cpu_count()
+{
+	return num_of_cpu;
 }

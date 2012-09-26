@@ -69,5 +69,5 @@ orig_gdt:
 	call hello_world
 ready_loop:
 	hlt
-	jmpl *ready_loop
+	jmp ready_loop
 _cpu_trampoline_end:

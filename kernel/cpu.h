@@ -54,9 +54,11 @@ struct MP_float_ptr
 
 struct MP_float_ptr *mp_find();
 
+
 void cpu_find();
 void cpu_wake_all();
 
+int cpu_count();
 uint32 cpuid(void);
 uint32 esp(void);
 
