@@ -3,28 +3,20 @@
 #include "multitasking.h"
 #include "memory.h"
 
-static struct msg_queue *queues[MAX_QUEUES];
-
-queue_id queue_create()
+struct msg_queue *queue_create(pid_t owner)
 {
-	queue_id id;
-	for (id = 0; id < MAX_QUEUES; ++id){
-		if (queues[id] == 0){
-			queues[id] = kmalloc(sizeof(struct msg_queue));
-			return id;
-		}
-	}
-	return 0;
+	struct msg_queue *result = NEW(struct msg_queue);
+	result->header.owner = owner;
+	return result;
 }
 
-uint8 ipc_connect(pid_t p1, pid_t p2)
+int ipc_connect(pid_t p1, pid_t p2)
 {
-	queue_id q1, q2;
-	q1 = queue_create();
-	q2 = queue_create();
+	struct msg_queue *q1 = queue_create(p1);
+	struct msg_queue *q2 = queue_create(p2);
 
-	proc_map_queue(p2, q2, q1);
-	return proc_map_queue(p1, q1, q2);
+	proc_attach_queue(proc_get_by_pid(p2), q2, q1);
+	return proc_attach_queue(proc_get_by_pid(p1), q1, q2);
 }
 
 static inline int next(int value)
@@ -32,38 +24,32 @@ static inline int next(int value)
 	return (value+1) % QUEUE_LEN;
 }
 
-int ipc_send(queue_id id, uint8 *ptr, uint16 size)
+int ipc_send(struct queue_descr *descr, uint8 *ptr, uint16 size)
 {
-	int status = 0;
-	struct msg_queue *queue = queues[id];
+	int count = 0;
+	struct msg_queue *queue = descr->send;
 
 	while(next(queue->header.write) != queue->header.read){
 		queue->buf[queue->header.write] = *ptr++;
-		status++;
+		count++;
 		queue->header.write = next(queue->header.write);
-		if (status == size)
+		if (count == size)
 			break;
 	}
-	return status;
+	return count;
 }
 
-int ipc_receive(queue_id id, uint8 *ptr, uint16 size)
+int ipc_receive(struct queue_descr *descr, uint8 *ptr, uint16 size)
 {
-	int status = 0;
-	struct msg_queue *queue = queues[id];
+	int count = 0;
+	struct msg_queue *queue = descr->recv;
 
 	while(queue->header.write != queue->header.read){
 		*ptr++ = queue->buf[queue->header.read];
-		status++;
+		count++;
 		queue->header.read = next(queue->header.read);
-		if (status == size)
+		if (count == size)
 			break;
 	}
-	return status;
-}
-
-int ipc_empty(queue_id id)
-{
-	struct msg_queue *queue = queues[id];
-	return (queue->header.write == queue->header.read);
+	return count;
 }

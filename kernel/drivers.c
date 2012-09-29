@@ -29,6 +29,7 @@ int server_set(pid_t pid, char *name, int irq)
 	int i = 0;
 	int descr;
 
+	/*
 	while(drivers[i].name[0] != '\0')
 		++i;
 	drivers[i].pid = pid;
@@ -37,6 +38,7 @@ int server_set(pid_t pid, char *name, int irq)
 		return -1;
 	handlers[irq] = queue_create();
 	descr = proc_map_queue(pid, 0, handlers[irq]);
+	*/
 	return descr;
 }
 

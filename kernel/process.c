@@ -8,9 +8,9 @@ static struct process *processes[MAX_PROCESSES];
 
 static pid_t find_next_pid()
 {
-	int i = 1;
-	for (i = 1; i < MAX_PROCESSES; ++i)
-		if (processes[i])
+	int i = 0;
+	for (i = 0; i < MAX_PROCESSES; ++i)
+		if (!processes[i])
 			return i;
 	return 0;
 }
@@ -59,7 +59,7 @@ struct process *proc_get_by_name(char *name)
 	return 0;
 }
 
-uint8 proc_register(struct process *proc, char *name)
+int proc_register(struct process *proc, char *name)
 {
 	//TODO: Race conditions!!!
 	kstrncpy(proc->name, name, PROC_MAX_NAME_LEN);
@@ -68,17 +68,32 @@ uint8 proc_register(struct process *proc, char *name)
 
 struct process *proc_create_kernel_proc()
 {
-	struct process *new;
-   
-	if (processes[0])
-		return processes[0];
+	char buf[128];
 
-	new = NEW(struct process);
+	struct process *new = NEW(struct process);
+   	pid_t pid = find_next_pid();
 
-	processes[0] = new;
-	new->pid = 0;
+	processes[pid] = new;
+	new->pid = pid;
 	new->pdir = KERNEL_PAGE_DIR_PHYS;
 
 	return new;
 }
 
+int proc_attach_queue(struct process *proc, struct msg_queue *send_queue, struct msg_queue *recv_queue)
+{
+	int i;
+	//TODO: Add locking
+	for (i = 0; i < MAX_QUEUES; ++i)
+	{
+		if (!proc->msg_queues[i].send && !proc->msg_queues[i].recv)
+			break;
+	}
+	if (i == MAX_QUEUES)
+		return -1;
+
+	proc->msg_queues[i].send = send_queue;
+	proc->msg_queues[i].recv = recv_queue;
+
+	return i;
+}

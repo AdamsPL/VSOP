@@ -13,7 +13,7 @@ ifeq ($(OPT_LVL),speed)
 	LDFLAGS+=-s
 endif
 
-CFLAGS+=-m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector -pipe -march=native
+CFLAGS+=-m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector -pipe -march=native -pedantic
 ASFLAGS+=--32
 LDFLAGS+=-melf_i386
 MNTDIR=$(RELPATH)/mount

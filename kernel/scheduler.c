@@ -34,6 +34,8 @@ static void sched_print()
 		screen_putstr(kprintf(buf, "cpu: %i cur: %x is_idle: %i\n", i, current_thread[i], current_thread[i] == idle_thread[i]));
 	}
 
+	return;
+
 	for (pri = 0; pri < MAX_PRIORITY; ++pri)
 	{
 		screen_putstr(kprintf(buf, "[%i h:%x t:%x]: ", pri, prio_queues[pri].head, prio_queues[pri].tail));
@@ -114,7 +116,10 @@ static sched_put_back()
 		return;
 	++thread->sched_exec_ticks;
 	thread->sched_wait_ticks = 0;
-	thread_list_push(prio_queues + thread->priority, thread);
+	if (thread->wait_time > 0)
+		timer_manage_thread(thread);
+	else
+		thread_list_push(prio_queues + thread->priority, thread);
 }
 
 static sched_move_down()
@@ -164,12 +169,13 @@ static sched_move_up()
 
 static sched_switch(struct thread *from_thread, struct thread *to_thread)
 {
+	char buf[128];
 	current_thread[cpuid()] = to_thread;
 
 	if (from_thread == to_thread)
 		return;
 
-	if (from_thread->parent != to_thread->parent)
+	if (from_thread->parent->pdir != to_thread->parent->pdir)
 		page_dir_switch(to_thread->parent->pdir);
 
 	tss_set_stack(cpuid(), to_thread->kernel_stack);
@@ -215,7 +221,6 @@ static sched_pick()
 
 static uint8 sched_tick(struct thread_state *state)
 {
-
 	section_enter(&lock);
 
 	//sched_print();
@@ -241,7 +246,7 @@ void sched_init()
 {
 	section_leave(&lock);
 
-	struct thread *new_thread = thread_create(proc_create_kernel_proc(), (uint32)idle_loop, THREAD_KERNEL);
+	struct thread *new_thread = thread_create(proc_get_by_pid(0), (uint32)idle_loop, THREAD_KERNEL);
 
 	current_thread[cpuid()] = new_thread;
 	idle_thread[cpuid()] = new_thread;
@@ -250,7 +255,18 @@ void sched_init()
 
 	lapic_set(0x320, 0x20080);
 	lapic_set(0x3E0, 0xB);
-	lapic_set(0x380, 0x06000000);
+	lapic_set(0x380, 0x05000000);
 
 	section_leave(&lock);
+}
+
+void sched_thread_sleep(uint64 ticks)
+{
+	current_thread[cpuid()]->wait_time += ticks;
+	asm("int $0x80");
+}
+
+pid_t sched_cur_proc()
+{
+	return current_thread[cpuid()]->parent->pid;
 }

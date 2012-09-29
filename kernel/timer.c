@@ -3,6 +3,7 @@
 #include "ports.h"
 #include "memory.h"
 #include "scheduler.h"
+#include "screen.h"
 
 #define TIMER_HZ 1024
 
@@ -12,42 +13,44 @@
 #define SEC_TO_MS 1000
 #define MS_TO_US 1000
 
-struct wait_list_elem
-{
-	struct thread *thread;
-	struct wait_list_elem *next;
-};
-
 static uint64 ticks = 0;
-static struct wait_list_elem *wait_list;
+static struct thread *next_thread = 0;
+static lock_t lock;
 
 static void _wait_list_add(struct thread *thread)
 {
-	struct wait_list_elem *new = NEW(struct wait_list_elem);
-	struct wait_list_elem **ptr = &wait_list;
+	struct thread **ptr = &next_thread;
+	section_enter(&lock);
 
-	while(*ptr && (*ptr)->thread->wait_time <= thread->wait_time)
+	while (*ptr && (*ptr)->wait_time <= thread->wait_time)
+		
 		ptr = &((*ptr)->next);
-
 	if (!*ptr)
-	{
-		*ptr = new;
-		return;
-	}
-	new->next = *ptr;
-	*ptr = new;
+		goto exit;
+
+	thread->next = (*ptr);
+
+exit:
+	*ptr = thread;
+	section_leave(&lock);
 }
 
 static uint8 _tick(struct thread_state *regs)
 {
+	struct thread *tmp;
 	++ticks;
 
-	while(wait_list && wait_list->thread->wait_time <= ticks)
+	section_enter(&lock);
+
+	while(next_thread && (next_thread->wait_time <= ticks))
 	{
-		wait_list->thread->wait_time = 0;
-		sched_thread_ready(wait_list->thread);
-		wait_list = wait_list->next;
+		tmp = next_thread->next;
+		next_thread->wait_time = 0;
+		next_thread->next = 0;
+		sched_thread_ready(next_thread);
+		next_thread = tmp;
 	}
+	section_leave(&lock);
 
 	return INT_OK;
 }
@@ -55,7 +58,7 @@ static uint8 _tick(struct thread_state *regs)
 void timer_init()
 {
 	ticks = 0;
-	wait_list = 0;
+	next_thread = 0;
 
 	port_write(0x70, 0x0B);
 	char prev = port_read_8(0x71);
@@ -107,6 +110,8 @@ struct time_t timer_uptime()
 
 void timer_manage_thread(struct thread *thread)
 {
+	thread->wait_time += ticks;
+	thread->next = 0;
 	_wait_list_add(thread);
 }
 

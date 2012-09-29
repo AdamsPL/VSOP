@@ -6,6 +6,7 @@
 
 void sched_init();
 void sched_thread_ready(struct thread *thread);
-struct thread *sched_current_thread();
+void sched_thread_sleep(uint64 ticks);
+pid_t sched_cur_proc();
 
 #endif 

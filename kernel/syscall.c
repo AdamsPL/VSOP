@@ -22,13 +22,14 @@ void syscall(struct thread_state *state)
 			break;
 		case SYS_CALL_CONNECT:
 			/*screen_putstr(kprintf(buf, "connect syscall!\n"));*/
-			state->eax = ipc_connect(proc_cur(), state->ebx);
+			/*state->eax = ipc_connect(proc_cur(), state->ebx);*/
 			break;
 		case SYS_CALL_SEND:
 			/*screen_putstr(kprintf(buf, "send syscall!\n"));*/
-			state->eax = ipc_send(proc_get_descr(proc_cur(), state->ebx).send_to, (uint8 *)(state->ecx), state->edx);
+			/*state->eax = ipc_send(proc_get_descr(proc_cur(), state->ebx).send_to, (uint8 *)(state->ecx), state->edx);*/
 			break;
 		case SYS_CALL_RECEIVE:
+			/*
 			result = proc_find_queue(proc_cur());
 			*((int*)state->ebx) = result;
 			if (result == -1){
@@ -36,6 +37,7 @@ void syscall(struct thread_state *state)
 			}else{
 				state->eax = ipc_receive(proc_get_descr(proc_cur(), result).rec_from, (uint8 *)(state->ecx), state->edx);
 			}
+			*/
 			break;
 		case SYS_CALL_WAIT:
 			/*screen_putstr(kprintf(buf, "wait syscall!\n"));*/
@@ -47,7 +49,7 @@ void syscall(struct thread_state *state)
 			break;
 		case SYS_CALL_REGISTER:
 			/*screen_putstr(kprintf(buf, "register syscall!\n"));*/
-			state->eax = server_set(proc_cur(), (char*)state->ebx, state->ecx);
+			/*state->eax = server_set(proc_cur(), (char*)state->ebx, state->ecx);*/
 			break;
 		case SYS_CALL_QUERY:
 			/*screen_putstr(kprintf(buf, "query syscall!\n"));*/

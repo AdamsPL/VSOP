@@ -15,17 +15,46 @@
 #include "process.h"
 #include "thread.h"
 
-lock_t lock;
-
-void dumper()
+void alice(void)
 {
+	struct process *bob;
 	char buf[128];
-	uint32 esp;
-	while(1)
+
+	screen_putstr(kprintf(buf, "Alice: %x\n", sched_cur_proc()));
+	proc_register(proc_get_by_pid(sched_cur_proc()), "ALICE");
+
+	while(!(bob = proc_get_by_name("BOB")))
 	{
-		asm("movl %%esp, %0" : "=a"(esp));
-		screen_putstr(kprintf(buf, "dump! %x cpu:%x\n", esp, cpuid()));
+		screen_putstr(kprintf(buf, "Alice: waiting...!\n"));
+		sched_thread_sleep(1000);
 	}
+
+	screen_putstr(kprintf(buf, "Alice: Found BOB: %x!\n", bob->pid));
+	ipc_connect(sched_cur_proc(), bob->pid);
+
+	while(1)
+		asm("hlt");
+}
+
+void bob(void)
+{
+	struct process *alice;
+	char buf[128];
+
+	screen_putstr(kprintf(buf, "Bob: %x\n", sched_cur_proc()));
+	proc_register(proc_get_by_pid(sched_cur_proc()), "BOB");
+
+	while(!(alice = proc_get_by_name("ALICE")))
+	{
+		screen_putstr(kprintf(buf, "Bob: waiting...!\n"));
+		sched_thread_sleep(1000);
+	}
+
+	screen_putstr(kprintf(buf, "Bob: Found ALICE! %x\n", alice->pid));
+	ipc_connect(sched_cur_proc(), alice->pid);
+
+	while(1)
+		asm("hlt");
 }
 
 void hello_world(void)
@@ -56,27 +85,24 @@ void kmain(struct mboot *mboot, unsigned int magic)
 	asm("push %eax");
 	asm("popf");
 
+	proc_create_kernel_proc();
+
 	sched_init();
 	timer_init();
 	interrupts_start();
 
 	cpu_wake_all();
 	
-	thread = thread_create(proc_create_kernel_proc(), (uint32)dumper, THREAD_KERNEL);
-	sched_thread_ready(thread);
-	thread = thread_create(proc_create_kernel_proc(), (uint32)dumper, THREAD_KERNEL);
-	sched_thread_ready(thread);
-	thread = thread_create(proc_create_kernel_proc(), (uint32)dumper, THREAD_KERNEL);
-	sched_thread_ready(thread);
-	thread = thread_create(proc_create_kernel_proc(), (uint32)dumper, THREAD_KERNEL);
-	sched_thread_ready(thread);
-	thread = thread_create(proc_create_kernel_proc(), (uint32)dumper, THREAD_KERNEL);
-	sched_thread_ready(thread);
-	thread = thread_create(proc_create_kernel_proc(), (uint32)dumper, THREAD_KERNEL);
+	thread = thread_create(proc_create_kernel_proc(), (uint32)alice, THREAD_KERNEL);
 	sched_thread_ready(thread);
 	
-	mboot_load_modules(mboot);
+	thread = thread_create(proc_create_kernel_proc(), (uint32)bob, THREAD_KERNEL);
+	sched_thread_ready(thread);
 
+
+	/*
+	mboot_load_modules(mboot);
+	*/
 	while(1)
 		asm("hlt");
 
