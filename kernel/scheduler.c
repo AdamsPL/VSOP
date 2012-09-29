@@ -116,10 +116,17 @@ static sched_put_back()
 		return;
 	++thread->sched_exec_ticks;
 	thread->sched_wait_ticks = 0;
+
 	if (thread->wait_time > 0)
+	{
 		timer_manage_thread(thread);
-	else
-		thread_list_push(prio_queues + thread->priority, thread);
+		return;
+	}
+	if (thread->msg_descr == -1)
+	{
+		return;
+	}
+	thread_list_push(prio_queues + thread->priority, thread);
 }
 
 static sched_move_down()
@@ -263,10 +270,31 @@ void sched_init()
 void sched_thread_sleep(uint64 ticks)
 {
 	current_thread[cpuid()]->wait_time += ticks;
-	asm("int $0x80");
+	sched_yield();
 }
 
 pid_t sched_cur_proc()
 {
 	return current_thread[cpuid()]->parent->pid;
+}
+
+int sched_thread_select_msg()
+{
+	char buf[128];
+	struct thread *thread = current_thread[cpuid()];
+	struct process *parent = thread->parent;
+
+	thread->msg_descr = proc_select_queue(parent);
+
+	while(thread->msg_descr == -1)
+	{
+		thread->parent->thread_in_select = thread;
+		sched_yield();
+	}
+	return thread->msg_descr;
+}
+
+void sched_yield(void)
+{
+	asm("int $0x80");
 }

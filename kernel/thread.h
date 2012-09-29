@@ -11,6 +11,7 @@ struct thread
 	uint32 stack;
 	uint32 kernel_stack;
 	uint64 wait_time;
+	int msg_descr;
 	uint32 esp;
 	uint32 eip;
 	uint32 sched_exec_ticks;
@@ -19,6 +20,5 @@ struct thread
 };
 
 struct thread *thread_create(struct process *parent, uint32 entry, enum thread_flags flags);
-void thread_wait(struct thread *this, uint64 time);
 
 #endif

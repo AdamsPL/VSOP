@@ -34,8 +34,3 @@ struct thread *thread_create(struct process *parent, uint32 entry, enum thread_f
 
 	return new;
 }
-
-void thread_wait(struct thread *this, uint64 time)
-{
-	this->wait_time = time;
-}

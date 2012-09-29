@@ -3,9 +3,10 @@
 
 #define MAX_THREADS (1 << 16)
 #define MAX_PROCESSES (1 << 16)
-#define MAX_QUEUES (1 << 16)
 #define MAX_CPU 8
 #define DEFAULT_PRIORITY 1
+
+#define PROC_MAX_QUEUES 0x100
 
 #define PAGE_SHIFT 12
 #define PAGE_SIZE (1 << PAGE_SHIFT)

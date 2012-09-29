@@ -68,8 +68,6 @@ int proc_register(struct process *proc, char *name)
 
 struct process *proc_create_kernel_proc()
 {
-	char buf[128];
-
 	struct process *new = NEW(struct process);
    	pid_t pid = find_next_pid();
 
@@ -84,16 +82,34 @@ int proc_attach_queue(struct process *proc, struct msg_queue *send_queue, struct
 {
 	int i;
 	//TODO: Add locking
-	for (i = 0; i < MAX_QUEUES; ++i)
+	for (i = 0; i < PROC_MAX_QUEUES; ++i)
 	{
 		if (!proc->msg_queues[i].send && !proc->msg_queues[i].recv)
 			break;
 	}
-	if (i == MAX_QUEUES)
+	if (i == PROC_MAX_QUEUES)
 		return -1;
 
 	proc->msg_queues[i].send = send_queue;
 	proc->msg_queues[i].recv = recv_queue;
 
+	proc->msg_queues[i].recv->header.owner = proc->pid;
+	proc->msg_queues[i].recv->header.descr = i;
+
 	return i;
+}
+
+int proc_select_queue(struct process *proc)
+{
+	int i;
+	struct queue_descr *msg_queues = proc->msg_queues;
+
+	for (i = 0; i < PROC_MAX_QUEUES; ++i)
+	{
+		if (!msg_queues[i].recv)
+			continue;
+		if (!queue_is_empty(msg_queues[i].recv))
+			return i;
+	}
+	return -1;
 }

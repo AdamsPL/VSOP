@@ -5,6 +5,7 @@
 
 struct msg_queue_header
 {
+	int descr;
 	pid_t owner;
 	uint16 read;
 	uint16 write;
@@ -28,5 +29,6 @@ int ipc_connect(pid_t p1, pid_t p2);
 int ipc_send(struct queue_descr *queue, uint8 *ptr, uint16 size);
 int ipc_receive(struct queue_descr *queue, uint8 *ptr, uint16 size);
 
-struct msg_queue *queue_create(pid_t owner);
+struct msg_queue *queue_create();
+int queue_is_empty(struct msg_queue *this);
 #endif

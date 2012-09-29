@@ -5,7 +5,6 @@
 
 #include "ipc.h"
 
-#define PROC_MAX_QUEUES 0x100
 #define PROC_MAX_NAME_LEN 64
 
 struct proc_section
@@ -25,6 +24,7 @@ struct process
 	struct proc_section bss;
 	uint32 pdir;
 	struct thread *threads;
+	struct thread *thread_in_select;
 	char name[PROC_MAX_NAME_LEN];
 	struct queue_descr msg_queues[PROC_MAX_QUEUES];
 };
@@ -36,4 +36,5 @@ struct process *proc_get_by_name(char *name);
 int proc_register(struct process *proc, char *name);
 
 int proc_attach_queue(struct process *proc, struct msg_queue *send_queue, struct msg_queue *recv_queue);
+int proc_select_queue(struct process *proc);
 #endif

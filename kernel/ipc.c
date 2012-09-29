@@ -2,11 +2,12 @@
 
 #include "multitasking.h"
 #include "memory.h"
+#include "process.h"
+#include "thread.h"
 
-struct msg_queue *queue_create(pid_t owner)
+struct msg_queue *queue_create()
 {
 	struct msg_queue *result = NEW(struct msg_queue);
-	result->header.owner = owner;
 	return result;
 }
 
@@ -28,6 +29,7 @@ int ipc_send(struct queue_descr *descr, uint8 *ptr, uint16 size)
 {
 	int count = 0;
 	struct msg_queue *queue = descr->send;
+	struct process *proc = proc_get_by_pid(queue->header.owner);
 
 	while(next(queue->header.write) != queue->header.read){
 		queue->buf[queue->header.write] = *ptr++;
@@ -35,6 +37,13 @@ int ipc_send(struct queue_descr *descr, uint8 *ptr, uint16 size)
 		queue->header.write = next(queue->header.write);
 		if (count == size)
 			break;
+	}
+	if (proc->thread_in_select)
+	{
+		struct thread *thread = proc->thread_in_select;
+		proc->thread_in_select = 0;
+		thread->msg_descr = queue->header.descr;
+		sched_thread_ready(thread);
 	}
 	return count;
 }
@@ -52,4 +61,9 @@ int ipc_receive(struct queue_descr *descr, uint8 *ptr, uint16 size)
 			break;
 	}
 	return count;
+}
+
+int queue_is_empty(struct msg_queue *this)
+{
+	return (this->header.read == this->header.write);
 }

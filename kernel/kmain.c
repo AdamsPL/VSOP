@@ -17,10 +17,12 @@
 
 void alice(void)
 {
+	struct process *alice = proc_get_by_pid(sched_cur_proc());
 	struct process *bob;
 	char buf[128];
+	char input[128];
 
-	screen_putstr(kprintf(buf, "Alice: %x\n", sched_cur_proc()));
+	screen_putstr(kprintf(buf, "Alice: %x\n", alice->pid));
 	proc_register(proc_get_by_pid(sched_cur_proc()), "ALICE");
 
 	while(!(bob = proc_get_by_name("BOB")))
@@ -30,18 +32,33 @@ void alice(void)
 	}
 
 	screen_putstr(kprintf(buf, "Alice: Found BOB: %x!\n", bob->pid));
-	ipc_connect(sched_cur_proc(), bob->pid);
+	int descr = ipc_connect(sched_cur_proc(), bob->pid);
+	sched_thread_sleep(5000);
+
+	kprintf(buf, "this is ALICE!\n");
+	ipc_send(&alice->msg_queues[descr], buf, 16);
+	screen_putstr(kprintf(buf, "Alice: notifing: %x!\n", alice->msg_queues[descr].send->header.owner));
 
 	while(1)
-		asm("hlt");
+	{
+		int count = 0;
+		descr = sched_thread_select_msg();
+		count = ipc_receive(&alice->msg_queues[descr], input, 128);
+		//screen_putstr(kprintf(buf, "Alice: got msg from descr: %x %s %s size: %x!\n", descr, input, "end", count));
+		ipc_send(&alice->msg_queues[descr], buf, 16);
+		kprintf(buf, "this is ALICE!\n");
+	}
+
 }
 
 void bob(void)
 {
+	struct process *bob = proc_get_by_pid(sched_cur_proc());
 	struct process *alice;
 	char buf[128];
+	char input[128];
 
-	screen_putstr(kprintf(buf, "Bob: %x\n", sched_cur_proc()));
+	screen_putstr(kprintf(buf, "Bob: %x\n", bob->pid));
 	proc_register(proc_get_by_pid(sched_cur_proc()), "BOB");
 
 	while(!(alice = proc_get_by_name("ALICE")))
@@ -51,10 +68,21 @@ void bob(void)
 	}
 
 	screen_putstr(kprintf(buf, "Bob: Found ALICE! %x\n", alice->pid));
-	ipc_connect(sched_cur_proc(), alice->pid);
+	int descr = ipc_connect(sched_cur_proc(), alice->pid);
+	sched_thread_sleep(5000);
+
+	kprintf(buf, "this is BOB!\n");
+	ipc_send(&bob->msg_queues[descr], buf, 14);
 
 	while(1)
-		asm("hlt");
+	{
+		int count = 0;
+		descr = sched_thread_select_msg();
+		count = ipc_receive(&bob->msg_queues[descr], input, 128);
+		//screen_putstr(kprintf(buf, "Bob: got msg from descr: %x %s %s size: %x!\n", descr, input, "end", count));
+		kprintf(buf, "this is BOB!\n");
+		ipc_send(&bob->msg_queues[descr], buf, 14);
+	}
 }
 
 void hello_world(void)
