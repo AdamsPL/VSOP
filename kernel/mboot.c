@@ -29,7 +29,7 @@ void mboot_parse(struct mboot *mboot)
 	struct module_info *mod_info;
 	uint32 i;
 
-	mem_phys_init(1024 * mboot->mem_upper + 0x100000);
+	mem_phys_init();
 
 	mem_init(mboot->mmap_addr, mboot->mmap_length);
 

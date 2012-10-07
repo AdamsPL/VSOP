@@ -68,10 +68,8 @@ void mem_init(struct mmap *mmap, uint32 length)
 
 void *kmalloc(uint32 size)
 {
-	//char ptr[128];
 	uint8 *buf = (uint8*)mem_alloc(&allocator, size);
 	kmemset(buf, 0x00, size);
-	//screen_putstr(kprintf(ptr, "kmalloc: %x => %x\n", size, buf));
 	return buf;
 }
 

@@ -3,6 +3,16 @@
 
 #include "process.h"
 #include "interrupts.h"
+#include "locks.h"
+
+enum thread_status
+{
+	THREAD_READY,
+	THREAD_WAITING,
+	THREAD_QUEUED,
+	THREAD_EXECUTING
+};
+
 
 struct thread
 {
@@ -16,7 +26,7 @@ struct thread
 	uint32 eip;
 	uint32 sched_exec_ticks;
 	uint32 sched_wait_ticks;
-	struct thread *next;
+	enum thread_status state;
 };
 
 struct thread *thread_create(struct process *parent, uint32 entry, enum thread_flags flags);

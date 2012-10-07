@@ -10,5 +10,6 @@ void sched_thread_sleep(uint64 ticks);
 int sched_thread_select_msg();
 pid_t sched_cur_proc();
 void sched_yield(void);
+struct thread *sched_cur_thread(void);
 
 #endif 

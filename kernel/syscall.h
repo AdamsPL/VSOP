@@ -1,9 +1,11 @@
 #ifndef _SYSCALL
 #define _SYSCALL
 
-#include "multitasking.h"
+#include "config.h"
 #include "system_calls.h"
+#include "thread.h"
 
-void syscall(struct thread_state *state);
+uint8 syscall(struct thread_state *state);
+void syscalls_init(void);
 
 #endif

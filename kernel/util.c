@@ -96,11 +96,8 @@ void *kmemcpy(uint8 *destination, const uint8 *source, uint32 count)
 	return destination;
 }
 
-void *kstrncpy(uint8 *destination, const uint8 *source, uint32 count)
+void kstrncpy(uint8 *destination, const uint8 *source, uint32 count)
 {
-	while(*source && count) {
-		*((char*)destination++) = *((char*)source++);
-		count--;
-	}
-	return destination;
+	while ((*destination++ = *source++) && count)
+		--count;
 }

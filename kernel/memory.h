@@ -16,7 +16,7 @@ void *kmalloc(uint32 size);
 void kfree(void *ptr, uint32 size);
 
 #define NEW(type) (type *) kmemset(kmalloc(sizeof(type)), 0, sizeof(type));
-#define ZEROS(ptr) kmemset((char *)(ptr), 0, sizeof(*ptr));
+#define ZEROS(ptr) kmemset((uint8 *)(ptr), 0, sizeof(*ptr));
 #define DELETE(ptr) kfree((void*)(ptr), sizeof(*ptr));
 
 #endif

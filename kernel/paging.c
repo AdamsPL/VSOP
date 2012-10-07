@@ -1,7 +1,7 @@
 #include "paging.h"
 #include "memory.h"
 #include "palloc.h"
-
+#include "screen.h"
 
 inline uint32 page_entry(uint32 addr, uint32 flags)
 {
@@ -48,12 +48,12 @@ void paging_map(uint32 virt, uint32 phys, uint32 flags)
 	if (page_dir[index] & PAGE_PRESENT){
 		page_table = page_table_virt_addr(index);
 	}else{
-		page_dir[index] = page_entry(mem_phys_alloc(1), PAGE_WRITABLE | PAGE_USERMODE | PAGE_PRESENT);
+		page_dir[index] = page_entry(mem_phys_alloc(), PAGE_WRITABLE | PAGE_USERMODE | PAGE_PRESENT);
 		page_table = page_table_virt_addr(index);
 		kmemset32(page_table, 0x00000000, 1024);
 	}
 	page_table[page_table_index(virt)] = page_entry(phys, flags);
-	asm volatile("invlpg %0" :: "m"(virt));
+	asm volatile("invlpg (%0)" :: "r"(virt) : "memory");
 }
 
 void page_dir_switch(uint32 newpdir)
@@ -65,6 +65,52 @@ uint32 paging_get_phys(uint32 addr)
 {
 	uint32 index = page_dir_index(addr);
 	uint32 *ptr = page_table_virt_addr(index);
+	if (!paging_is_mapped(addr))
+		return 0x00;
 	index = page_table_index(addr);
 	return (ptr[index] & 0xFFFFF000);
+}
+/*
+static uint32 page_table_clone(uint32 oldtable)
+{
+	static const uint32 oldtable_virt = 0xaaaa0000;
+	static const uint32 newtable_virt = 0xbbbb0000;
+	uint32 newtable;
+
+	if ((oldtable & PAGE_PRESENT) == 0)
+		return 0;
+
+	newtable = mem_phys_alloc();
+
+	paging_map(oldtable_virt, oldtable & 0xFFFFF000, PAGE_WRITABLE | PAGE_PRESENT);
+	paging_map(newtable_virt, newtable & 0xFFFFF000, PAGE_WRITABLE | PAGE_PRESENT);
+
+	kmemcpy((uint8*)newtable_virt, (uint8*)oldtable_virt, PAGE_SIZE);
+
+	paging_map(oldtable_virt, 0, 0);
+	paging_map(newtable_virt, 0, 0);
+
+	return (newtable & 0xFFFFF000) | (oldtable & 0xFFF);
+}
+*/
+uint32 page_dir_clone(uint32 olddir)
+{
+	static uint32 *const olddir_virt = (uint32*)0xcccc0000;
+	static uint32 *const newdir_virt = (uint32*)0xdddd0000;
+	uint32 newdir;
+	int i;
+
+	newdir = mem_phys_alloc();
+
+	paging_map((uint32)olddir_virt, olddir & 0xFFFFF000, PAGE_WRITABLE | PAGE_PRESENT);
+	paging_map((uint32)newdir_virt, newdir & 0xFFFFF000, PAGE_WRITABLE | PAGE_PRESENT);
+
+	for (i = 0; i < 1024; ++i)
+		newdir_virt[i] = olddir_virt[i];
+	newdir_virt[1023] = page_entry(newdir, PAGE_USERMODE | PAGE_WRITABLE | PAGE_PRESENT);
+
+	paging_map((uint32)olddir_virt, 0, 0);
+	paging_map((uint32)newdir_virt, 0, 0);
+
+	return newdir;
 }

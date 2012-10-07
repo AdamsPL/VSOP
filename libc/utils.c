@@ -46,7 +46,7 @@ int int2str(char *str, unsigned int n, int base)
 	return res;
 }
 
-char *printf(char *str, const char *format, ...)
+char *kprintf(char *str, const char *format, ...)
 {
 	const char *c = format;
 	unsigned int *stack = (uint32*)&format + 1;

@@ -1,7 +1,6 @@
 #include "interrupts.h"
 #include "ports.h"
 #include "util.h"
-#include "multitasking.h"
 #include "syscall.h"
 #include "drivers.h"
 #include "cpu.h"
@@ -9,6 +8,7 @@
 #include "memory.h"
 #include "timer.h"
 #include "scheduler.h"
+#include "gdt.h"
 
 #define IOAPIC_DISABLE     0x10000
 
@@ -36,11 +36,12 @@ struct int_handler_elem *int_handlers[256];
 static struct idt_entry idt_entries[256];
 volatile struct idt iptr;
 
+static int int_level[MAX_CPU];
+
 #include "screen.h"
 
 #define PRINT_FIELD(x) screen_putstr(kprintf(buf, #x":%x|", regs->x));
 
-static int base = 0;
 static uint32 cr2 = 0;
 
 void regs_print(struct thread_state *regs)
@@ -181,9 +182,12 @@ void apic_init()
 static uint8 unhandled_interrupt_handler(struct thread_state *state)
 {
 	char buf[256];
+	/*screen_clear();*/
 	screen_putstr(kprintf(buf, "unhandled int(%x)! pid:%i cr2: %x cpu:%i\n", state->int_id, sched_cur_proc(), cr2, cpuid()));
 	regs_print(state);
-	asm("hlt");
+	asm("cli");
+	while(1)
+		asm("hlt");
 	return INT_OK;
 }
 
@@ -194,10 +198,11 @@ void eoi(void)
 
 void irq_handler(struct thread_state regs)
 {
-	char buf[256];
 	struct int_handler_elem *elem;
 
 	asm volatile("movl %%cr2, %0" : "=a"(cr2));
+
+	asm("sti");
 
 	elem = int_handlers[regs.int_id];
 
@@ -266,4 +271,18 @@ void interrupts_start()
 void interrupts_stop()
 {
 	asm("cli");
+}
+
+void interrupts_disable()
+{
+	int cpu = cpuid();
+	if (int_level[cpu]++ == 0)
+		asm("cli");
+}
+
+void interrupts_enable()
+{
+	int cpu = cpuid();
+	if (--int_level[cpu] == 0)
+		asm("sti");
 }

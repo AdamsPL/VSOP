@@ -1,16 +1,18 @@
 #include "thread.h"
 #include "memory.h"
 #include "paging.h"
+#include "palloc.h"
+#include "screen.h"
 
 void _leave_kernel(void);
 
 struct thread *thread_create(struct process *parent, uint32 entry, enum thread_flags flags)
 {
-	char buf[128];
-	struct thread *new = NEW(struct thread);
 	/*TODO:FIXME*/
 	/*When creating a second stack for a second thread we will overwrite the pagedir associated with the first one!!!*/
 	uint32 stack = 0;
+	struct thread *new = NEW(struct thread);
+
 	new->parent = parent;
 	new->kernel_stack = (uint32)kmalloc(PAGE_SIZE);
 

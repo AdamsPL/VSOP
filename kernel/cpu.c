@@ -5,8 +5,10 @@
 #include "interrupts.h"
 #include "screen.h"
 #include "ports.h"
+#include "paging.h"
+#include "timer.h"
 
-static num_of_cpu = -1;
+static int num_of_cpu = -1;
 
 static void *mp_slide(uint8 *from, uint8 *to)
 {
@@ -49,7 +51,9 @@ uint32 cpuid()
 
 uint32 esp(void)
 {
-	asm("movl %esp, %eax");
+	int result;
+	asm("movl %%esp, %0" : "=r"(result));
+	return result;
 }
 
 void cpu_find()
@@ -91,13 +95,13 @@ void cpu_wake_all()
 	char buf[256];
 	uint32 *warm_reset_vector = (uint32*)(0x40 << 4 | 0x67);
 	uint32 *trampoline = kmalloc(PAGE_SIZE * 2);
-	uint32 trampoline_len = _cpu_trampoline_end - _cpu_trampoline;
+	uint32 trampoline_len = (uint32)_cpu_trampoline_end - (uint32)_cpu_trampoline;
 	uint32 addr;
 	uint32 fake_gdt_len = (uint32)&fake_gdt_end - (uint32)&fake_gdt_ptr;
 	int cpu;
 	struct gdt *virt_gdt_ptr;
 
-	kmemcpy((uint8*)trampoline, (uint8*)_cpu_trampoline, trampoline_len);
+	kmemcpy((uint8*)trampoline, (uint8*)(uint32)(_cpu_trampoline), trampoline_len);
 	kmemcpy((uint8*)trampoline + PAGE_SIZE, (uint8*)&fake_gdt_ptr, fake_gdt_len);
 	addr = paging_get_phys((uint32)trampoline);
 
@@ -107,10 +111,6 @@ void cpu_wake_all()
 	port_write(0x70, 0x0F);
 	port_write(0x71, 0x0A);
 	*warm_reset_vector = addr;
-
-	screen_putstr(kprintf(buf, "trampoline @ %x\n", addr));
-	screen_putstr(kprintf(buf, "trampoline len: %x\n", trampoline_len));
-	screen_putstr(kprintf(buf, "fake_gdt_len @ %x\n", fake_gdt_len));
 
 	cpu_stack = 0xB00B1E50;
 	for (cpu = 1; cpu < cpu_count(); ++cpu)

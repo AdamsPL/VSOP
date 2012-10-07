@@ -22,14 +22,15 @@ struct process
 	struct proc_section text;
 	struct proc_section data;
 	struct proc_section bss;
+	struct proc_section rodata;
 	uint32 pdir;
 	struct thread *threads;
-	struct thread *thread_in_select;
 	char name[PROC_MAX_NAME_LEN];
 	struct queue_descr msg_queues[PROC_MAX_QUEUES];
+	struct thread *selecting_thread;
 };
 
-struct process *proc_create(struct proc_section text, struct proc_section data, struct proc_section bss);
+struct process *proc_create(struct proc_section text, struct proc_section data, struct proc_section bss, struct proc_section rodata);
 struct process *proc_create_kernel_proc();
 struct process *proc_get_by_pid(pid_t pid);
 struct process *proc_get_by_name(char *name);
@@ -37,4 +38,7 @@ int proc_register(struct process *proc, char *name);
 
 int proc_attach_queue(struct process *proc, struct msg_queue *send_queue, struct msg_queue *recv_queue);
 int proc_select_queue(struct process *proc);
+
+struct queue_descr *proc_get_descr(struct process *proc, int id);
+
 #endif

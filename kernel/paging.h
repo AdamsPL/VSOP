@@ -31,4 +31,6 @@ uint8 paging_is_mapped(uint32 virt);
 
 void page_dir_switch(uint32 newpdir);
 
+uint32 page_dir_clone(uint32 olddir);
+
 #endif

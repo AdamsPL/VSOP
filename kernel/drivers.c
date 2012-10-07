@@ -1,7 +1,6 @@
 #include "drivers.h"
 #include "util.h"
 #include "ipc.h"
-#include "multitasking.h"
 
 struct driver drivers[128];
 int handlers[128];
@@ -26,8 +25,7 @@ int server_get(char *name)
 
 int server_set(pid_t pid, char *name, int irq)
 {
-	int i = 0;
-	int descr;
+	int descr = 1;
 
 	/*
 	while(drivers[i].name[0] != '\0')
@@ -46,5 +44,7 @@ void server_irq_notify(int irq)
 {
 	if (handlers[irq] == -1)
 		return;
+	/*
 	ipc_send(handlers[irq], (uint8*)"irq!", 4);
+	*/
 }

@@ -1,14 +1,14 @@
 #ifndef _SYSTEM_CALLS_H
 #define _SYSTEM_CALLS_H
 
-#define SYS_CALL_EXIT 1
-#define SYS_CALL_CONNECT 2
-#define SYS_CALL_DISCONNECT 3
-#define SYS_CALL_SEND 4
-#define SYS_CALL_RECEIVE 5
-#define SYS_CALL_WAIT 6
-#define SYS_CALL_MMAP 7
-#define SYS_CALL_REGISTER 8
-#define SYS_CALL_QUERY 9
+#define SYSCALL_EXIT 0
+#define SYSCALL_WAIT 1
+#define SYSCALL_SPAWN 2
+#define SYSCALL_REGISTER 3
+#define SYSCALL_CONNECT 4
+#define SYSCALL_SELECT 5
+#define SYSCALL_READ 6
+#define SYSCALL_WRITE 7
+#define SYSCALL_MMAP 8
 
 #endif

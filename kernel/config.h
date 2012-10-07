@@ -19,6 +19,8 @@
 
 #define STACK_OFFSET (PAGE_SIZE - 0x10)
 
+#define UNUSED(x) (void)(x);
+
 typedef unsigned char uint8;
 typedef signed char int8;
 typedef unsigned short uint16;
@@ -27,9 +29,9 @@ typedef unsigned int uint32;
 typedef signed int int32;
 typedef unsigned long uint64;
 
-typedef uint16 pid_t;
+typedef uint32 pid_t;
 typedef uint16 queue_id;
 typedef uint32 size_t;
-typedef uint32 lock_t;
+typedef volatile uint32 lock_t;
 
 #endif

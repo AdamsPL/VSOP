@@ -1,9 +1,10 @@
 #include "ipc.h"
 
-#include "multitasking.h"
 #include "memory.h"
 #include "process.h"
 #include "thread.h"
+#include "scheduler.h"
+#include "screen.h"
 
 struct msg_queue *queue_create()
 {
@@ -29,7 +30,8 @@ int ipc_send(struct queue_descr *descr, uint8 *ptr, uint16 size)
 {
 	int count = 0;
 	struct msg_queue *queue = descr->send;
-	struct process *proc = proc_get_by_pid(queue->header.owner);
+	struct process *parent = proc_get_by_pid(queue->header.owner);
+	struct thread *thread = parent->selecting_thread;
 
 	while(next(queue->header.write) != queue->header.read){
 		queue->buf[queue->header.write] = *ptr++;
@@ -38,13 +40,10 @@ int ipc_send(struct queue_descr *descr, uint8 *ptr, uint16 size)
 		if (count == size)
 			break;
 	}
-	if (proc->thread_in_select)
-	{
-		struct thread *thread = proc->thread_in_select;
-		proc->thread_in_select = 0;
-		thread->msg_descr = queue->header.descr;
+
+	if (thread)
 		sched_thread_ready(thread);
-	}
+
 	return count;
 }
 

@@ -3,6 +3,8 @@
 
 #include "config.h"
 
+struct thread;
+
 struct msg_queue_header
 {
 	int descr;
@@ -11,7 +13,7 @@ struct msg_queue_header
 	uint16 write;
 };
 
-#define QUEUE_LEN (PAGE_SIZE - sizeof(struct msg_queue_header))
+#define QUEUE_LEN 512
 
 struct msg_queue
 {

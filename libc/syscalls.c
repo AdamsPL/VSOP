@@ -15,47 +15,52 @@ static int syscall(int number)
 
 void exit(int error_code)
 {
-	syscall(SYS_CALL_EXIT);
+	asm volatile("movl %0, %%ebx" :: "m"(error_code) : "%ebx");
+	syscall(SYSCALL_EXIT);
 }
 
-stream connect(int pid)
+void wait(int ticks)
 {
-	asm volatile("movl %0, %%ebx" :: "m"(pid) : "%ebx");
-	return syscall(SYS_CALL_CONNECT);
+	asm volatile("movl %0, %%ebx" :: "m"(ticks) : "%ebx");
+	syscall(SYSCALL_WAIT);
 }
 
-int send(stream str, char *buf, int length)
+int register_process(const char *name)
 {
-	asm volatile("movl %0, %%ebx" :: "m"(str) : "%ebx");
+	asm volatile("movl %0, %%ebx" :: "m"(name) : "%ebx");
+	return syscall(SYSCALL_REGISTER); 
+}
+
+descr connect(const char *name)
+{
+	asm volatile("movl %0, %%ebx" :: "m"(name) : "%ebx");
+	return syscall(SYSCALL_CONNECT);
+}
+
+descr select()
+{
+	return syscall(SYSCALL_SELECT);
+}
+
+int read(descr dsc, const uint8 *buf, const uint32 size)
+{
+	asm volatile("movl %0, %%ebx" :: "m"(dsc) : "%ebx");
 	asm volatile("movl %0, %%ecx" :: "m"(buf) : "%ecx");
-	asm volatile("movl %0, %%edx" :: "m"(length) : "%edx");
-	return syscall(SYS_CALL_SEND);
+	asm volatile("movl %0, %%edx" :: "m"(size) : "%edx");
+	return syscall(SYSCALL_READ);
 }
 
-stream receive(int *from, char *buf, int length)
+int write(descr dsc, const uint8 *buf, const uint32 size)
 {
-	asm volatile("movl %0, %%ebx" :: "m"(from) : "%ebx");
+	asm volatile("movl %0, %%ebx" :: "m"(dsc) : "%ebx");
 	asm volatile("movl %0, %%ecx" :: "m"(buf) : "%ecx");
-	asm volatile("movl %0, %%edx" :: "m"(length) : "%edx");
-	return syscall(SYS_CALL_RECEIVE);
+	asm volatile("movl %0, %%edx" :: "m"(size) : "%edx");
+	return syscall(SYSCALL_WRITE);
 }
 
-void *mmap(void *addr)
+void mmap(void *virt_addr, void *phys_addr)
 {
-	asm volatile("movl %0, %%ebx" :: "m"(addr) : "%ebx");
-	return (void*)syscall(SYS_CALL_MMAP);
+	asm volatile("movl %0, %%ebx" :: "m"(virt_addr) : "%ebx");
+	asm volatile("movl %0, %%ecx" :: "m"(phys_addr) : "%ecx");
+	syscall(SYSCALL_MMAP);
 }
-
-stream proc_register(char *str, int irq)
-{
-	asm volatile("movl %0, %%ebx" :: "m"(str) : "%ebx");
-	asm volatile("movl %0, %%ecx" :: "m"(irq) : "%ecx");
-	return syscall(SYS_CALL_REGISTER);
-}
-
-stream proc_query(char *str)
-{
-	asm volatile("movl %0, %%ebx" :: "m"(str) : "%ebx");
-	return syscall(SYS_CALL_QUERY);
-}
-

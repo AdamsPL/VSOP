@@ -22,6 +22,7 @@
 #define INT_OK 1
 #define INT_ERROR 0
 #define INT_SCHED_TICK 128
+#define INT_SYSCALL 80
 #define INT_RTC 211
 
 struct thread_state{
@@ -55,5 +56,8 @@ void idt_set(uint16 id, uint32 base, uint8 flags);
 void eoi(void);
 
 void lapic_init(void);
+
+void interrupts_disable();
+void interrupts_enable();
 
 #endif
