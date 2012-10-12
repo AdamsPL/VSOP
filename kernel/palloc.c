@@ -6,6 +6,9 @@
 
 #include "screen.h"
 #include "util.h"
+#include "locks.h"
+
+static lock_t lock = 0;
 
 static uint32 memory_map[ENTRIES + 1];
 
@@ -40,6 +43,8 @@ uint32 mem_phys_alloc()
 	uint32 addr;
 	uint32 tmp;
 
+	section_enter(&lock);
+
 	while (!memory_map[i]){
 		++i;
 	}
@@ -56,7 +61,11 @@ uint32 mem_phys_alloc()
 	}
 	addr = PAGE_SIZE * (BITS * i + bit);
 	mem_phys_reserve(addr);
-	return PAGE_SIZE * (BITS * i + bit);
+
+	tmp = PAGE_SIZE * (BITS * i + bit);
+
+	section_leave(&lock);
+	return tmp;
 }
 
 void mem_phys_dump()

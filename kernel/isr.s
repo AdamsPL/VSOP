@@ -51,7 +51,9 @@ isr_common:
 
 
 _leave_kernel:
+	push $0x80
 	call eoi
+	pop %eax
 	pop %eax
 	mov %ax, %ds
 	mov %ax, %es

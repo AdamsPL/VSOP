@@ -6,13 +6,11 @@
 #define MAX_CPU 8
 #define DEFAULT_PRIORITY 1
 
-#define PROC_MAX_QUEUES 0x100
+#define PROC_MAX_QUEUES 0x10
 
 #define PAGE_SHIFT 12
 #define PAGE_SIZE (1 << PAGE_SHIFT)
 #define PAGES (1 << (32-PAGE_SHIFT))
-
-#define PROC_MAX_STREAMS 0x100
 
 #define ADDR_BASE 0xC0000000
 #define VIRT_TO_PHYS(x) ((uint32)x - ADDR_BASE)

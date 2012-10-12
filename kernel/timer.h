@@ -17,5 +17,6 @@ void timer_init();
 struct time_t timer_uptime();
 void timer_manage_thread(struct thread *thread);
 void timer_active_wait(uint32 wtime);
+uint64 timer_get_ticks(void);
 
 #endif

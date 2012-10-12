@@ -1,6 +1,7 @@
 #include "gdt.h"
 #include "util.h"
 #include "interrupts.h"
+#include "memory.h"
 
 #define GDT_ENTRIES (6 + MAX_CPU)
 
@@ -76,7 +77,8 @@ void tss_flush(uint32 id)
 
 static void tss_init(uint8 id)
 {
-	gdt_set(5 + id, VIRT_TO_PHYS(&tss[id]), VIRT_TO_PHYS(&tss[id + 1]), 0xE9, 0x00);
+	/*gdt_set(5 + id, VIRT_TO_PHYS(&tss[id]), VIRT_TO_PHYS(&tss[id + 1]), 0xE9, 0x00);*/
+	gdt_set(5 + id, (uint32)(tss + id), (uint32)(tss + id + 1), 0xE9, 0x00);
 	tss[id].ss0 = 0x10;
 	tss[id].esp0 = 0xDEADC0DE;
 	tss[id].cs = 0x0b;

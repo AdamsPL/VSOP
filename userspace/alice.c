@@ -6,9 +6,6 @@ int main()
 	char buf[32];
 	register_process("alice");
 
-	while((bob = connect("bob")) == -1)
-		wait(100);
-
 	while(1)
 	{
 		bob = select();

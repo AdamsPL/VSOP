@@ -68,6 +68,7 @@ static uint8 _tick(struct thread_state *regs)
 		screen_putstr(kprintf(buf, "timer rdy\n"));
 		*/
 		sched_thread_ready(next_elem->thread);
+		DELETE(next_elem);
 		next_elem = tmp;
 	}
 	section_leave(&lock);
@@ -140,4 +141,9 @@ void timer_active_wait(uint32 wtime)
 {
 	wtime += ticks;
 	while(ticks < wtime);
+}
+
+uint64 timer_get_ticks(void)
+{
+	return ticks;
 }

@@ -20,15 +20,18 @@
 
 void hello_world(void)
 {
+	restore_cr0();
+	apic_enable();
+	ioapic_init();
 	lapic_init();
 	sched_init();
+	cpu_sync();
+	sched_start_timer();
 	interrupts_start();
 }
 
 void kmain(struct mboot *mboot, unsigned int magic)
 {
-	uint32 eflags;
-
 	gdt_init();
 	screen_clear();
 	mboot_parse(mboot);
@@ -36,23 +39,17 @@ void kmain(struct mboot *mboot, unsigned int magic)
 	interrupts_init();
 	syscalls_init();
 	drivers_init();
-	asm("pushf");
-	asm("pop %eax");
-	asm("movl %%eax, %0" : "=a"(eflags));
-	eflags |= 1 << 14;
-	asm("movl %0, %%eax" :: "m"(eflags));
-	asm("push %eax");
-	asm("popf");
 
 	proc_create_kernel_proc();
-
 	sched_init();
-	timer_init();
+	mboot_load_modules(mboot);
+
 	interrupts_start();
 
+	timer_init();
 	cpu_wake_all();
-	
-	mboot_load_modules(mboot);
+	cpu_sync();
+	sched_start_timer();
 
 	while(1)
 		asm("hlt");

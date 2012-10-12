@@ -2,11 +2,10 @@
 
 int main()
 {
-	register_process("loop");
+	int x = 0;
 	while(1)
 	{
-		exit(0);
-		wait(1000);
+		++x;
 	}
 	return 0;
 }

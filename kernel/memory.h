@@ -10,7 +10,7 @@ void *kbrk(uint32 pages);
 
 uint32 page_count(uint32 bytes);
 inline uint32 page_align(uint32 addr);
-inline uint32 kernel_size();
+uint32 mem_stats();
 
 void *kmalloc(uint32 size);
 void kfree(void *ptr, uint32 size);

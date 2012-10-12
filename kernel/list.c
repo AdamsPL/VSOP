@@ -38,9 +38,6 @@ void *list_pop(struct list *this)
 
 	elem = this->head;
 
-	if (elem)
-		result = elem->target;
-
 	if (this->head == this->tail)
 	{
 		this->head = 0;
@@ -48,6 +45,12 @@ void *list_pop(struct list *this)
 	}
 	else
 		this->head = this->head->next;
+
+	if (elem)
+	{
+		result = elem->target;
+		DELETE(elem);
+	}
 
 	section_leave(&this->lock);
 	return result;

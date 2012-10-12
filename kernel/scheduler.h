@@ -11,5 +11,7 @@ int sched_thread_select_msg();
 pid_t sched_cur_proc();
 void sched_yield(void);
 struct thread *sched_cur_thread(void);
+void sched_start_timer();
+uint8 sched_tick(struct thread_state *state);
 
 #endif 

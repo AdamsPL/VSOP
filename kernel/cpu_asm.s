@@ -10,6 +10,7 @@
 .extern iptr
 
 _cpu_trampoline:
+	cli
 	xor %ax, %ax
 	mov %ax, %ds
 	mov %ax, %es
@@ -63,6 +64,9 @@ bootstrap:
 	jmpl $0x08, $orig_gdt
 orig_gdt:
 	movl $cpu_stack, %eax
+	movl (0xfee00020), %ebx
+	shr $22, %ebx
+	addl %ebx, %eax
 	movl (%eax), %eax
 	movl %eax, %esp
 	movl %eax, %ebp

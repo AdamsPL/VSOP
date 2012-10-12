@@ -61,5 +61,7 @@ void cpu_wake_all();
 int cpu_count();
 uint32 cpuid(void);
 uint32 esp(void);
+void restore_cr0(void);
+void cpu_sync(void);
 
 #endif

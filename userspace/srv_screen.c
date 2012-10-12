@@ -114,9 +114,11 @@ void screen_putstr(char *c)
 
 int main()
 {
-	char buf[512];
+	char msg[128];
+	char buf[128];
 	int len = 0;
-	descr msgqueue;
+	int iter = 0;
+	descr msgqueue = 0;
 	
 	mmap(videomem, (void*)0xB8000);
 	cur_x = 0;
@@ -124,12 +126,17 @@ int main()
 
 	register_process("sys.drivers.screen");
 	screen_clear();
-	while(1){
+	while(1)
+	{
+		
 		msgqueue = select();
-		len = read(msgqueue, (uint8*)buf, 512);
+		len = read(msgqueue, (uint8*)msg, 32);
 		if (len <= 0)
 			continue;
-		screen_putstr(buf);
+		
+		kprintf(buf, "%x %x %s\n", iter++, msgqueue, msg);
+		if (iter % 0x100 == 0)
+			screen_putstr(buf);
 	}
 	
 	return 0;

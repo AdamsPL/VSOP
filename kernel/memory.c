@@ -6,12 +6,16 @@
 
 #include "screen.h"
 
+#include "locks.h"
+
 #define RSA_SIZE 0x2000
 
 extern uint32 end;
 extern uint32 code;
 
 uint32 heap;
+static lock_t lock = 0;
+uint32 stats = 0;
 
 inline uint32 page_count(uint32 bytes)
 {
@@ -68,14 +72,27 @@ void mem_init(struct mmap *mmap, uint32 length)
 
 void *kmalloc(uint32 size)
 {
-	uint8 *buf = (uint8*)mem_alloc(&allocator, size);
+	uint8 *buf;
+
+	section_enter(&lock);
+	stats += size;
+	buf	= (uint8*)mem_alloc(&allocator, size);
 	kmemset(buf, 0x00, size);
+
+	section_leave(&lock);
+
 	return buf;
 }
 
 void kfree(void *ptr, uint32 size)
 {
-	char buf[128];
-	screen_putstr(kprintf(buf, "kfree: %x %x\n", ptr, size));
+	section_enter(&lock);
+	stats -= size;
 	mem_free(&allocator, ptr, size);
+	section_leave(&lock);
+}
+
+uint32 mem_stats()
+{
+	return stats;
 }

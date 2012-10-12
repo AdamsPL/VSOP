@@ -14,6 +14,9 @@
 #define LAPIC_PERF_MON  	0x0340
 #define LAPIC_ICR_LOW       0x0300
 #define LAPIC_ICR_HIGH      0x0310
+#define LAPIC_INT0  	    0x0350
+#define LAPIC_INT1	    	0x0360
+#define LAPIC_EINT	    	0x0370
 #define IOAPIC_REDIR_BASE  	0x10
 
 #define LAPIC_BASE         	0xFEE00000
@@ -53,9 +56,11 @@ void interrupts_start(void);
 void isr_init(void);
 void idt_set(uint16 id, uint32 base, uint8 flags);
 
-void eoi(void);
+void eoi(int id);
 
+void ioapic_init(void);
 void lapic_init(void);
+void apic_enable(void);
 
 void interrupts_disable();
 void interrupts_enable();

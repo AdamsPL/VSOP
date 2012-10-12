@@ -9,6 +9,7 @@
 #include "timer.h"
 #include "scheduler.h"
 #include "gdt.h"
+#include "config.h"
 
 #define IOAPIC_DISABLE     0x10000
 
@@ -35,8 +36,6 @@ struct int_handler_elem *int_handlers[256];
 
 static struct idt_entry idt_entries[256];
 volatile struct idt iptr;
-
-static int int_level[MAX_CPU];
 
 #include "screen.h"
 
@@ -93,7 +92,7 @@ static void ioapic_map(uint32 irq, uint32 vector)
 	/*disabling, just in case...*/
 	ioapic_set(reg_low, IOAPIC_DISABLE);
 	ioapic_set(reg_high, 0x00);
-	ioapic_set(reg_low, vector);
+	ioapic_set(reg_low, (1 << 8) | vector);
 }
 
 uint8 keyboard_handler(struct thread_state *state)
@@ -139,15 +138,31 @@ int lapic_get(uint32 reg)
 
 void lapic_init()
 {
-	lapic_set(LAPIC_SIR, 0x0010F);
 	lapic_set(LAPIC_TPR, 0x00020);
 	lapic_set(LAPIC_TIMER, 0x10000);
+	lapic_set(LAPIC_PERF_MON, 0x10000);
+	lapic_set(LAPIC_INT0, 0x08700);
+	lapic_set(LAPIC_INT1, 0x00400);
+	lapic_set(LAPIC_ERR, 0x00370);
+	lapic_set(LAPIC_SIR, 0x0010F);
+}
+
+void apic_enable(void)
+{
+	uint32 lo, hi, msr;
+
+	/*enabling apic*/
+	lo = 0;
+	hi = 0;
+	msr = 0x1B;
+	asm volatile("rdmsr" : "=a"(lo), "=d"(hi) : "c"(msr));
+	lo &= 0xFFFFF000;
+	lo |= 0x800;
+	asm volatile("wrmsr" :: "a"(lo), "d"(hi), "c"(msr));
 }
 
 void apic_init()
 {
-	uint32 lo, hi, msr;
-
 	port_write(0x20, 0x11);
 	port_write(0xA0, 0x11);
 
@@ -166,15 +181,8 @@ void apic_init()
 	port_write(0x22, 0x70);	
 	port_write(0x23, 0x01);	
 
-	/*enabling apic*/
-	lo = 0;
-	hi = 0;
-	msr = 0x1B;
-	asm volatile("rdmsr" : "=a"(lo), "=d"(hi) : "c"(msr));
-	lo &= 0xFFFFF000;
-	lo |= 0x800;
-	asm volatile("wrmsr" :: "a"(lo), "d"(hi), "c"(msr));
 
+	apic_enable();
 	ioapic_init();
 	lapic_init();
 }
@@ -191,25 +199,47 @@ static uint8 unhandled_interrupt_handler(struct thread_state *state)
 	return INT_OK;
 }
 
-void eoi(void)
+static lock_t lock;
+
+void eoi(int id)
 {
-	lapic_set(LAPIC_EOI, 0x01);
+	section_leave(&lock);
+	lapic_set(LAPIC_TPR, 0x00);
+	if (id > 0x70)
+		lapic_set(LAPIC_EOI, 0x01);
 }
+
+/*
+static int irq_count[MAX_CPU];
+*/
 
 void irq_handler(struct thread_state regs)
 {
 	struct int_handler_elem *elem;
-
+	/*
+	if(regs.int_id != INT_RTC)
+	{
+		char buf[128];
+		int i;
+		++irq_count[cpuid()];
+		screen_putstr(kprintf(buf, "[ "));
+		for (i = 0; i < cpu_count(); ++i)
+			screen_putstr(kprintf(buf, "%x ", irq_count[i]));
+		screen_putstr(kprintf(buf, "]!\n", irq_count[0], irq_count[1], irq_count[2]));
+	}
+	*/
+	lapic_set(LAPIC_TPR, 230);
+	section_enter(&lock);
 	asm volatile("movl %%cr2, %0" : "=a"(cr2));
-
-	asm("sti");
 
 	elem = int_handlers[regs.int_id];
 
 	while(elem && elem->handler(&regs) != INT_OK)
 		elem = elem->next;
-
-	eoi();
+/*
+	screen_putstr(kprintf(buf, "LEAVE int(%x)!\n", regs.int_id));
+*/
+	eoi(regs.int_id);
 }
 
 void idt_init()
@@ -252,6 +282,11 @@ void interrupts_register_handler(uint8 int_id, interrupt_handler handler)
 	int_handlers[int_id] = elem;
 }
 
+static uint8 ignore_int(struct thread_state *regs)
+{
+	return INT_OK;
+}
+
 void interrupts_init()
 {
 	int i;
@@ -259,30 +294,22 @@ void interrupts_init()
 	apic_init();
 	for (i = 0; i < 256; ++i)
 		interrupts_register_handler(i, unhandled_interrupt_handler);
+	/*
 	interrupts_register_handler(218, keyboard_handler);
+	*/
+	interrupts_register_handler(15, ignore_int);
+	interrupts_register_handler(INT_SCHED_TICK, sched_tick);
 }
 
 void interrupts_start()
 {
+	tss_set_stack(cpuid(), (uint32)kmalloc(PAGE_SIZE));
 	tss_flush(cpuid());
+	lapic_set(LAPIC_TPR, 0x00);
 	asm("sti");
 }
 
 void interrupts_stop()
 {
 	asm("cli");
-}
-
-void interrupts_disable()
-{
-	int cpu = cpuid();
-	if (int_level[cpu]++ == 0)
-		asm("cli");
-}
-
-void interrupts_enable()
-{
-	int cpu = cpuid();
-	if (--int_level[cpu] == 0)
-		asm("sti");
 }

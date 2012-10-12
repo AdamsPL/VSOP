@@ -70,33 +70,11 @@ uint32 paging_get_phys(uint32 addr)
 	index = page_table_index(addr);
 	return (ptr[index] & 0xFFFFF000);
 }
-/*
-static uint32 page_table_clone(uint32 oldtable)
-{
-	static const uint32 oldtable_virt = 0xaaaa0000;
-	static const uint32 newtable_virt = 0xbbbb0000;
-	uint32 newtable;
 
-	if ((oldtable & PAGE_PRESENT) == 0)
-		return 0;
-
-	newtable = mem_phys_alloc();
-
-	paging_map(oldtable_virt, oldtable & 0xFFFFF000, PAGE_WRITABLE | PAGE_PRESENT);
-	paging_map(newtable_virt, newtable & 0xFFFFF000, PAGE_WRITABLE | PAGE_PRESENT);
-
-	kmemcpy((uint8*)newtable_virt, (uint8*)oldtable_virt, PAGE_SIZE);
-
-	paging_map(oldtable_virt, 0, 0);
-	paging_map(newtable_virt, 0, 0);
-
-	return (newtable & 0xFFFFF000) | (oldtable & 0xFFF);
-}
-*/
 uint32 page_dir_clone(uint32 olddir)
 {
-	static uint32 *const olddir_virt = (uint32*)0xcccc0000;
-	static uint32 *const newdir_virt = (uint32*)0xdddd0000;
+	static uint32 *olddir_virt = (uint32*)0xcccc0000;
+	static uint32 *newdir_virt = (uint32*)0xdddd0000;
 	uint32 newdir;
 	int i;
 
@@ -105,9 +83,9 @@ uint32 page_dir_clone(uint32 olddir)
 	paging_map((uint32)olddir_virt, olddir & 0xFFFFF000, PAGE_WRITABLE | PAGE_PRESENT);
 	paging_map((uint32)newdir_virt, newdir & 0xFFFFF000, PAGE_WRITABLE | PAGE_PRESENT);
 
-	for (i = 0; i < 1024; ++i)
+	for (i = 0; i < 1023; ++i)
 		newdir_virt[i] = olddir_virt[i];
-	newdir_virt[1023] = page_entry(newdir, PAGE_USERMODE | PAGE_WRITABLE | PAGE_PRESENT);
+	newdir_virt[1023] = page_entry(newdir, PAGE_PRESENT);
 
 	paging_map((uint32)olddir_virt, 0, 0);
 	paging_map((uint32)newdir_virt, 0, 0);

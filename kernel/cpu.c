@@ -8,7 +8,26 @@
 #include "paging.h"
 #include "timer.h"
 
-static int num_of_cpu = -1;
+static volatile int num_of_cpu = 0;
+void _cpu_trampoline(void);
+void _cpu_trampoline_end(void);
+extern uint32 fake_gdt_ptr;
+extern uint32 fake_gdt_end;
+
+#define INIT 	0x00000500
+#define STARTUP	0x00000600
+#define LEVEL 	0x00008000
+#define ASSERT	0x00004000
+
+#define CR0_PAGING 			(1 << 31)
+#define CR0_PROTECTED_MODE 	(1 << 0)
+
+uint32 cpu_stack[MAX_CPU];
+
+static lock_t lock = 0;
+static volatile int awoken_cpu = 0;
+static int orig_cr0;
+
 
 static void *mp_slide(uint8 *from, uint8 *to)
 {
@@ -49,6 +68,18 @@ uint32 cpuid()
 	return lapic_get(LAPIC_ID) >> 24;
 }
 
+uint32 cr0(void)
+{
+	uint32 result;
+	asm("movl %%cr0, %0" : "=r"(result));
+	return result;
+}
+
+void restore_cr0()
+{
+	asm("movl %0, %%cr0" :: "r"(orig_cr0));
+}
+
 uint32 esp(void)
 {
 	int result;
@@ -78,18 +109,6 @@ void cpu_find()
 	}
 }
 
-void _cpu_trampoline(void);
-void _cpu_trampoline_end(void);
-extern uint32 fake_gdt_ptr;
-extern uint32 fake_gdt_end;
-
-#define INIT 	0x00000500
-#define STARTUP	0x00000600
-#define LEVEL 	0x00008000
-#define ASSERT	0x00004000
-
-uint32 cpu_stack;
-
 void cpu_wake_all()
 {
 	char buf[256];
@@ -100,6 +119,9 @@ void cpu_wake_all()
 	uint32 fake_gdt_len = (uint32)&fake_gdt_end - (uint32)&fake_gdt_ptr;
 	int cpu;
 	struct gdt *virt_gdt_ptr;
+
+	orig_cr0 = CR0_PAGING | CR0_PROTECTED_MODE;
+	restore_cr0();
 
 	kmemcpy((uint8*)trampoline, (uint8*)(uint32)(_cpu_trampoline), trampoline_len);
 	kmemcpy((uint8*)trampoline + PAGE_SIZE, (uint8*)&fake_gdt_ptr, fake_gdt_len);
@@ -112,14 +134,13 @@ void cpu_wake_all()
 	port_write(0x71, 0x0A);
 	*warm_reset_vector = addr;
 
-	cpu_stack = 0xB00B1E50;
 	for (cpu = 1; cpu < cpu_count(); ++cpu)
 	{
-		cpu_stack = (uint32)kmalloc(PAGE_SIZE);
-		screen_putstr(kprintf(buf, "wake! cpu %i stack: %x\n", cpu, cpu_stack));
+		cpu_stack[cpu] = (uint32)kmalloc(PAGE_SIZE) + PAGE_SIZE;
+		screen_putstr(kprintf(buf, "wake! cpu %i stack: %x\n", cpu, cpu_stack[cpu]));
 		lapic_set(LAPIC_ICR_HIGH, cpu << 24);
 		lapic_set(LAPIC_ICR_LOW, INIT | LEVEL | ASSERT);
-		timer_active_wait(200);
+		timer_active_wait(100);
 
 		lapic_set(LAPIC_ICR_HIGH, cpu << 24);
 		lapic_set(LAPIC_ICR_LOW, STARTUP | (addr >> 12));
@@ -130,4 +151,15 @@ void cpu_wake_all()
 int cpu_count()
 {
 	return num_of_cpu;
+}
+
+void cpu_sync(void)
+{
+	char buf[128];
+	screen_putstr(kprintf(buf, "cr0:%x\n", cr0()));
+	section_enter(&lock);
+	++awoken_cpu;
+	section_leave(&lock);
+	while(awoken_cpu != num_of_cpu)
+		;
 }

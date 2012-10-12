@@ -1,5 +1,6 @@
 #include "config.h"
 #include "memory.h"
+#include "locks.h"
 
 #define MEMALOC_SIZE 0x4000
 #define ALOCATORS 16
