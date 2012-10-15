@@ -24,7 +24,7 @@ run: $(MOUNTCANARY) $(GRUBMENU) install
 $(GRUBMENU): $(MOUNTCANARY) userspace/modfile
 	echo "" > $(GRUBMENU)
 	echo "default 0" >> $(GRUBMENU)
-	echo "timeout 3" >> $(GRUBMENU)
+	echo "timeout 1" >> $(GRUBMENU)
 	echo "title VSOP" >> $(GRUBMENU)
 	echo "root (hd0,0)" >> $(GRUBMENU)
 	echo "kernel /kernel.img" >> $(GRUBMENU)

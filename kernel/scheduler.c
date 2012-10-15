@@ -116,13 +116,13 @@ static void sched_switch(struct thread *from_thread, struct thread *to_thread)
 	current_thread[cpuid()] = to_thread;
 
 	asm volatile(\
-			"pushl %%esi\n" 			\
-			"pushl %%edi\n" 			\
-			"pushl %%ebp\n" 			\
+			"pushl %%esi\n" 		\
+			"pushl %%edi\n" 		\
+			"pushl %%ebp\n" 		\
 			"movl %%esp, %0\n" 		\
 			"movl %2, %%esp\n" 		\
-			"movl $1f, %1\n" 			\
-			"pushl %3\n" 				\
+			"movl $1f, %1\n" 		\
+			"pushl %3\n" 			\
 			"jmp _task_switch\n" 	\
 			"1:\n" 					\
 			"popl %%ebp\n" 			\
@@ -170,14 +170,18 @@ static void sched_wake_threads(void)
 
 uint8 sched_tick(struct thread_state *state)
 {
+	/*
 	char buf[128];
+	*/
 	struct thread *next;
 	struct thread *prev;
 
 	section_enter(&lock);
 
-	screen_putstr(kprintf(buf, "%x: tick: %x tpr: %x\n", timer_get_ticks(), cpuid(), lapic_get(LAPIC_TPR)));
-	
+	/*
+	if (sched_cur_thread() != idle_thread[cpuid()])
+	screen_putstr(kprintf(buf, "%x: tick! thread:%x cpu:%x\n", timer_get_ticks(), sched_cur_thread(), cpuid()));
+	*/
 	/*screen_putstr(kprintf(buf, "lock: %x mem: %x\n", cpuid(), mem_stats()));*/
 	
 	prev = sched_cur_thread();
@@ -230,8 +234,10 @@ pid_t sched_cur_proc()
 
 int sched_thread_select_msg()
 {
+	/*
 	int i = 0;
 	char buf[128];
+	*/
 	struct thread *thread = sched_cur_thread();
 	struct process *parent = thread->parent;
 	int queue = proc_select_queue(parent);
@@ -239,7 +245,7 @@ int sched_thread_select_msg()
 	while(queue == -1)
 	{
 		thread->state = THREAD_WAITING;
-		screen_putstr(kprintf(buf, "looping %x times:%x\n", cpuid(), ++i));
+		/*screen_putstr(kprintf(buf, "%x: looping %x times:%x\n", thread, cpuid(), ++i));*/
 		sched_yield();
 		queue = proc_select_queue(parent);
 	}
@@ -250,6 +256,7 @@ int sched_thread_select_msg()
 void sched_yield(void)
 {
 	sched_tick(0);
+	/*asm volatile("int $0x80");*/
 }
 
 struct thread *sched_cur_thread(void)
@@ -261,5 +268,5 @@ void sched_start_timer()
 {
 	lapic_set(0x320, 0x00020080);
 	lapic_set(0x3E0, 0xB);
-	lapic_set(0x380, 0xA1000000);
+	lapic_set(0x380, 0x00100000);
 }

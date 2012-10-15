@@ -30,6 +30,6 @@ typedef unsigned long uint64;
 typedef uint32 pid_t;
 typedef uint16 queue_id;
 typedef uint32 size_t;
-typedef volatile uint32 lock_t;
+typedef volatile int lock_t;
 
 #endif

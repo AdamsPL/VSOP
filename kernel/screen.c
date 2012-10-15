@@ -1,6 +1,7 @@
 #include "screen.h"
 #include "util.h"
 #include "config.h"
+#include "locks.h"
 
 enum ScreenColor{
 	BLACK = 0,
@@ -29,6 +30,8 @@ unsigned short *videomem = (unsigned short*)0xB8000;
 
 static uint8 cur_x = 0;
 static uint8 cur_y = 0;
+
+static lock_t screen_lock = 0;
 
 static void mv_cur(char c) {
 	switch(c){
@@ -91,10 +94,13 @@ void screen_clear()
 {
 	uint8 c = cur_style >> 4;
 	uint16 blank = screen_getstyle(c, c) << 8;
+
+	section_enter(&screen_lock);
 	blank |= ' ';
 	kmemset16(videomem, blank, SCREEN_HEIGHT * SCREEN_WIDTH);
 	cur_x = 0;
 	cur_y = 0;
+	section_leave(&screen_lock);
 }
 
 void screen_set_bg(uint8 color)
@@ -111,6 +117,8 @@ void screen_set_fg(uint8 color)
 
 void screen_putstr(char *c)
 {
+	section_enter(&screen_lock);
 	while(*c)
 		screen_putchar(*c++, cur_style);
+	section_leave(&screen_lock);
 }

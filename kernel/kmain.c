@@ -26,8 +26,41 @@ void hello_world(void)
 	lapic_init();
 	sched_init();
 	cpu_sync();
-	sched_start_timer();
+
 	interrupts_start();
+
+	sched_start_timer();
+}
+
+void dupa1(void)
+{
+	/*
+	char buf[128];
+	*/
+	while(1)
+	{
+		/*screen_putstr(kprintf(buf, "%x\n", 1));*/
+	}
+}
+void dupa2(void)
+{
+	/*
+	char buf[128];
+	*/
+	while(1)
+	{
+		/*screen_putstr(kprintf(buf, "%x\n", 2));*/
+	}
+}
+void dupa3(void)
+{
+	/*
+	char buf[128];
+	*/
+	while(1)
+	{
+		/*screen_putstr(kprintf(buf, "%x\n", 3));*/
+	}
 }
 
 void kmain(struct mboot *mboot, unsigned int magic)
@@ -42,13 +75,30 @@ void kmain(struct mboot *mboot, unsigned int magic)
 
 	proc_create_kernel_proc();
 	sched_init();
+	/*
 	mboot_load_modules(mboot);
+	*/
+	timer_init();
 
 	interrupts_start();
 
-	timer_init();
 	cpu_wake_all();
+
+	sched_thread_ready(thread_create(proc_get_by_pid(0), (uint32)dupa1, THREAD_KERNEL));
+	sched_thread_ready(thread_create(proc_get_by_pid(0), (uint32)dupa1, THREAD_KERNEL));
+	sched_thread_ready(thread_create(proc_get_by_pid(0), (uint32)dupa1, THREAD_KERNEL));
+	sched_thread_ready(thread_create(proc_get_by_pid(0), (uint32)dupa1, THREAD_KERNEL));
+	sched_thread_ready(thread_create(proc_get_by_pid(0), (uint32)dupa2, THREAD_KERNEL));
+	sched_thread_ready(thread_create(proc_get_by_pid(0), (uint32)dupa2, THREAD_KERNEL));
+	sched_thread_ready(thread_create(proc_get_by_pid(0), (uint32)dupa2, THREAD_KERNEL));
+	sched_thread_ready(thread_create(proc_get_by_pid(0), (uint32)dupa2, THREAD_KERNEL));
+	sched_thread_ready(thread_create(proc_get_by_pid(0), (uint32)dupa3, THREAD_KERNEL));
+	sched_thread_ready(thread_create(proc_get_by_pid(0), (uint32)dupa3, THREAD_KERNEL));
+	sched_thread_ready(thread_create(proc_get_by_pid(0), (uint32)dupa3, THREAD_KERNEL));
+	sched_thread_ready(thread_create(proc_get_by_pid(0), (uint32)dupa3, THREAD_KERNEL));
+
 	cpu_sync();
+
 	sched_start_timer();
 
 	while(1)

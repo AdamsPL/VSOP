@@ -6,6 +6,7 @@ int main()
 	while(1)
 	{
 		++x;
+		/*exit(x);*/
 	}
 	return 0;
 }

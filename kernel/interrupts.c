@@ -92,7 +92,10 @@ static void ioapic_map(uint32 irq, uint32 vector)
 	/*disabling, just in case...*/
 	ioapic_set(reg_low, IOAPIC_DISABLE);
 	ioapic_set(reg_high, 0x00);
+	/*
 	ioapic_set(reg_low, (1 << 8) | vector);
+	*/
+	ioapic_set(reg_low, vector);
 }
 
 uint8 keyboard_handler(struct thread_state *state)
@@ -190,7 +193,7 @@ void apic_init()
 static uint8 unhandled_interrupt_handler(struct thread_state *state)
 {
 	char buf[256];
-	/*screen_clear();*/
+	screen_clear();
 	screen_putstr(kprintf(buf, "unhandled int(%x)! pid:%i cr2: %x cpu:%i\n", state->int_id, sched_cur_proc(), cr2, cpuid()));
 	regs_print(state);
 	asm("cli");
@@ -199,11 +202,8 @@ static uint8 unhandled_interrupt_handler(struct thread_state *state)
 	return INT_OK;
 }
 
-static lock_t lock;
-
 void eoi(int id)
 {
-	section_leave(&lock);
 	lapic_set(LAPIC_TPR, 0x00);
 	if (id > 0x70)
 		lapic_set(LAPIC_EOI, 0x01);
@@ -228,8 +228,7 @@ void irq_handler(struct thread_state regs)
 		screen_putstr(kprintf(buf, "]!\n", irq_count[0], irq_count[1], irq_count[2]));
 	}
 	*/
-	lapic_set(LAPIC_TPR, 230);
-	section_enter(&lock);
+	lapic_set(LAPIC_TPR, 0xE0);
 	asm volatile("movl %%cr2, %0" : "=a"(cr2));
 
 	elem = int_handlers[regs.int_id];
@@ -252,8 +251,6 @@ void idt_init()
 
 void regs_init(struct thread_state *regs, uint32 stack, uint32 entry, enum thread_flags flags)
 {
-	stack += PAGE_SIZE;
-
 	kmemset((void*)regs, 0, sizeof(struct thread_state));
 
 	regs->eip = entry;

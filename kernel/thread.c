@@ -29,9 +29,9 @@ struct thread *thread_create(struct process *parent, uint32 entry, enum thread_f
 	}
 
 	new->eip = (uint32)_leave_kernel;
-	new->esp = new->kernel_stack +PAGE_SIZE - sizeof(struct thread_state);
+	new->esp = new->kernel_stack + PAGE_SIZE - sizeof(struct thread_state) - 16;
 
-	regs_init((struct thread_state*)new->esp, stack, entry, flags);
+	regs_init((struct thread_state*)new->esp, stack + PAGE_SIZE - 16, entry, flags);
 	new->stack = stack;
 
 	return new;
