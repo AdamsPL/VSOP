@@ -41,6 +41,20 @@ static int get_higher_prio(int prio)
 
 void _task_switch(void)
 {
+	section_leave(&lock);
+}
+
+static void sched_print()
+{
+	char buf[128];
+	int i;
+
+	for (i = 0; i < MAX_PRIORITY; ++i)
+	{
+		list_print(prio_queues + i);
+	}
+	list_print(&waiting_threads);
+	screen_putstr(kprintf(buf, "*****\n"));
 }
 
 static void sched_put_back(void)
@@ -67,6 +81,7 @@ static void sched_move_down()
 {
 	struct thread *thread;
 	int pri;
+	return;
 	for (pri = 0; pri < MAX_PRIORITY; ++pri)
 	{
 		thread = (struct thread *)list_peek(prio_queues + pri);
@@ -87,6 +102,7 @@ static void sched_move_up()
 {
 	struct thread *thread;
 	int pri;
+	return;
 	for (pri = 0; pri < MAX_PRIORITY; ++pri)
 	{
 		thread = (struct thread *)list_peek(prio_queues + pri);
@@ -107,7 +123,10 @@ static void sched_move_up()
 static void sched_switch(struct thread *from_thread, struct thread *to_thread)
 {
 	if (from_thread == to_thread)
+	{
+		section_leave(&lock);
 		return;
+	}
 
 	if (from_thread->parent->pdir != to_thread->parent->pdir)
 		page_dir_switch(to_thread->parent->pdir);
@@ -170,13 +189,30 @@ static void sched_wake_threads(void)
 
 uint8 sched_tick(struct thread_state *state)
 {
-	/*
 	char buf[128];
-	*/
 	struct thread *next;
 	struct thread *prev;
+	int i, j, k;
 
 	section_enter(&lock);
+	for (i = 0; i < cpu_count(); ++i)
+	{
+		for (j = 0; j < cpu_count(); ++j)
+		{
+			if (i != j && (current_thread[i] == current_thread[j]))
+			{
+				screen_putstr(kprintf(buf, "%x==%x [%x][%x] idle:%i\n", i, j, current_thread[i], current_thread[j], current_thread[i] == idle_thread[i]));
+				for (k = 0; k < cpu_count(); ++k)
+					screen_putstr(kprintf(buf, "%i)%x ", k, current_thread[k]));
+				screen_putstr(kprintf(buf, "\n"));
+
+				screen_putstr(kprintf(buf, "%x==%x [%x][%x] idle:%i\n", i, j, current_thread[i], current_thread[j], current_thread[i] == idle_thread[i]));
+				sched_print();
+				while(1) asm("hlt");
+			}
+		}
+	}
+
 
 	/*
 	if (sched_cur_thread() != idle_thread[cpuid()])
@@ -186,16 +222,13 @@ uint8 sched_tick(struct thread_state *state)
 	
 	prev = sched_cur_thread();
 
-	sched_put_back();
 	sched_wake_threads();
+	sched_put_back();
+	
 	sched_move_down();
 	sched_move_up();
-
+	
 	next = sched_pick();
-
-	section_leave(&lock);
-
-	/*screen_putstr(kprintf(buf, "tock: %x mem: %x\n", cpuid(), mem_stats()));*/
 
 	sched_switch(prev, next);
 

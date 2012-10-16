@@ -193,7 +193,7 @@ void apic_init()
 static uint8 unhandled_interrupt_handler(struct thread_state *state)
 {
 	char buf[256];
-	screen_clear();
+	/*screen_clear();*/
 	screen_putstr(kprintf(buf, "unhandled int(%x)! pid:%i cr2: %x cpu:%i\n", state->int_id, sched_cur_proc(), cr2, cpuid()));
 	regs_print(state);
 	asm("cli");

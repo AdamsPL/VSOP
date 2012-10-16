@@ -6,6 +6,19 @@
 
 void _leave_kernel(void);
 
+static void alloc_stack(uint32 *stack, uint32 size)
+{
+	*stack -= size;
+}
+
+static void push_stack(uint32 *stack, uint32 value)
+{
+	uint32 **ptr;
+	*stack -= sizeof(value);
+	ptr = (uint32**)stack;
+	**ptr = value;
+}
+
 struct thread *thread_create(struct process *parent, uint32 entry, enum thread_flags flags)
 {
 	/*TODO:FIXME*/
@@ -29,9 +42,15 @@ struct thread *thread_create(struct process *parent, uint32 entry, enum thread_f
 	}
 
 	new->eip = (uint32)_leave_kernel;
-	new->esp = new->kernel_stack + PAGE_SIZE - sizeof(struct thread_state) - 16;
+	new->esp = new->kernel_stack + PAGE_SIZE - 16;
 
+	alloc_stack(&new->esp, sizeof(struct thread_state));
 	regs_init((struct thread_state*)new->esp, stack + PAGE_SIZE - 16, entry, flags);
+
+	push_stack(&new->esp, 0);/*esi*/
+	push_stack(&new->esp, 0);/*edi*/
+	push_stack(&new->esp, new->kernel_stack + PAGE_SIZE - 16);/*ebp*/
+
 	new->stack = stack;
 
 	return new;

@@ -25,7 +25,6 @@
 _isr_null:
 	iret
 
-
 isr_common:
 	pusha
 	mov %ds, %ax
@@ -53,6 +52,9 @@ isr_common:
 _leave_kernel:
 	push $0x80
 	call eoi
+	pop %eax
+	pop %eax
+	pop %eax
 	pop %eax
 	pop %eax
 	mov %ax, %ds
