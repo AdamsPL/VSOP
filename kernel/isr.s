@@ -27,6 +27,7 @@ _isr_null:
 
 isr_common:
 	pusha
+	xorl %eax, %eax
 	mov %ds, %ax
 	push %eax
 

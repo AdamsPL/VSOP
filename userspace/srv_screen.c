@@ -116,9 +116,7 @@ int main()
 {
 	char msg[128];
 	char buf[128];
-	int len = 0;
 	int iter = 0;
-	descr msgqueue = 0;
 	
 	mmap(videomem, (void*)0xB8000);
 	cur_x = 0;
@@ -129,14 +127,13 @@ int main()
 	while(1)
 	{
 		
-		msgqueue = select();
-		len = read(msgqueue, (uint8*)msg, 32);
-		if (len <= 0)
+		read((uint8*)msg, 32);
+		iter++;
+		if (iter % 128)
 			continue;
 		
-		kprintf(buf, "%x %x %s\n", iter++, msgqueue, msg);
-		if (iter % 0x100 == 0)
-			screen_putstr(buf);
+		kprintf(buf, "%x %s\n", iter, msg);
+		screen_putstr(buf);
 	}
 	
 	return 0;

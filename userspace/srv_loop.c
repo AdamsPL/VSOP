@@ -6,7 +6,8 @@ int main()
 	while(1)
 	{
 		++x;
-		/*exit(x);*/
+		if (x % 1024 == 0)
+			exit(x);
 	}
 	return 0;
 }

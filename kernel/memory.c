@@ -8,8 +8,6 @@
 
 #include "locks.h"
 
-#define RSA_SIZE 0x2000
-
 extern uint32 end;
 extern uint32 code;
 
@@ -45,7 +43,7 @@ void mem_init(struct mmap *mmap, uint32 length)
 {
 	uint8 *end = (uint8*)mmap + length;
 	uint8 *ptr = (uint8*)mmap;
-	heap = 0xC2000000;
+	heap = 0xC3000000;
 
 	mem_allocator_init(&allocator);
 

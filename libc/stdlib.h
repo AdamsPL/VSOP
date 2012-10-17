@@ -8,10 +8,10 @@ typedef int descr;
 void wait(int ticks);
 void exit(int error_code);
 int register_process(const char *name);
-descr connect(const char *name);
-descr select();
-int write(descr dsc, const uint8 *buf, const uint32 size);
-int read(descr dsc, const uint8 *buf, const uint32 size);
+int pidof(const char *name);
+
+int write(uint32 pid, const uint8 *buf, const uint32 size);
+int read(const uint8 *buf, const uint32 size);
 
 void mmap(void *virt, void *phys);
 

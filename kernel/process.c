@@ -86,47 +86,29 @@ struct process *proc_create_kernel_proc()
 	return new;
 }
 
-int proc_attach_queue(struct process *proc, struct msg_queue *send_queue, struct msg_queue *recv_queue)
+struct message *proc_recv(struct process *this)
 {
-	int i;
+	struct message *msg = 0;
 
-	for (i = 0; i < PROC_MAX_QUEUES; ++i)
+	while(1)
 	{
-		if (!proc->msg_queues[i].send && !proc->msg_queues[i].recv)
-			break;
+	   	msg = list_pop(&this->messages);
+		if (msg)
+			return msg;
+		sched_thread_wait_for_msg();
 	}
-	if (i == PROC_MAX_QUEUES)
-		return -1;
-
-
-	proc->msg_queues[i].send = send_queue;
-	proc->msg_queues[i].recv = recv_queue;
-
-	proc->msg_queues[i].recv->header.owner = proc->pid;
-	proc->msg_queues[i].recv->header.descr = i;
-
-	return i;
 }
 
-int proc_select_queue(struct process *proc)
+void proc_send(struct message *msg, struct process *dest)
 {
-	int i;
-	struct queue_descr *msg_queues = proc->msg_queues;
-
-	proc->selecting_thread = sched_cur_thread();
-
-	for (i = 0; i < PROC_MAX_QUEUES; ++i)
-	{
-		if (!msg_queues[i].recv)
-			continue;
-		if (!queue_is_empty(msg_queues[i].recv))
-			return i;
-	}
-
-	return -1;
+	list_push(&dest->messages, msg);
 }
 
-struct queue_descr *proc_get_descr(struct process *proc, int id)
+uint8 thread_msg_event(struct thread *this)
 {
-	return proc->msg_queues + id;
+	if (!this)
+		return 0;
+	if (!this->parent)
+		return 0;
+	return (list_size(&this->parent->messages) > 0);
 }

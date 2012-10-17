@@ -5,7 +5,6 @@
 #include "interrupts.h"
 #include "paging.h"
 #include "locks.h"
-#include "ipc.h"
 #include "ports.h"
 #include "gdt.h"
 #include "elf.h"
@@ -24,34 +23,12 @@ void hello_world(void)
 	apic_enable();
 	ioapic_init();
 	lapic_init();
-	sched_init();
+
 	cpu_sync();
 
 	interrupts_start();
 
 	sched_start_timer();
-}
-
-void dupa1(void)
-{
-	while(1)
-	{
-		asm("hlt");
-	}
-}
-void dupa2(void)
-{
-	while(1)
-	{
-		asm("hlt");
-	}
-}
-void dupa3(void)
-{
-	while(1)
-	{
-		asm("hlt");
-	}
 }
 
 void kmain(struct mboot *mboot, unsigned int magic)
@@ -67,36 +44,15 @@ void kmain(struct mboot *mboot, unsigned int magic)
 	proc_create_kernel_proc();
 	sched_init();
 	
-	mboot_load_modules(mboot);
-	
 	timer_init();
 
 	interrupts_start();
 
 	cpu_wake_all();
-
-	/*
-
-	sched_thread_ready(thread_create(proc_get_by_pid(0), (uint32)dupa1, THREAD_KERNEL));
-	sched_thread_ready(thread_create(proc_get_by_pid(0), (uint32)dupa1, THREAD_KERNEL));
-	sched_thread_ready(thread_create(proc_get_by_pid(0), (uint32)dupa1, THREAD_KERNEL));
-	sched_thread_ready(thread_create(proc_get_by_pid(0), (uint32)dupa1, THREAD_KERNEL));
-	sched_thread_ready(thread_create(proc_get_by_pid(0), (uint32)dupa2, THREAD_KERNEL));
-	sched_thread_ready(thread_create(proc_get_by_pid(0), (uint32)dupa2, THREAD_KERNEL));
-	sched_thread_ready(thread_create(proc_get_by_pid(0), (uint32)dupa2, THREAD_KERNEL));
-	sched_thread_ready(thread_create(proc_get_by_pid(0), (uint32)dupa2, THREAD_KERNEL));
-	sched_thread_ready(thread_create(proc_get_by_pid(0), (uint32)dupa3, THREAD_KERNEL));
-	sched_thread_ready(thread_create(proc_get_by_pid(0), (uint32)dupa3, THREAD_KERNEL));
-	sched_thread_ready(thread_create(proc_get_by_pid(0), (uint32)dupa3, THREAD_KERNEL));
-	sched_thread_ready(thread_create(proc_get_by_pid(0), (uint32)dupa3, THREAD_KERNEL));
-
-	*/
-
 	cpu_sync();
 
-	sched_start_timer();
+	mboot_load_modules(mboot);
 
-	while(1)
-		asm("hlt");
+	sched_start_timer();
 
 }

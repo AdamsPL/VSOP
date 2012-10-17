@@ -31,28 +31,22 @@ int register_process(const char *name)
 	return syscall(SYSCALL_REGISTER); 
 }
 
-descr connect(const char *name)
+int pidof(const char *name)
 {
 	asm volatile("movl %0, %%ebx" :: "m"(name) : "%ebx");
-	return syscall(SYSCALL_CONNECT);
+	return syscall(SYSCALL_PIDOF); 
 }
 
-descr select()
+int read(const uint8 *buf, const uint32 size)
 {
-	return syscall(SYSCALL_SELECT);
-}
-
-int read(descr dsc, const uint8 *buf, const uint32 size)
-{
-	asm volatile("movl %0, %%ebx" :: "m"(dsc) : "%ebx");
-	asm volatile("movl %0, %%ecx" :: "m"(buf) : "%ecx");
-	asm volatile("movl %0, %%edx" :: "m"(size) : "%edx");
+	asm volatile("movl %0, %%ebx" :: "m"(buf) : "%ebx");
+	asm volatile("movl %0, %%ecx" :: "m"(size) : "%ecx");
 	return syscall(SYSCALL_READ);
 }
 
-int write(descr dsc, const uint8 *buf, const uint32 size)
+int write(uint32 pid, const uint8 *buf, const uint32 size)
 {
-	asm volatile("movl %0, %%ebx" :: "m"(dsc) : "%ebx");
+	asm volatile("movl %0, %%ebx" :: "m"(pid) : "%ebx");
 	asm volatile("movl %0, %%ecx" :: "m"(buf) : "%ecx");
 	asm volatile("movl %0, %%edx" :: "m"(size) : "%edx");
 	return syscall(SYSCALL_WRITE);

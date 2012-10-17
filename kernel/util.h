@@ -13,4 +13,7 @@ void *kmemset16(uint16 *ptr, uint16 value, uint32 count);
 void *kmemset32(uint32 *ptr, uint32 value, uint32 count);
 
 void kstrncpy(uint8 *destination, const uint8 *source, uint32 count);
+
+int truncate(int value, int min, int max);
+
 #endif

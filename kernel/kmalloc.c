@@ -2,7 +2,7 @@
 #include "memory.h"
 #include "locks.h"
 
-#define MEMALOC_SIZE 0x4000
+#define MEMALOC_SIZE 0x8000
 #define ALOCATORS 16
 #define NODES ((MEMALOC_SIZE - sizeof(uint16) * ALOCATORS) / sizeof(struct mem_node))
 #define COUNT(x) (sizeof(x) / sizeof(*x))

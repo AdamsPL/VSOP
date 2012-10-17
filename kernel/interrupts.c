@@ -26,13 +26,7 @@ struct idt {
 	uint32 base;
 }__attribute__((packed));
 
-struct int_handler_elem
-{
-	interrupt_handler handler;
-	struct int_handler_elem *next;
-};
-
-struct int_handler_elem *int_handlers[256];
+interrupt_handler int_handlers[256];
 
 static struct idt_entry idt_entries[256];
 volatile struct idt iptr;
@@ -93,16 +87,16 @@ static void ioapic_map(uint32 irq, uint32 vector)
 	ioapic_set(reg_low, IOAPIC_DISABLE);
 	ioapic_set(reg_high, 0x00);
 	/*
-	ioapic_set(reg_low, (1 << 8) | vector);
-	*/
 	ioapic_set(reg_low, vector);
+	*/
+	ioapic_set(reg_low, (1 << 8) | vector);
 }
 
 uint8 keyboard_handler(struct thread_state *state)
 {
 	char buf[32];
 	struct time_t uptime = timer_uptime();
-	screen_putstr(kprintf(buf, "keyboard!: d:%i h:%i m:%i s:%i ms:%i\n", uptime.days, uptime.hours, uptime.minutes, uptime.sec, uptime.milisec));
+	screen_putstr(kprintf(buf, "keyboard!: eip:%x d:%i h:%i m:%i s:%i ms:%i\n", state->eip, uptime.days, uptime.hours, uptime.minutes, uptime.sec, uptime.milisec));
 	return INT_OK;
 }
 
@@ -194,11 +188,8 @@ static uint8 unhandled_interrupt_handler(struct thread_state *state)
 {
 	char buf[256];
 	/*screen_clear();*/
-	screen_putstr(kprintf(buf, "unhandled int(%x)! pid:%i cr2: %x cpu:%i\n", state->int_id, sched_cur_proc(), cr2, cpuid()));
+	screen_putstr(kprintf(buf, "unhandled state:%x int(%x)! proc:%x thread: %x cpu:%x\n", state, state->int_id, sched_cur_proc(), sched_cur_thread(), cpuid()));
 	regs_print(state);
-	asm("cli");
-	while(1)
-		asm("hlt");
 	return INT_OK;
 }
 
@@ -209,35 +200,16 @@ void eoi(int id)
 		lapic_set(LAPIC_EOI, 0x01);
 }
 
-/*
-static int irq_count[MAX_CPU];
-*/
-
 void irq_handler(struct thread_state regs)
 {
-	struct int_handler_elem *elem;
-	/*
-	if(regs.int_id != INT_RTC)
-	{
-		char buf[128];
-		int i;
-		++irq_count[cpuid()];
-		screen_putstr(kprintf(buf, "[ "));
-		for (i = 0; i < cpu_count(); ++i)
-			screen_putstr(kprintf(buf, "%x ", irq_count[i]));
-		screen_putstr(kprintf(buf, "]!\n", irq_count[0], irq_count[1], irq_count[2]));
-	}
-	*/
 	lapic_set(LAPIC_TPR, 0xE0);
 	asm volatile("movl %%cr2, %0" : "=a"(cr2));
 
-	elem = int_handlers[regs.int_id];
+	if (regs.ds > 0x100)
+		unhandled_interrupt_handler(&regs);
+	
+	int_handlers[regs.int_id](&regs);
 
-	while(elem && elem->handler(&regs) != INT_OK)
-		elem = elem->next;
-/*
-	screen_putstr(kprintf(buf, "LEAVE int(%x)!\n", regs.int_id));
-*/
 	eoi(regs.int_id);
 }
 
@@ -273,10 +245,7 @@ void regs_init(struct thread_state *regs, uint32 stack, uint32 entry, enum threa
 
 void interrupts_register_handler(uint8 int_id, interrupt_handler handler)
 {
-	struct int_handler_elem *elem = NEW(struct int_handler_elem);
-	elem->handler = handler;
-	elem->next = int_handlers[int_id];
-	int_handlers[int_id] = elem;
+	int_handlers[int_id] = handler;
 }
 
 static uint8 ignore_int(struct thread_state *regs)
@@ -291,9 +260,7 @@ void interrupts_init()
 	apic_init();
 	for (i = 0; i < 256; ++i)
 		interrupts_register_handler(i, unhandled_interrupt_handler);
-	/*
 	interrupts_register_handler(218, keyboard_handler);
-	*/
 	interrupts_register_handler(15, ignore_int);
 	interrupts_register_handler(INT_SCHED_TICK, sched_tick);
 }

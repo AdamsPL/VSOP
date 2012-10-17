@@ -12,7 +12,12 @@ struct list_elem *list_elem_new(void *target)
 
 void list_push(struct list *this, void *target)
 {
-	struct list_elem *elem = list_elem_new(target);
+	struct list_elem *elem;
+   
+	if (!target)
+		return;
+
+	elem = list_elem_new(target);
 
 	section_enter(&this->lock);
 
@@ -26,6 +31,7 @@ void list_push(struct list *this, void *target)
 	this->tail = elem;
 
 cleanup:
+	++this->size;
 	section_leave(&this->lock);
 }
 
@@ -52,6 +58,8 @@ void *list_pop(struct list *this)
 		DELETE(elem);
 	}
 
+	if (result)
+		--this->size;
 	section_leave(&this->lock);
 	return result;
 }
@@ -70,10 +78,7 @@ void list_print(struct list *this)
 	screen_putstr(kprintf(buf, "\n", this));
 }
 
-void *list_peek(struct list *this)
+int list_size(struct list *this)
 {
-	struct list_elem *ptr = this->head;
-	if (!ptr)
-		return ptr;
-	return ptr->target;
+	return this->size;
 }

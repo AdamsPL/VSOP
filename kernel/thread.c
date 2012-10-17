@@ -27,7 +27,7 @@ struct thread *thread_create(struct process *parent, uint32 entry, enum thread_f
 	struct thread *new = NEW(struct thread);
 
 	new->parent = parent;
-	new->kernel_stack = (uint32)kmalloc(PAGE_SIZE);
+	new->kernel_stack = (uint32)kmalloc(PAGE_SIZE) + PAGE_SIZE - 16;
 
 	if (flags && THREAD_USERSPACE)
 	{
@@ -42,14 +42,14 @@ struct thread *thread_create(struct process *parent, uint32 entry, enum thread_f
 	}
 
 	new->eip = (uint32)_leave_kernel;
-	new->esp = new->kernel_stack + PAGE_SIZE - 16;
+	new->esp = new->kernel_stack;
 
 	alloc_stack(&new->esp, sizeof(struct thread_state));
 	regs_init((struct thread_state*)new->esp, stack + PAGE_SIZE - 16, entry, flags);
 
 	push_stack(&new->esp, 0);/*esi*/
 	push_stack(&new->esp, 0);/*edi*/
-	push_stack(&new->esp, new->kernel_stack + PAGE_SIZE - 16);/*ebp*/
+	push_stack(&new->esp, new->kernel_stack);/*ebp*/
 
 	new->stack = stack;
 

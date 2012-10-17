@@ -3,7 +3,7 @@
 #include "interrupts.h"
 #include "memory.h"
 
-#define GDT_ENTRIES (6 + MAX_CPU)
+#define GDT_ENTRIES (5 + MAX_CPU)
 
 struct gdt_entry
 {
@@ -88,7 +88,7 @@ static void tss_init(uint8 id)
 void gdt_init()
 {
 	int i = 0;
-	gdtr.size = sizeof(gdt) - 1;
+	gdtr.size = sizeof(gdt);
 	gdtr.base = VIRT_TO_PHYS(&gdt);
 	
 	kmemset((uint8*)&tss, 0, sizeof(tss));

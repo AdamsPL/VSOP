@@ -3,12 +3,10 @@
 
 #define SYSCALL_EXIT 0
 #define SYSCALL_WAIT 1
-#define SYSCALL_SPAWN 2
+#define SYSCALL_PIDOF 2
 #define SYSCALL_REGISTER 3
-#define SYSCALL_CONNECT 4
-#define SYSCALL_SELECT 5
-#define SYSCALL_READ 6
-#define SYSCALL_WRITE 7
-#define SYSCALL_MMAP 8
+#define SYSCALL_READ 4
+#define SYSCALL_WRITE 5
+#define SYSCALL_MMAP 6
 
 #endif

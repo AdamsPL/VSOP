@@ -2,14 +2,17 @@
 
 int main()
 {
-	descr bob;
 	char buf[32];
+	descr bob = -1;
+
 	register_process("alice");
+
+	while((bob = pidof("bob")) == -1)
+		wait(100);
 
 	while(1)
 	{
-		bob = select();
-		read(bob, (uint8*)buf, 32);
+		read((uint8*)buf, 32);
 		write(bob, (uint8*)buf, 32);
 	}
 

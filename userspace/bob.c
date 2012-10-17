@@ -2,32 +2,28 @@
 
 int main()
 {
-	descr screen;
-	int i = 0;
-
-	descr alice;
+	uint32 alice;
+	uint32 screen;
+	
 	char buf[32];
 
 	register_process("bob");
 
-	while((alice = connect("alice")) == -1)
+	while((alice = pidof("alice")) == -1)
 		wait(100);
-	
-	while((screen = connect("sys.drivers.screen")) == -1)
+
+	while((screen = pidof("sys.drivers.screen")) == -1)
 		wait(100);
-	
+
 	kprintf(buf, "HELLO!");
+
 	write(alice, (uint8*)buf, 32);
 
 	while(1)
 	{
-		alice = select();
-		read(alice, (uint8*)buf, 32);
+		read((uint8*)buf, 32);
 		write(alice, (uint8*)buf, 32);
-
 		write(screen, (uint8*)buf, 32);
-		exit(i++);
-		
 	}
 
 	return 0;

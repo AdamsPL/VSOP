@@ -140,7 +140,7 @@ void cpu_wake_all()
 		screen_putstr(kprintf(buf, "wake! cpu %i stack: %x\n", cpu, cpu_stack[cpu]));
 		lapic_set(LAPIC_ICR_HIGH, cpu << 24);
 		lapic_set(LAPIC_ICR_LOW, INIT | LEVEL | ASSERT);
-		timer_active_wait(100);
+		timer_active_wait(50);
 
 		lapic_set(LAPIC_ICR_HIGH, cpu << 24);
 		lapic_set(LAPIC_ICR_LOW, STARTUP | (addr >> 12));
@@ -155,8 +155,6 @@ int cpu_count()
 
 void cpu_sync(void)
 {
-	char buf[128];
-	screen_putstr(kprintf(buf, "cr0:%x\n", cr0()));
 	section_enter(&lock);
 	++awoken_cpu;
 	section_leave(&lock);

@@ -101,3 +101,12 @@ void kstrncpy(uint8 *destination, const uint8 *source, uint32 count)
 	while ((*destination++ = *source++) && count)
 		--count;
 }
+
+int truncate(int value, int min, int max)
+{
+	if (value > max)
+		return max;
+	if (value < min)
+		return min;
+	return value;
+}

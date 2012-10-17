@@ -2,8 +2,8 @@
 #define _PROCESS_H
 
 #include "config.h"
-
-#include "ipc.h"
+#include "list.h"
+#include "locks.h"
 
 #define PROC_MAX_NAME_LEN 64
 
@@ -24,10 +24,9 @@ struct process
 	struct proc_section bss;
 	struct proc_section rodata;
 	uint32 pdir;
-	struct thread *threads;
 	char name[PROC_MAX_NAME_LEN];
-	struct queue_descr msg_queues[PROC_MAX_QUEUES];
-	struct thread *selecting_thread;
+
+	struct list messages;
 };
 
 struct process *proc_create(struct proc_section text, struct proc_section data, struct proc_section bss, struct proc_section rodata);
@@ -36,9 +35,9 @@ struct process *proc_get_by_pid(pid_t pid);
 struct process *proc_get_by_name(char *name);
 int proc_register(struct process *proc, char *name);
 
-int proc_attach_queue(struct process *proc, struct msg_queue *send_queue, struct msg_queue *recv_queue);
-int proc_select_queue(struct process *proc);
+struct message *proc_recv(struct process *this);
+void proc_send(struct message *msg, struct process *dest);
 
-struct queue_descr *proc_get_descr(struct process *proc, int id);
+uint8 thread_msg_event(struct thread *this);
 
 #endif

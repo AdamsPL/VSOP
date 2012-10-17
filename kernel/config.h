@@ -18,6 +18,7 @@
 #define STACK_OFFSET (PAGE_SIZE - 0x10)
 
 #define UNUSED(x) (void)(x);
+#define MAX_PRIORITY 5
 
 typedef unsigned char uint8;
 typedef signed char int8;

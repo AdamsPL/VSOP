@@ -1,6 +1,5 @@
 #include "drivers.h"
 #include "util.h"
-#include "ipc.h"
 
 struct driver drivers[128];
 int handlers[128];
