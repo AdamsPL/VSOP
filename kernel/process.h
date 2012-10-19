@@ -37,6 +37,7 @@ int proc_register(struct process *proc, char *name);
 
 struct message *proc_recv(struct process *this);
 void proc_send(struct message *msg, struct process *dest);
+uint8 proc_peek(struct process *this);
 
 uint8 thread_msg_event(struct thread *this);
 

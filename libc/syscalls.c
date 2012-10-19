@@ -58,3 +58,14 @@ void mmap(void *virt_addr, void *phys_addr)
 	asm volatile("movl %0, %%ecx" :: "m"(phys_addr) : "%ecx");
 	syscall(SYSCALL_MMAP);
 }
+
+void handle(int irq)
+{
+	asm volatile("movl %0, %%ebx" :: "m"(irq) : "%ebx");
+	syscall(SYSCALL_HANDLE);
+}
+
+uint8 peek()
+{
+	return syscall(SYSCALL_PEEK);
+}

@@ -8,5 +8,7 @@
 #define SYSCALL_READ 4
 #define SYSCALL_WRITE 5
 #define SYSCALL_MMAP 6
+#define SYSCALL_HANDLE 7
+#define SYSCALL_PEEK 8
 
 #endif

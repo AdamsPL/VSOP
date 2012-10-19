@@ -129,10 +129,7 @@ int main()
 		
 		read((uint8*)msg, 32);
 		iter++;
-		if (iter % 128)
-			continue;
-		
-		kprintf(buf, "%x %s\n", iter, msg);
+		kprintf(buf, "%x:%s\n", iter, msg);
 		screen_putstr(buf);
 	}
 	

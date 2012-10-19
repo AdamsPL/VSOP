@@ -1,49 +1,36 @@
 #include "drivers.h"
 #include "util.h"
+#include "process.h"
+#include "interrupts.h"
+#include "message.h"
 
-struct driver drivers[128];
-int handlers[128];
+struct process *handlers[256];
 
 void drivers_init()
 {
 	int i;
-	for (i = 0; i < 128; ++i)
-		handlers[i] = -1;
+	for (i = 0; i < 256; ++i)
+		handlers[i] = 0;
 }
 
-int server_get(char *name)
+uint8 driver_irq_notify(struct thread_state *state)
 {
-	int i = 0;
-	while(kstrcmp(name, drivers[i].name)){
-		++i;
-		if (i == 128)
-			return -1;
-	}
-	return drivers[i].pid;
+	int irq = state->int_id;
+	char buf[] = "int";
+	struct message *msg;
+
+	if (!handlers[irq])
+		return INT_ERROR;
+
+	msg = message_alloc(sizeof(buf), (uint8*)buf);
+
+	proc_send(msg, handlers[irq]);
+	return INT_OK;
 }
 
-int server_set(pid_t pid, char *name, int irq)
+void driver_register(pid_t pid, int irq)
 {
-	int descr = 1;
-
-	/*
-	while(drivers[i].name[0] != '\0')
-		++i;
-	drivers[i].pid = pid;
-	kstrncpy((uint8*)drivers[i].name, (uint8*)name, 24);
-	if (irq == -1)
-		return -1;
-	handlers[irq] = queue_create();
-	descr = proc_map_queue(pid, 0, handlers[irq]);
-	*/
-	return descr;
-}
-
-void server_irq_notify(int irq)
-{
-	if (handlers[irq] == -1)
-		return;
-	/*
-	ipc_send(handlers[irq], (uint8*)"irq!", 4);
-	*/
+	struct process *proc = proc_get_by_pid(pid);
+	handlers[irq] = proc;
+	interrupts_register_handler(irq, driver_irq_notify);
 }

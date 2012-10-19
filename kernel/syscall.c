@@ -16,7 +16,6 @@ uint8 syscall(struct thread_state *state)
 	int result = -1;
 	struct process *target_proc;
 	struct process *cur_proc = sched_cur_proc();
-	/*screen_putstr(kprintf(buf, "syscall enter: %x proc: %x!\n", id, cur_proc->pid));*/
 	struct message *msg;
 
 	switch (id)
@@ -41,13 +40,7 @@ uint8 syscall(struct thread_state *state)
 			state->eax = result;
 			break;
 		case SYSCALL_READ:
-			/*
-			screen_putstr(kprintf(buf, "proc: %x read buf:%x len: %x\n", cur_proc, state->ebx, state->ecx));
-			*/
 			msg = proc_recv(cur_proc);
-			/*
-			screen_putstr(kprintf(buf, "read buf:%x len: %x\n", state->ebx, state->ecx));
-			*/
 			kmemcpy((uint8*)state->ebx, (uint8*)msg->buf, state->ecx);
 			message_free(msg);
 			state->eax = 0;
@@ -56,9 +49,6 @@ uint8 syscall(struct thread_state *state)
 			target_proc = proc_get_by_pid(state->ebx);
 			if (!target_proc)
 				break;
-			/*
-			screen_putstr(kprintf(buf, "write pid:%x buf:%x len: %x\n", state->ebx, state->ecx, state->edx));
-			*/
 			msg = message_alloc(state->edx, (uint8*)state->ecx);
 			proc_send(msg, target_proc);
 			state->eax = 0;
@@ -66,12 +56,15 @@ uint8 syscall(struct thread_state *state)
 		case SYSCALL_MMAP:
 			paging_map(state->ebx, state->ecx, PAGE_USERMODE | PAGE_WRITABLE | PAGE_PRESENT);
 			break;
-		default:
+		case SYSCALL_HANDLE:
+			driver_register(cur_proc->pid, state->ebx);
 			break;
+		case SYSCALL_PEEK:
+			result = proc_peek(cur_proc);
+			state->eax = result;
+			break;
+
 	}
-	/*
-	screen_putstr(kprintf(buf, "syscall leave: %x proc: %x! result: %x\n", id, cur_proc->pid, state->eax));
-	*/
 	return INT_OK;
 }
 

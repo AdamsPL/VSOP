@@ -112,3 +112,8 @@ uint8 thread_msg_event(struct thread *this)
 		return 0;
 	return (list_size(&this->parent->messages) > 0);
 }
+
+uint8 proc_peek(struct process *this)
+{
+	return (list_size(&this->messages) > 0);
+}

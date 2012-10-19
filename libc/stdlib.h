@@ -9,6 +9,7 @@ void wait(int ticks);
 void exit(int error_code);
 int register_process(const char *name);
 int pidof(const char *name);
+void handle(int irq);
 
 int write(uint32 pid, const uint8 *buf, const uint32 size);
 int read(const uint8 *buf, const uint32 size);
@@ -28,5 +29,6 @@ char *kprintf(char *str, const char *format, ...);
 int strlen(char *str);
 
 void exit(int code);
+uint8 peek(void);
 
 #endif
