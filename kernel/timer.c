@@ -13,7 +13,7 @@
 #define SEC_TO_MS 1000
 #define MS_TO_US 1000
 
-static uint64 ticks = 0;
+static volatile uint64 ticks = 0;
 
 static uint8 _tick(struct thread_state *regs)
 {

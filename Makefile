@@ -1,5 +1,5 @@
 MEMORY=1024
-CORES=4
+CORES=2
 SUBDIRS=kernel libc userspace
 RELPATH=.
 include $(RELPATH)/Makefile.top

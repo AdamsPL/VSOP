@@ -94,7 +94,7 @@ static void ioapic_map(uint32 irq, uint32 vector)
 
 uint8 keyboard_handler(struct thread_state *state)
 {
-	char buf[32];
+	char buf[128];
 	struct time_t uptime = timer_uptime();
 	screen_putstr(kprintf(buf, "keyboard!: eip:%x d:%i h:%i m:%i s:%i ms:%i\n", state->eip, uptime.days, uptime.hours, uptime.minutes, uptime.sec, uptime.milisec));
 	return INT_OK;
