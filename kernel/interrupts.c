@@ -86,17 +86,19 @@ static void ioapic_map(uint32 irq, uint32 vector)
 	/*disabling, just in case...*/
 	ioapic_set(reg_low, IOAPIC_DISABLE);
 	ioapic_set(reg_high, 0x00);
-	/*
 	ioapic_set(reg_low, vector);
-	*/
+	/*
 	ioapic_set(reg_low, (1 << 8) | vector);
+	*/
 }
 
 uint8 keyboard_handler(struct thread_state *state)
 {
 	char buf[128];
 	struct time_t uptime = timer_uptime();
-	screen_putstr(kprintf(buf, "keyboard!: eip:%x d:%i h:%i m:%i s:%i ms:%i\n", state->eip, uptime.days, uptime.hours, uptime.minutes, uptime.sec, uptime.milisec));
+	screen_putstr(kprintf(buf, "ZZZ :( keyboard!: eip:%x d:%i h:%i m:%i s:%i ms:%i\n", state->eip, uptime.days, uptime.hours, uptime.minutes, uptime.sec, uptime.milisec));
+
+	port_read_8(0x60);
 	return INT_OK;
 }
 
@@ -125,23 +127,25 @@ void lapic_set(uint32 reg, uint32 value)
 {
 	volatile uint32 *lapic = (uint32*)(LAPIC_BASE + reg);
 	*lapic = value;
+	asm volatile("": : :"memory");
 }
 
 int lapic_get(uint32 reg)
 {
 	volatile uint32 *lapic = (uint32*)(LAPIC_BASE + reg);
+	asm volatile("": : :"memory");
 	return *lapic;
 }
 
 void lapic_init()
 {
-	lapic_set(LAPIC_TPR, 0x00020);
+	lapic_set(LAPIC_TPR, 0x00000);
 	lapic_set(LAPIC_TIMER, 0x10000);
 	lapic_set(LAPIC_PERF_MON, 0x10000);
 	lapic_set(LAPIC_INT0, 0x08700);
 	lapic_set(LAPIC_INT1, 0x00400);
 	lapic_set(LAPIC_ERR, 0x00370);
-	lapic_set(LAPIC_SIR, 0x0010F);
+	lapic_set(LAPIC_SIR, 0x0012F);
 }
 
 void apic_enable(void)
@@ -160,25 +164,13 @@ void apic_enable(void)
 
 void apic_init()
 {
-	port_write(0x20, 0x11);
-	port_write(0xA0, 0x11);
-
-	port_write(0x21, 0x20);
-	port_write(0xA1, 0x28);
-	port_write(0x21, 0x04);
-	port_write(0xA1, 0x02);
-	port_write(0x21, 0x01);
-	port_write(0xA1, 0x01);
-	port_write(0x21, 0x00);
-	port_write(0xA1, 0x00);
-
 	/*Disabling 8259*/
 	port_write(0xA1, 0xFF);
 	port_write(0x21, 0xFF);
+	/*
 	port_write(0x22, 0x70);	
 	port_write(0x23, 0x01);	
-	
-
+	*/
 	apic_enable();
 	ioapic_init();
 	lapic_init();
@@ -188,23 +180,30 @@ static uint8 unhandled_interrupt_handler(struct thread_state *state)
 {
 	char buf[256];
 	/*screen_clear();*/
-	screen_putstr(kprintf(buf, "unhandled state:%x int(%x)! proc:%x thread: %x cpu:%x\n", state, state->int_id, sched_cur_proc(), sched_cur_thread(), cpuid()));
+	screen_putstr(kprintf(buf, "unhandled intint:%x int(%i)! proc:%x thread: %x cpu:%x\n", state, state->int_id, sched_cur_proc(), sched_cur_thread(), cpuid()));
 	regs_print(state);
+	while(1)
+		asm("hlt");
 	return INT_OK;
 }
 
 void eoi(int id)
 {
-	lapic_set(LAPIC_TPR, 0x00);
-	if (id > 0x70)
+	if (id > 0x30)
 	{
-		lapic_set(LAPIC_EOI, 0x01);
+		lapic_set(LAPIC_EOI, 0x00);
 	}
+	/*
+	asm volatile("");
+	lapic_set(LAPIC_TPR, 0x00);
+	*/
 }
 
 void irq_handler(struct thread_state regs)
 {
+	/*
 	lapic_set(LAPIC_TPR, 0xE0);
+	*/
 	asm volatile("movl %%cr2, %0" : "=a"(cr2));
 
 	if (regs.ds > 0x100)

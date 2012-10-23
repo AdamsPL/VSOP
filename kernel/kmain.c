@@ -38,14 +38,12 @@ void kmain(struct mboot *mboot, unsigned int magic)
 	mboot_parse(mboot);
 	cpu_find();
 	interrupts_init();
+
 	syscalls_init();
 	drivers_init();
-
 	proc_create_kernel_proc();
 	sched_init();
-	
 	timer_init();
-
 	interrupts_start();
 
 	cpu_wake_all();
@@ -54,5 +52,7 @@ void kmain(struct mboot *mboot, unsigned int magic)
 	mboot_load_modules(mboot);
 
 	sched_start_timer();
-
+	
+	while(1)
+		asm("hlt");
 }

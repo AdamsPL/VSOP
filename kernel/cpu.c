@@ -23,6 +23,7 @@ extern uint32 fake_gdt_end;
 #define CR0_PROTECTED_MODE 	(1 << 0)
 
 uint32 cpu_stack[MAX_CPU];
+uint32 cpu_mapping[256];
 
 static lock_t lock = 0;
 static volatile int awoken_cpu = 0;
@@ -65,7 +66,8 @@ struct MP_float_ptr *mp_find()
 
 uint32 cpuid()
 {
-	return lapic_get(LAPIC_ID) >> 24;
+	uint8 id = lapic_get(LAPIC_ID) >> 24;
+	return cpu_mapping[id];
 }
 
 uint32 cr0(void)
@@ -96,12 +98,15 @@ void cpu_find()
 
 	num_of_cpu = 0;
 
+	cpu_mapping[0] = 0;
+
 	ptr = (uint8*)mpc + sizeof(*mpc);
 	for (i = 0; i < mpc->entry_count; ++i) {
 		if (*ptr == 0){
 			struct MP_proc_entry *pe_ptr = (struct MP_proc_entry*)ptr;
 			screen_putstr(kprintf(buf, "lapic id:%i ", pe_ptr->lapic_id));
 			screen_putstr(kprintf(buf, "cpu_flags:%x\n", pe_ptr->cpu_flags));
+			cpu_mapping[pe_ptr->lapic_id] = i;
 			ptr += 20;
 			++num_of_cpu;
 		}else

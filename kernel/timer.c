@@ -19,21 +19,35 @@ static uint8 _tick(struct thread_state *regs)
 {
 	++ticks;
 
+	port_write(0x70, 0x0C);
+	port_read_8(0x71);
+
 	return INT_OK;
 }
 
 void timer_init()
 {
 	char prev;
-
+	char rate = 6; /*1024HZ*/
 	ticks = 0;
 
-	port_write(0x70, 0x0B);
+	interrupts_register_handler(INT_RTC, _tick);
+	
+	/*resetting rate*/
+	port_write(0x70, 0x8A);
 	prev = port_read_8(0x71);
-	port_write(0x70, 0x0B);
+	port_write(0x70, 0x8A);
+	port_write(0x71, (prev & 0xF0) | rate);
+
+	/*enabling irq 8*/
+	port_write(0x70, 0x8B);
+	prev = port_read_8(0x71);
+	port_write(0x70, 0x8B);
 	port_write(0x71, prev | 0x40);
 
-	interrupts_register_handler(INT_RTC, _tick);
+	/*clear port C*/
+	port_write(0x70, 0x0C);
+	port_read_8(0x71);
 }
 
 uint64 _time_to_ticks(struct time_t time)
