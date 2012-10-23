@@ -171,13 +171,13 @@ void apic_init()
 	port_write(0xA1, 0x01);
 	port_write(0x21, 0x00);
 	port_write(0xA1, 0x00);
-	
+
 	/*Disabling 8259*/
 	port_write(0xA1, 0xFF);
 	port_write(0x21, 0xFF);
 	port_write(0x22, 0x70);	
 	port_write(0x23, 0x01);	
-
+	
 
 	apic_enable();
 	ioapic_init();
@@ -197,7 +197,9 @@ void eoi(int id)
 {
 	lapic_set(LAPIC_TPR, 0x00);
 	if (id > 0x70)
+	{
 		lapic_set(LAPIC_EOI, 0x01);
+	}
 }
 
 void irq_handler(struct thread_state regs)

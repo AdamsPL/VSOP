@@ -168,7 +168,7 @@ uint8 sched_can_run(struct scheduler *this)
 		this->next_thread->event = 0;
 		return 1;
 	}
-	scheduler_put_back(this, this->next_thread);
+	scheduler_put_back(scheduler_find(), this->next_thread);
 	return 0;
 }
 

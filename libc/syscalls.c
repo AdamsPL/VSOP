@@ -69,3 +69,8 @@ uint8 peek()
 {
 	return syscall(SYSCALL_PEEK);
 }
+
+uint64 time()
+{
+	return syscall(SYSCALL_TIME);
+}

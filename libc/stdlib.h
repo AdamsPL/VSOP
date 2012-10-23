@@ -30,5 +30,6 @@ int strlen(char *str);
 
 void exit(int code);
 uint8 peek(void);
+uint64 time(void);
 
 #endif

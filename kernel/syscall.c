@@ -8,6 +8,7 @@
 #include "process.h"
 #include "cpu.h"
 #include "message.h"
+#include "timer.h"
 
 uint8 syscall(struct thread_state *state)
 {
@@ -63,7 +64,10 @@ uint8 syscall(struct thread_state *state)
 			result = proc_peek(cur_proc);
 			state->eax = result;
 			break;
-
+		case SYSCALL_TIME:
+			result = timer_get_ticks();
+			state->eax = result;
+			break;
 	}
 	return INT_OK;
 }
