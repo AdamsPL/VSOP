@@ -17,6 +17,8 @@
 #include "syscall.h"
 #include "timer.h"
 
+#define DEBUG_MAX_CORES 1
+
 void hello_world(void)
 {
 	restore_cr0();
@@ -24,10 +26,11 @@ void hello_world(void)
 	ioapic_init();
 	lapic_init();
 
-	cpu_sync();
+	cpu_sync(DEBUG_MAX_CORES);
 
 	interrupts_start();
 
+	sched_ready();
 	sched_start_timer();
 }
 
@@ -42,12 +45,17 @@ void kmain(struct mboot *mboot, unsigned int magic)
 	syscalls_init();
 	drivers_init();
 	proc_create_kernel_proc();
-	sched_init();
+	scheduling_init();
+	sched_ready();
 	timer_init();
 	interrupts_start();
 
-	cpu_wake_all();
-	cpu_sync();
+	/*
+	cpu_wake_all(cpu_count());
+	cpu_sync(cpu_count());
+	*/
+	cpu_wake_all(DEBUG_MAX_CORES);
+	cpu_sync(DEBUG_MAX_CORES);
 
 	mboot_load_modules(mboot);
 

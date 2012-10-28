@@ -23,7 +23,8 @@ extern uint32 fake_gdt_end;
 #define CR0_PROTECTED_MODE 	(1 << 0)
 
 uint32 cpu_stack[MAX_CPU];
-uint32 cpu_mapping[256];
+uint8 cpu_mapping[256];
+uint8 cpu_orig_mapping[256];
 
 static lock_t lock = 0;
 static volatile int awoken_cpu = 0;
@@ -99,6 +100,7 @@ void cpu_find()
 	num_of_cpu = 0;
 
 	cpu_mapping[0] = 0;
+	cpu_orig_mapping[0] = 0;
 
 	ptr = (uint8*)mpc + sizeof(*mpc);
 	for (i = 0; i < mpc->entry_count; ++i) {
@@ -107,6 +109,7 @@ void cpu_find()
 			screen_putstr(kprintf(buf, "lapic id:%i ", pe_ptr->lapic_id));
 			screen_putstr(kprintf(buf, "cpu_flags:%x\n", pe_ptr->cpu_flags));
 			cpu_mapping[pe_ptr->lapic_id] = i;
+			cpu_orig_mapping[i] = pe_ptr->lapic_id;
 			ptr += 20;
 			++num_of_cpu;
 		}else
@@ -114,7 +117,7 @@ void cpu_find()
 	}
 }
 
-void cpu_wake_all()
+void cpu_wake_all(int count)
 {
 	char buf[256];
 	uint32 *warm_reset_vector = (uint32*)(0x40 << 4 | 0x67);
@@ -124,6 +127,7 @@ void cpu_wake_all()
 	uint32 fake_gdt_len = (uint32)&fake_gdt_end - (uint32)&fake_gdt_ptr;
 	int cpu;
 	struct gdt *virt_gdt_ptr;
+	int cpu_lapic_id;
 
 	orig_cr0 = CR0_PAGING | CR0_PROTECTED_MODE;
 	restore_cr0();
@@ -139,16 +143,17 @@ void cpu_wake_all()
 	port_write(0x71, 0x0A);
 	*warm_reset_vector = addr;
 
-	for (cpu = 1; cpu < cpu_count(); ++cpu)
+	for (cpu = 1; cpu < count; ++cpu)
 	{
+		cpu_lapic_id = cpu_orig_mapping[cpu];
 		cpu_stack[cpu] = (uint32)kmalloc(PAGE_SIZE) + PAGE_SIZE;
 		screen_putstr(kprintf(buf, "wake! cpu %i stack: %x\n", cpu, cpu_stack[cpu]));
-		lapic_set(LAPIC_ICR_HIGH, cpu << 24);
+		lapic_set(LAPIC_ICR_HIGH, cpu_lapic_id << 24);
 		lapic_set(LAPIC_ICR_LOW, INIT | LEVEL | ASSERT);
-		timer_active_wait(50);
-
-		lapic_set(LAPIC_ICR_HIGH, cpu << 24);
+		timer_active_wait(30);
+		lapic_set(LAPIC_ICR_HIGH, cpu_lapic_id << 24);
 		lapic_set(LAPIC_ICR_LOW, STARTUP | (addr >> 12));
+		timer_active_wait(30);
 	}
 	return;
 }
@@ -158,11 +163,11 @@ int cpu_count()
 	return num_of_cpu;
 }
 
-void cpu_sync(void)
+void cpu_sync(int count)
 {
 	section_enter(&lock);
 	++awoken_cpu;
 	section_leave(&lock);
-	while(awoken_cpu != num_of_cpu)
+	while(awoken_cpu != count)
 		;
 }

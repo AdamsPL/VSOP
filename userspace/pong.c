@@ -94,6 +94,8 @@ int main()
 {
 	int screen;
 	int i;
+	int tick = 50;
+	uint64 start, stop;
 
 	snake[0].x = 20;
 	snake[0].y = 12;
@@ -114,18 +116,17 @@ int main()
 
 	while(1)
 	{
-		++iterations;
-		if (iterations % 4 == 0)
-		{
-			change_dir();
-			enlarge_snake();
-			move_snake();
-			draw_snake();
-			write(screen, (uint8*)buf, sizeof(buf));
-		}
+		start = time();
+		change_dir();
+		enlarge_snake();
+		move_snake();
+		draw_snake();
+		write(screen, (uint8*)buf, sizeof(buf));
 		while(peek())
 			read((uint8*)status, sizeof(status));
-		wait(10);
+		stop = time();
+		wait(tick - stop + start);
+		++iterations;
 	}
 
 	return 0;

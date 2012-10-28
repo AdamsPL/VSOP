@@ -18,6 +18,7 @@ struct scheduler
 	struct thread *idle_thread;
 	struct thread *current_thread;
 	struct thread *next_thread;
+	uint8 started;
 };
 
 static struct scheduler schedulers[MAX_CPU];
@@ -127,6 +128,9 @@ static int scheduler_get_load(struct scheduler *this)
 	int p;
 	int result = 0;
 
+	if (!this->started)
+		return 0xFFFFFF;
+
 	for (p = 0; p < MAX_PRIORITY; ++p)
 		result += list_size(this->prio_queues + p);
 
@@ -189,7 +193,7 @@ uint8 sched_tick(struct thread_state *state)
 	return INT_OK;
 }
 
-void sched_init()
+void scheduling_init()
 {
 	int i;
 	
@@ -240,4 +244,10 @@ void sched_start_timer()
 struct process *sched_cur_proc(void)
 {
 	return sched_cur_thread()->parent;
+}
+
+void sched_ready()
+{
+	struct scheduler *sched = schedulers + cpuid();
+	sched->started = 1;
 }

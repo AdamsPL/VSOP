@@ -56,12 +56,12 @@ struct MP_float_ptr *mp_find();
 
 
 void cpu_find();
-void cpu_wake_all();
+void cpu_wake_all(int count);
 
 int cpu_count();
 uint32 cpuid(void);
 uint32 esp(void);
+void cpu_sync(int count);
 void restore_cr0(void);
-void cpu_sync(void);
 
 #endif
