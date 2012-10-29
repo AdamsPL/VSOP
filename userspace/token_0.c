@@ -25,7 +25,7 @@ int main()
 	{
 		read((uint8*)buf, 32);
 		iter++;
-		if (iter % 8192 == 0)
+		if (iter % 2048 == 0)
 		{
 			stop = time();
 			kprintf(buf, "messages: %i time:%i", iter, stop - start);

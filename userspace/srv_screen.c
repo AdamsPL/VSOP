@@ -117,7 +117,8 @@ int main()
 	char msg[128];
 	char buf[128];
 	int iter = 0;
-	
+	int descr;
+
 	mmap(videomem, (void*)0xB8000);
 	cur_x = 0;
 	cur_y = 0;
@@ -126,8 +127,13 @@ int main()
 	screen_clear();
 	while(1)
 	{
-		
-		read((uint8*)msg, 32);
+		descr = select();
+		if (descr == -1)
+		{
+			wait(1000);
+			continue;
+		}
+		read(descr, (uint8*)msg, 32);
 		iter++;
 		kprintf(buf, "%x:%s\n", iter, msg);
 		screen_putstr(buf);

@@ -3,7 +3,7 @@
 
 #include "config.h"
 #include "list.h"
-#include "locks.h"
+#include "stream.h"
 
 #define PROC_MAX_NAME_LEN 64
 
@@ -26,7 +26,7 @@ struct process
 	uint32 pdir;
 	char name[PROC_MAX_NAME_LEN];
 
-	struct list messages;
+	struct iostream_descriptors iodescr;
 };
 
 struct process *proc_create(struct proc_section text, struct proc_section data, struct proc_section bss, struct proc_section rodata);
@@ -34,11 +34,5 @@ struct process *proc_create_kernel_proc();
 struct process *proc_get_by_pid(pid_t pid);
 struct process *proc_get_by_name(char *name);
 int proc_register(struct process *proc, char *name);
-
-struct message *proc_recv(struct process *this);
-void proc_send(struct message *msg, struct process *dest);
-uint8 proc_peek(struct process *this);
-
-uint8 thread_msg_event(struct thread *this);
 
 #endif

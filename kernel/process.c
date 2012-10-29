@@ -86,34 +86,3 @@ struct process *proc_create_kernel_proc()
 	return new;
 }
 
-struct message *proc_recv(struct process *this)
-{
-	struct message *msg = 0;
-
-	while(1)
-	{
-	   	msg = list_pop(&this->messages);
-		if (msg)
-			return msg;
-		sched_thread_wait_for_msg();
-	}
-}
-
-void proc_send(struct message *msg, struct process *dest)
-{
-	list_push(&dest->messages, msg);
-}
-
-uint8 thread_msg_event(struct thread *this)
-{
-	if (!this)
-		return 0;
-	if (!this->parent)
-		return 0;
-	return (list_size(&this->parent->messages) > 0);
-}
-
-uint8 proc_peek(struct process *this)
-{
-	return (list_size(&this->messages) > 0);
-}

@@ -2,9 +2,10 @@
 #define _DRIVERS_H
 
 #include "config.h"
+#include "process.h"
 
 void drivers_init(void);
-void driver_register(pid_t pid, int irq);
+int driver_register(struct process *proc, int irq);
 
 #endif 
 

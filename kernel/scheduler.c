@@ -218,8 +218,10 @@ void sched_thread_sleep(uint64 ticks)
 
 void sched_thread_wait_for_msg()
 {
+	/*
 	struct thread *cur = sched_cur_thread();
 	sched_thread_wait(cur, thread_msg_event);
+	*/
 }
 
 void sched_yield(void)

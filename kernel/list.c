@@ -40,6 +40,9 @@ void *list_pop(struct list *this)
 	struct list_elem *elem;
 	void *result = 0;
 
+	if (this->size == 0)
+		return 0;
+	
 	section_enter(&this->lock);
 
 	elem = this->head;
