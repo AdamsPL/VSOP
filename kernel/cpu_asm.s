@@ -11,33 +11,28 @@
 
 _cpu_trampoline:
 	cli
-
-	movl $0x5000, %ebx
+	movl $0x4000, %ebx
 
 	xorl %eax, %eax
 	mov %cs, %ax
 	add $0x100, %ax
+
 	mov %ax, %ds
-	#mov %cs, %ax
-	#shl $4, %eax
 	xorl %eax, %eax
-	movl %eax, %ecx
-	movl (%ecx), %ecx
-	mov %ecx, (%ebx)
+
+	movl (%eax), %ecx
+
 	lgdt (%eax)
 
 	xorl %eax, %eax
-	mov $0x10, %ax
 	mov %ax, %ds
-	mov %ax, %es
-	mov %ax, %fs
-	mov %ax, %gs
-	mov %ax, %ss
+	movl $bootstrap, (%ebx)
 
 	movl %cr0, %eax
-	or $0x01, %eax
+	or $0x01, %al
 	movl %eax, %cr0
-	jmpl $0x08, $bootstrap
+
+	ljmpl $0x08, $(bootstrap)
 .code32
 bootstrap:
 	mov $0x10, %ax
@@ -46,6 +41,8 @@ bootstrap:
 	mov %ax, %fs
 	mov %ax, %gs
 	mov %ax, %ss
+
+
 	movl $kpage_dir, %eax
 	subl $0xC0000000, %eax
 	movl %eax, %cr3

@@ -18,7 +18,7 @@
 #include "timer.h"
 
 /*#define CPU_COUNT (cpu_count())*/
-#define CPU_COUNT 4
+#define CPU_COUNT 3
 
 void hello_world(void)
 {
@@ -36,6 +36,9 @@ void hello_world(void)
 
 void kmain(struct mboot *mboot, unsigned int magic)
 {
+	uint32 *tst = (uint32*)(0x4000);
+	char buf[128];
+
 	gdt_init();
 	screen_clear();
 	mboot_parse(mboot);
@@ -52,7 +55,16 @@ void kmain(struct mboot *mboot, unsigned int magic)
 	timer_init();
 	interrupts_start();
 
+	paging_map((uint32)tst, (uint32)tst, PAGE_PRESENT | PAGE_WRITABLE);
+	*tst = 0;
+
 	cpu_wake_all(CPU_COUNT);
+
+	timer_active_wait(1000);
+	kprintf(buf, "tst:%x\n", *tst);
+	screen_putstr(buf);
+	timer_active_wait(5000);
+
 	cpu_sync(CPU_COUNT);
 
 	sched_start_timer();

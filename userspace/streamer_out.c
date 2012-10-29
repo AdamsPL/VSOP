@@ -1,8 +1,6 @@
 #include <stdlib.h>
 
-#define PACKET_SIZE 128
-#define PAYLOAD 4096000
-#define PACKETS (PAYLOAD / PACKET_SIZE)
+#include "streamer_common.h"
 
 int main()
 {
@@ -10,20 +8,24 @@ int main()
 	int in;
 	char buf[PACKET_SIZE];
 	int i;
+	int t;
 
 	register_process("streamer_out");
 
 	while((screen = connect("sys.drivers.screen")) == -1)
 		wait(100);
 
-	for (i = 0; i < PACKETS; ++i)
+	in = select();
+	for (t = 0; t < TESTS; ++t)
 	{
-		in = select();
-		read(in, (uint8*)buf, sizeof(buf));
+		for (i = 0; i < PACKETS; ++i)
+		{
+			read(in, (uint8*)buf, sizeof(buf));
+		}
+		kprintf(buf, "%i : STOP", time());
+		write(screen, (uint8*)buf, 32);
+		write(in, (uint8*)buf, sizeof(buf));
 	}
-	kprintf(buf, "%i : STOP", time());
-	write(screen, (uint8*)buf, 32);
-
 
 	return 0;
 }

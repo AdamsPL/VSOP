@@ -118,9 +118,9 @@ void cpu_wake_all(int count)
 {
 	char buf[256];
 	uint16 *warm_reset_vector = (uint16*)0x1000;
-	uint32 *trampoline = kmalloc(PAGE_SIZE * 2);
+	uint32 addr = 0x50000;
+	uint32 *trampoline = (uint32*)addr;
 	uint32 trampoline_len = (uint32)_cpu_trampoline_end - (uint32)_cpu_trampoline;
-	uint32 addr;
 	uint32 fake_gdt_len = (uint32)&fake_gdt_end - (uint32)&fake_gdt_ptr;
 	int cpu;
 	int id;
@@ -128,6 +128,8 @@ void cpu_wake_all(int count)
 
 	orig_cr0 = CR0_PAGING | CR0_PROTECTED_MODE;
 	restore_cr0();
+
+	paging_map((uint32)trampoline, addr, PAGE_WRITABLE | PAGE_PRESENT);
 
 	kmemcpy((uint8*)trampoline, (uint8*)(uint32)(_cpu_trampoline), trampoline_len);
 	kmemcpy((uint8*)trampoline + PAGE_SIZE, (uint8*)&fake_gdt_ptr, fake_gdt_len);
@@ -161,13 +163,7 @@ void cpu_wake_all(int count)
 		lapic_set(LAPIC_ICR_HIGH, id << 24);
 		lapic_set(LAPIC_ICR_LOW, STARTUP | (addr >> 12));
 		screen_putstr(kprintf(buf, "init! startup:%x\n", id));
-		timer_active_wait(200);
-		/*
-		lapic_set(LAPIC_ICR_HIGH, id << 24);
-		lapic_set(LAPIC_ICR_LOW, STARTUP | (addr >> 12));
-		screen_putstr(kprintf(buf, "init! startup:%x\n", id));
 		timer_active_wait(1);
-		*/
 	}
 	screen_putstr(kprintf(buf, "WAKEUP DONE\n"));
 	return;
