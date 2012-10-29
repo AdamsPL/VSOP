@@ -12,8 +12,8 @@ void sched_thread_wait_for_msg();
 void sched_yield(void);
 struct thread *sched_cur_thread(void);
 struct process *sched_cur_proc(void);
-void sched_ready();
 void sched_start_timer();
 uint8 sched_tick(struct thread_state *state);
+void sched_idle_loop(void);
 
 #endif 

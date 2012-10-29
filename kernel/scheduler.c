@@ -23,7 +23,7 @@ struct scheduler
 
 static struct scheduler schedulers[MAX_CPU];
 
-static void idle_loop(void)
+void sched_idle_loop(void)
 {
 	while(1)
 		asm("hlt");
@@ -37,7 +37,7 @@ static void scheduler_add(struct scheduler *this, struct thread *thread)
 static void scheduler_init(struct scheduler *this)
 {
 	kmemset((uint8*)this, 0, sizeof(*this));
-	this->idle_thread = thread_create(proc_get_by_pid(0), (uint32)idle_loop, THREAD_KERNEL);
+	this->idle_thread = thread_create(proc_get_by_pid(0), (uint32)sched_idle_loop, THREAD_KERNEL);
 	this->current_thread = this->idle_thread;
 }
 
@@ -144,7 +144,7 @@ static struct scheduler *scheduler_find()
 	int tmp;
 	int i;
 
-	for (i = 1; i < cpu_count(); ++i)
+	for (i = 1; i < MAX_CPU; ++i)
 	{
 		tmp = scheduler_get_load(schedulers + i);
 		if (tmp < lowest)
@@ -173,12 +173,14 @@ uint8 sched_can_run(struct scheduler *this)
 		return 1;
 	}
 	scheduler_put_back(scheduler_find(), this->next_thread);
+	
 	return 0;
 }
 
 uint8 sched_tick(struct thread_state *state)
 {
 	struct scheduler *sched = schedulers + cpuid();
+	sched->started = 1;
 
 	scheduler_put_back(sched, sched->current_thread);
 	while(1)
@@ -197,7 +199,7 @@ void scheduling_init()
 {
 	int i;
 	
-	for (i = 0; i < cpu_count(); ++i)
+	for (i = 0; i < MAX_CPU; ++i)
 		scheduler_init(schedulers + i);
 }
 
@@ -235,19 +237,10 @@ void sched_start_timer()
 {
 	lapic_set(0x320, 0x00020080);
 	lapic_set(0x3E0, 0xB);
-	lapic_set(0x380, 0x00100000);
-
-	while(1)
-		asm("hlt");
+	lapic_set(0x380, 0x00010000 + cpuid());
 }
 
 struct process *sched_cur_proc(void)
 {
 	return sched_cur_thread()->parent;
-}
-
-void sched_ready()
-{
-	struct scheduler *sched = schedulers + cpuid();
-	sched->started = 1;
 }

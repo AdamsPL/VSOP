@@ -14,22 +14,21 @@ void _cpu_trampoline_end(void);
 extern uint32 fake_gdt_ptr;
 extern uint32 fake_gdt_end;
 
-#define INIT 	0x00000500
-#define STARTUP	0x00000600
-#define LEVEL 	0x00008000
-#define ASSERT	0x00004000
+#define INIT 		0x00000500
+#define STARTUP		0x00000600
+#define LEVEL 		0x00008000
+#define ASSERT		0x00004000
+#define DEASSERT	0x00000000
 
 #define CR0_PAGING 			(1 << 31)
 #define CR0_PROTECTED_MODE 	(1 << 0)
 
 uint32 cpu_stack[MAX_CPU];
-uint8 cpu_mapping[256];
-uint8 cpu_orig_mapping[256];
+uint8 cpu_mapping[MAX_CPU];
 
 static lock_t lock = 0;
 static volatile int awoken_cpu = 0;
 static int orig_cr0;
-
 
 static void *mp_slide(uint8 *from, uint8 *to)
 {
@@ -67,8 +66,7 @@ struct MP_float_ptr *mp_find()
 
 uint32 cpuid()
 {
-	uint8 id = lapic_get(LAPIC_ID) >> 24;
-	return cpu_mapping[id];
+	return lapic_get(LAPIC_ID) >> 24;
 }
 
 uint32 cr0(void)
@@ -100,7 +98,6 @@ void cpu_find()
 	num_of_cpu = 0;
 
 	cpu_mapping[0] = 0;
-	cpu_orig_mapping[0] = 0;
 
 	ptr = (uint8*)mpc + sizeof(*mpc);
 	for (i = 0; i < mpc->entry_count; ++i) {
@@ -108,8 +105,8 @@ void cpu_find()
 			struct MP_proc_entry *pe_ptr = (struct MP_proc_entry*)ptr;
 			screen_putstr(kprintf(buf, "lapic id:%i ", pe_ptr->lapic_id));
 			screen_putstr(kprintf(buf, "cpu_flags:%x\n", pe_ptr->cpu_flags));
-			cpu_mapping[pe_ptr->lapic_id] = i;
-			cpu_orig_mapping[i] = pe_ptr->lapic_id;
+			cpu_stack[pe_ptr->lapic_id] = (uint32)kmalloc(PAGE_SIZE) + PAGE_SIZE - 0x10;
+			cpu_mapping[i] = pe_ptr->lapic_id;
 			ptr += 20;
 			++num_of_cpu;
 		}else
@@ -120,14 +117,14 @@ void cpu_find()
 void cpu_wake_all(int count)
 {
 	char buf[256];
-	uint32 *warm_reset_vector = (uint32*)(0x40 << 4 | 0x67);
+	uint16 *warm_reset_vector = (uint16*)0x1000;
 	uint32 *trampoline = kmalloc(PAGE_SIZE * 2);
 	uint32 trampoline_len = (uint32)_cpu_trampoline_end - (uint32)_cpu_trampoline;
 	uint32 addr;
 	uint32 fake_gdt_len = (uint32)&fake_gdt_end - (uint32)&fake_gdt_ptr;
 	int cpu;
+	int id;
 	struct gdt *virt_gdt_ptr;
-	int cpu_lapic_id;
 
 	orig_cr0 = CR0_PAGING | CR0_PROTECTED_MODE;
 	restore_cr0();
@@ -141,20 +138,38 @@ void cpu_wake_all(int count)
 	
 	port_write(0x70, 0x0F);
 	port_write(0x71, 0x0A);
-	*warm_reset_vector = addr;
+
+	screen_putstr(kprintf(buf, "trampoline @ %x\n", addr));
+
+	paging_map((uint32)warm_reset_vector, (0x467), PAGE_PRESENT | PAGE_WRITABLE);
+
+	warm_reset_vector[0] = (uint16)(addr & 0xf);
+	warm_reset_vector[1] = (uint16)(addr >> 4);
 
 	for (cpu = 1; cpu < count; ++cpu)
 	{
-		cpu_lapic_id = cpu_orig_mapping[cpu];
-		cpu_stack[cpu] = (uint32)kmalloc(PAGE_SIZE) + PAGE_SIZE;
-		screen_putstr(kprintf(buf, "wake! cpu %i stack: %x\n", cpu, cpu_stack[cpu]));
-		lapic_set(LAPIC_ICR_HIGH, cpu_lapic_id << 24);
+		id = cpu_mapping[cpu];
+		screen_putstr(kprintf(buf, "wake! cpu %i lapic_id:%x\n", cpu, id));
+		lapic_set(LAPIC_ICR_HIGH, id << 24);
 		lapic_set(LAPIC_ICR_LOW, INIT | LEVEL | ASSERT);
-		timer_active_wait(30);
-		lapic_set(LAPIC_ICR_HIGH, cpu_lapic_id << 24);
+		screen_putstr(kprintf(buf, "init! lapic:%x\n", id));
+		timer_active_wait(1);
+		lapic_set(LAPIC_ICR_HIGH, id << 24);
+		lapic_set(LAPIC_ICR_LOW, INIT | LEVEL | DEASSERT);
+		screen_putstr(kprintf(buf, "init! lapic:%x\n", id));
+		timer_active_wait(1);
+		lapic_set(LAPIC_ICR_HIGH, id << 24);
 		lapic_set(LAPIC_ICR_LOW, STARTUP | (addr >> 12));
-		timer_active_wait(30);
+		screen_putstr(kprintf(buf, "init! startup:%x\n", id));
+		timer_active_wait(200);
+		/*
+		lapic_set(LAPIC_ICR_HIGH, id << 24);
+		lapic_set(LAPIC_ICR_LOW, STARTUP | (addr >> 12));
+		screen_putstr(kprintf(buf, "init! startup:%x\n", id));
+		timer_active_wait(1);
+		*/
 	}
+	screen_putstr(kprintf(buf, "WAKEUP DONE\n"));
 	return;
 }
 

@@ -1,4 +1,4 @@
-MEMORY=1024
+MEMORY=512
 CORES=8
 SUBDIRS=kernel libc userspace
 RELPATH=.
@@ -38,5 +38,10 @@ stats:
 
 ctags:
 	ctags -R --fields=+iaS --extra=+q .
+
+usb: install
+	sync
+	sudo dd if=disk.img of=/dev/disk/by-id/usb-Kingston_DT_100_G2_001CC0C60DBBCBB024232591-0:0
+	sync
 
 include $(RELPATH)/Makefile.bot

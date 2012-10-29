@@ -76,7 +76,9 @@ static void ioapic_set(uint32 reg, uint32 value)
 	volatile uint32 *io_win = (uint32*)(IOAPIC_BASE + 0x10);
 
 	*io_regsel = reg;
+	asm("" : : : "memory");
 	*io_win = value;
+	asm("" : : : "memory");
 }
 
 static void ioapic_map(uint32 irq, uint32 vector)
@@ -152,6 +154,14 @@ void apic_enable(void)
 {
 	uint32 lo, hi, msr;
 
+	/*Disabling 8259*/
+	port_write(0xA1, 0xFF);
+	port_write(0x21, 0xFF);
+	/*
+	port_write(0x22, 0x70);	
+	port_write(0x23, 0x01);	
+	*/
+
 	/*enabling apic*/
 	lo = 0;
 	hi = 0;
@@ -164,13 +174,6 @@ void apic_enable(void)
 
 void apic_init()
 {
-	/*Disabling 8259*/
-	port_write(0xA1, 0xFF);
-	port_write(0x21, 0xFF);
-	/*
-	port_write(0x22, 0x70);	
-	port_write(0x23, 0x01);	
-	*/
 	apic_enable();
 	ioapic_init();
 	lapic_init();
@@ -180,7 +183,7 @@ static uint8 unhandled_interrupt_handler(struct thread_state *state)
 {
 	char buf[256];
 	/*screen_clear();*/
-	screen_putstr(kprintf(buf, "unhandled intint:%x int(%i)! proc:%x thread: %x cpu:%x\n", state, state->int_id, sched_cur_proc(), sched_cur_thread(), cpuid()));
+	screen_putstr(kprintf(buf, "BAD INT:(%i)! cr2: %x, proc:%x thread: %x cpu:%x\n", state->int_id, cr2, sched_cur_proc(), sched_cur_thread(), cpuid()));
 	regs_print(state);
 	while(1)
 		asm("hlt");
@@ -201,14 +204,8 @@ void eoi(int id)
 
 void irq_handler(struct thread_state regs)
 {
-	/*
-	lapic_set(LAPIC_TPR, 0xE0);
-	*/
 	asm volatile("movl %%cr2, %0" : "=a"(cr2));
 
-	if (regs.ds > 0x100)
-		unhandled_interrupt_handler(&regs);
-	
 	int_handlers[regs.int_id](&regs);
 
 	eoi(regs.int_id);

@@ -11,21 +11,22 @@
 
 _cpu_trampoline:
 	cli
-	xor %ax, %ax
-	mov %ax, %ds
-	mov %ax, %es
-	mov %ax, %fs
-	mov %ax, %gs
-	mov %ax, %ss
 
+	movl $0x5000, %ebx
+
+	xorl %eax, %eax
 	mov %cs, %ax
-	add $0x100, %eax
-	shl $4, %eax
-	movl %eax, %ebx
-	add $0x2000, %ebx
-	movl %ebx, %esp
+	add $0x100, %ax
+	mov %ax, %ds
+	#mov %cs, %ax
+	#shl $4, %eax
+	xorl %eax, %eax
+	movl %eax, %ecx
+	movl (%ecx), %ecx
+	mov %ecx, (%ebx)
 	lgdt (%eax)
 
+	xorl %eax, %eax
 	mov $0x10, %ax
 	mov %ax, %ds
 	mov %ax, %es
@@ -65,7 +66,9 @@ bootstrap:
 orig_gdt:
 	movl $cpu_stack, %eax
 	movl (0xfee00020), %ebx
-	shr $22, %ebx
+	shr $24, %ebx
+	andl $0x0F, %ebx
+	shl $0x2, %ebx
 	addl %ebx, %eax
 	movl (%eax), %eax
 	movl %eax, %esp

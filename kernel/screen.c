@@ -117,8 +117,12 @@ void screen_set_fg(uint8 color)
 
 void screen_putstr(char *c)
 {
+	/*
 	section_enter(&screen_lock);
+	*/
 	while(*c)
 		screen_putchar(*c++, cur_style);
+	/*
 	section_leave(&screen_lock);
+	*/
 }
