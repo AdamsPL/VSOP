@@ -6,6 +6,7 @@
 char *kprintf(char *str, const char *format, ...);
 
 int kstrcmp(char *str1, char *str2);
+int ksubstr(char *str1, char *str2);
 
 void *kmemcpy(uint8 *destination, const uint8 *source, uint32 count);
 void *kmemset(uint8 *ptr, uint8 value, uint32 count);

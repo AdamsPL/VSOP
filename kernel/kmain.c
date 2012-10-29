@@ -17,16 +17,13 @@
 #include "syscall.h"
 #include "timer.h"
 
-/*#define CPU_COUNT (cpu_count())*/
-#define CPU_COUNT 3
-
 void hello_world(void)
 {
 	restore_cr0();
 	apic_enable();
 	lapic_init();
 
-	cpu_sync(CPU_COUNT);
+	cpu_sync(maximum_cpu);
 
 	interrupts_start();
 
@@ -36,12 +33,11 @@ void hello_world(void)
 
 void kmain(struct mboot *mboot, unsigned int magic)
 {
-	uint32 *tst = (uint32*)(0x4000);
-	char buf[128];
-
+	char buf[64];
 	gdt_init();
 	screen_clear();
 	mboot_parse(mboot);
+	mboot_parse_cmdline(mboot);
 	cpu_find();
 	interrupts_init();
 
@@ -55,17 +51,10 @@ void kmain(struct mboot *mboot, unsigned int magic)
 	timer_init();
 	interrupts_start();
 
-	paging_map((uint32)tst, (uint32)tst, PAGE_PRESENT | PAGE_WRITABLE);
-	*tst = 0;
+	screen_putstr(kprintf(buf, "MAX_CPU:%x\n", maximum_cpu));
 
-	cpu_wake_all(CPU_COUNT);
-
-	timer_active_wait(1000);
-	kprintf(buf, "tst:%x\n", *tst);
-	screen_putstr(buf);
-	timer_active_wait(5000);
-
-	cpu_sync(CPU_COUNT);
+	cpu_wake_all(maximum_cpu);
+	cpu_sync(maximum_cpu);
 
 	sched_start_timer();
 	sched_idle_loop();

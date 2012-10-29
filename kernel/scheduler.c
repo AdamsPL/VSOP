@@ -149,8 +149,6 @@ static struct scheduler *scheduler_find()
 	int tmp;
 	int i;
 
-	return sched;
-
 	for (i = 1; i < MAX_CPU; ++i)
 	{
 		tmp = scheduler_get_load(schedulers + i);

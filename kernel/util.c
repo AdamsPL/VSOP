@@ -60,8 +60,9 @@ char *kprintf(char *str, const char *format, ...) {
 	return buf;
 }
 
-int kstrcmp(char *str1, char *str2){
-	while((*str1 == *str2) && *str1){
+int kstrcmp(char *str1, char *str2)
+{
+	while((*str1 == *str2) && *str1 && *str2){
 		str1++;
 		str2++;
 	}
@@ -71,6 +72,21 @@ int kstrcmp(char *str1, char *str2){
 		return -1;
 	else
 		return 1;
+}
+
+int ksubstr(char *str1, char *str2)
+{
+	while((*str1 == *str2) && *str1 && *str2){
+		str1++;
+		str2++;
+	}
+	if (*str1 == *str2)
+		return 1;
+
+	if (!*str1 || !*str2)
+		return 1;
+
+	return 0;
 }
 
 #define KMEMSET_IMPL(name, type) void *name(type *ptr, type value, uint32 count) \

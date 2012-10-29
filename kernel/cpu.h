@@ -64,4 +64,6 @@ uint32 esp(void);
 void cpu_sync(int count);
 void restore_cr0(void);
 
+extern uint8 maximum_cpu;
+
 #endif

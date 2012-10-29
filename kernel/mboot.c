@@ -3,6 +3,8 @@
 #include "elf.h"
 #include "palloc.h"
 #include "paging.h"
+#include "screen.h"
+#include "cpu.h"
 
 struct module_info{
 	uint32 mod_start;
@@ -52,5 +54,36 @@ void mboot_load_modules(struct mboot *mboot)
 	for (i = 0; i < mboot->mods_count; ++i){
 		elf_load((uint8*)mod_info->mod_start);
 		mod_info++;
+	}
+}
+
+static char *cmdline_find(char *cmdline, char *txt)
+{
+	while(*cmdline)
+	{
+		if (ksubstr(cmdline, txt))
+			return cmdline;
+		cmdline++;
+	}
+	return 0;
+}
+
+void mboot_parse_cmdline(struct mboot *mboot)
+{
+	char *cmdline = (char*)0x70000; 
+	char *max_cpu_param = 0;
+	char buf[64];
+
+	if (mboot->flags && 0x04)
+	{
+		paging_map((uint32)cmdline, mboot->cmdline, PAGE_PRESENT);
+		screen_putstr(cmdline);
+		screen_putstr("\n");
+		max_cpu_param = cmdline_find(cmdline, "max_cpu=");
+		if (!max_cpu_param)
+			return;
+		max_cpu_param += 8;
+		maximum_cpu = *max_cpu_param - '0';
+		screen_putstr(kprintf(buf, "found %x...\n", maximum_cpu));
 	}
 }

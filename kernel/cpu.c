@@ -13,6 +13,7 @@ void _cpu_trampoline(void);
 void _cpu_trampoline_end(void);
 extern uint32 fake_gdt_ptr;
 extern uint32 fake_gdt_end;
+uint8 maximum_cpu = 8;
 
 #define INIT 		0x00000500
 #define STARTUP		0x00000600
@@ -112,6 +113,8 @@ void cpu_find()
 		}else
 			break;
 	}
+	if (num_of_cpu < maximum_cpu)
+		maximum_cpu = num_of_cpu;
 }
 
 void cpu_wake_all(int count)

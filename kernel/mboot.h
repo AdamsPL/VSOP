@@ -16,4 +16,5 @@ struct mmap {
 
 void mboot_parse(struct mboot *mboot);
 void mboot_load_modules(struct mboot *mboot);
+void mboot_parse_cmdline(struct mboot *mboot);
 #endif
