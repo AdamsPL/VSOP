@@ -8,7 +8,6 @@
 void scheduling_init();
 void sched_thread_ready(struct thread *thread);
 void sched_thread_sleep(uint64 ticks);
-void sched_thread_wait_for_msg();
 void sched_yield(void);
 struct thread *sched_cur_thread(void);
 struct process *sched_cur_proc(void);

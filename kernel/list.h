@@ -12,7 +12,6 @@ struct list_elem
 struct list
 {
 	int size;
-	lock_t lock;
 	struct list_elem *head;
 	struct list_elem *tail;
 };

@@ -18,7 +18,7 @@
 #include "timer.h"
 
 /*#define CPU_COUNT (cpu_count())*/
-#define CPU_COUNT 2
+#define CPU_COUNT 4
 
 void hello_world(void)
 {

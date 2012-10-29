@@ -19,8 +19,6 @@ void list_push(struct list *this, void *target)
 
 	elem = list_elem_new(target);
 
-	section_enter(&this->lock);
-
 	if (!this->tail)
 	{
 		this->head = elem;
@@ -32,7 +30,6 @@ void list_push(struct list *this, void *target)
 
 cleanup:
 	++this->size;
-	section_leave(&this->lock);
 }
 
 void *list_pop(struct list *this)
@@ -43,7 +40,6 @@ void *list_pop(struct list *this)
 	if (this->size == 0)
 		return 0;
 	
-	section_enter(&this->lock);
 
 	elem = this->head;
 
@@ -63,7 +59,6 @@ void *list_pop(struct list *this)
 
 	if (result)
 		--this->size;
-	section_leave(&this->lock);
 	return result;
 }
 

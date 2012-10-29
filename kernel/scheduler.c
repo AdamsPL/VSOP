@@ -11,6 +11,7 @@
 #include "paging.h"
 #include "gdt.h"
 #include "list.h"
+#include "locks.h"
 
 struct scheduler
 {
@@ -18,6 +19,7 @@ struct scheduler
 	struct thread *idle_thread;
 	struct thread *current_thread;
 	struct thread *next_thread;
+	lock_t lock;
 	uint8 started;
 };
 
@@ -31,7 +33,9 @@ void sched_idle_loop(void)
 
 static void scheduler_add(struct scheduler *this, struct thread *thread)
 {
+	section_enter(&this->lock);
 	list_push(this->prio_queues + thread->priority, thread);
+	section_leave(&this->lock);
 }
 
 static void scheduler_init(struct scheduler *this)
@@ -73,6 +77,7 @@ static void scheduler_pick(struct scheduler *this)
 		if (t)
 		{
 			this->next_thread = t;
+			section_leave(&this->lock);
 			return;
 		}
 	}
@@ -144,6 +149,8 @@ static struct scheduler *scheduler_find()
 	int tmp;
 	int i;
 
+	return sched;
+
 	for (i = 1; i < MAX_CPU; ++i)
 	{
 		tmp = scheduler_get_load(schedulers + i);
@@ -185,8 +192,11 @@ uint8 sched_tick(struct thread_state *state)
 	scheduler_put_back(sched, sched->current_thread);
 	while(1)
 	{
+			
+		section_enter(&sched->lock);
 		scheduler_move_up(sched);
 		scheduler_pick(sched);
+		section_leave(&sched->lock);
 		if (sched_can_run(sched))
 			break;
 	}
@@ -214,14 +224,6 @@ void sched_thread_sleep(uint64 ticks)
 	struct thread *cur = sched_cur_thread();
 	cur->wait_timer = timer_get_ticks() + ticks;
 	sched_thread_wait(cur, thread_timer_event);
-}
-
-void sched_thread_wait_for_msg()
-{
-	/*
-	struct thread *cur = sched_cur_thread();
-	sched_thread_wait(cur, thread_msg_event);
-	*/
 }
 
 void sched_yield(void)
