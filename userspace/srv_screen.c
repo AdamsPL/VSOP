@@ -133,7 +133,7 @@ int main()
 			wait(1000);
 			continue;
 		}
-		read(descr, (uint8*)msg, 32);
+		read(descr, (uint8*)msg, 64);
 		iter++;
 		kprintf(buf, "%x:%s\n", iter, msg);
 		screen_putstr(buf);
