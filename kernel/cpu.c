@@ -91,7 +91,6 @@ uint32 esp(void)
 
 void cpu_find()
 {
-	char buf[256];
 	struct MP_config *mpc = mp_find()->config;
 	uint8 *ptr;
 	int i;
@@ -104,8 +103,6 @@ void cpu_find()
 	for (i = 0; i < mpc->entry_count; ++i) {
 		if (*ptr == 0){
 			struct MP_proc_entry *pe_ptr = (struct MP_proc_entry*)ptr;
-			screen_putstr(kprintf(buf, "lapic id:%i ", pe_ptr->lapic_id));
-			screen_putstr(kprintf(buf, "cpu_flags:%x\n", pe_ptr->cpu_flags));
 			cpu_stack[pe_ptr->lapic_id] = (uint32)kmalloc(PAGE_SIZE) + PAGE_SIZE - 0x10;
 			cpu_mapping[i] = pe_ptr->lapic_id;
 			ptr += 20;

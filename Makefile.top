@@ -1,5 +1,5 @@
 #debug/size/speed
-OPT_LVL=speed
+OPT_LVL=debug
 
 ifeq ($(OPT_LVL),debug)
 	CFLAGS+=-ggdb

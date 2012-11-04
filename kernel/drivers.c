@@ -20,14 +20,16 @@ uint8 driver_irq_notify(struct thread_state *state)
 	if (!handlers[irq])
 		return INT_ERROR;
 
-	stream_write(handlers[irq], (uint8*)buf, sizeof(buf));
+	stream_write(handlers[irq], (uint8*)buf, 1);
 
 	return INT_OK;
 }
 
 int driver_register(struct process *proc, int irq)
 {
+	int result;
 	handlers[irq] = stream_new();
-	return iostream_attach(&proc->iodescr, handlers[irq], handlers[irq]);
+	result = iostream_attach(&proc->iodescr, handlers[irq], handlers[irq]);
 	interrupts_register_handler(irq, driver_irq_notify);
+	return result;
 }

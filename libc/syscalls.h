@@ -12,7 +12,7 @@ int write(int descr, const uint8 *buf, const uint32 size);
 
 void mmap(void *virt, void *phys);
 void handle(int irq);
-uint8 peek(void);
+int peek(int descr);
 uint64 time(void);
 
 #endif

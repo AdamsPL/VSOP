@@ -10,6 +10,7 @@ void read_key()
 
 int main()
 {
+	int os;
 	int snake;
 	char buf[64];
 	memset(status, 0, sizeof(status));
@@ -17,12 +18,20 @@ int main()
 	register_process("sys.drivers.keyboard");
 	handle(218);
 
-	while((snake = pidof("snake")) == -1)
+	while((snake = connect("snake")) == -1)
 		wait(100);
+	/*
+	while((snake = connect("sys.drivers.screen")) == -1)
+		wait(100);
+	*/
+
+	write(snake, (uint8*)status, sizeof(status));
+
+	os = select();
 
 	while(1)
 	{
-		read((uint8*)buf, sizeof(buf));
+		read(os, (uint8*)buf, 1);
 		read_key();
 		write(snake, (uint8*)status, sizeof(status));
 	}

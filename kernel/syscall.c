@@ -33,6 +33,9 @@ uint8 syscall(struct thread_state *state)
 			state->eax = result;
 			break;
 		case SYSCALL_CONNECT:
+			/*
+			screen_putstr(kprintf(buf, "%s: CONNECT\n", cur_proc->name));
+			*/
 			target_proc = proc_get_by_name((char*)state->ebx);
 			if (target_proc)
 			{
@@ -45,6 +48,9 @@ uint8 syscall(struct thread_state *state)
 				result = -1;
 			break;
 		case SYSCALL_SELECT:
+			/*
+			screen_putstr(kprintf(buf, "%s: SELECT\n", cur_proc->name));
+			*/
 			while(1)
 			{
 				result = iostream_select(&cur_proc->iodescr);
@@ -56,10 +62,16 @@ uint8 syscall(struct thread_state *state)
 			}
 			break;
 		case SYSCALL_READ:
+			/*
+			screen_putstr(kprintf(buf, "%s: READ\n", cur_proc->name));
+			*/
 			stream_read(cur_proc->iodescr.iostreams[state->ebx].input, (uint8*)state->ecx, state->edx);
 			result = 0;
 			break;
 		case SYSCALL_WRITE:
+			/*
+			screen_putstr(kprintf(buf, "%s: WRITE\n", cur_proc->name));
+			*/
 			stream_write(cur_proc->iodescr.iostreams[state->ebx].output, (uint8*)state->ecx, state->edx);
 			result = 0;
 			break;
@@ -70,7 +82,7 @@ uint8 syscall(struct thread_state *state)
 			result = driver_register(cur_proc, state->ebx);
 			break;
 		case SYSCALL_PEEK:
-			result = (stream_read_length(cur_proc->iodescr.iostreams[state->ebx].input) > 1);
+			result = stream_read_length(cur_proc->iodescr.iostreams[state->ebx].input);
 			break;
 		case SYSCALL_TIME:
 			result = timer_get_ticks();

@@ -11,7 +11,7 @@
 #include "paging.h"
 #include "gdt.h"
 #include "list.h"
-#include "locks.h"
+#include "screen.h"
 
 struct scheduler
 {
@@ -19,7 +19,7 @@ struct scheduler
 	struct thread *idle_thread;
 	struct thread *current_thread;
 	struct thread *next_thread;
-	lock_t lock;
+	struct list waiting_threads;
 	uint8 started;
 };
 
@@ -33,27 +33,26 @@ void sched_idle_loop(void)
 
 static void scheduler_add(struct scheduler *this, struct thread *thread)
 {
-	section_enter(&this->lock);
 	list_push(this->prio_queues + thread->priority, thread);
-	section_leave(&this->lock);
-}
-
-static void scheduler_init(struct scheduler *this)
-{
-	kmemset((uint8*)this, 0, sizeof(*this));
-	this->idle_thread = thread_create(proc_get_by_pid(0), (uint32)sched_idle_loop, THREAD_KERNEL);
-	this->current_thread = this->idle_thread;
 }
 
 static void scheduler_put_back(struct scheduler *this, struct thread *th)
 {
+	/*
+	char buf[128];
+
+	screen_putstr(kprintf(buf, "Putting back %x, idle:%x\n", th, this->idle_thread));
+	*/
 	if (!th)
 		return;
 
-	th->priority = truncate(th->priority + 1, 0, MAX_PRIORITY - 1);
+	if (th == this->idle_thread)
+		return;
+
+	/*th->priority = truncate(th->priority + 1, 0, MAX_PRIORITY - 1);*/
 	list_push(this->prio_queues + th->priority, th);
 }
-
+/*
 static void scheduler_move_up(struct scheduler *this)
 {
 	int p;
@@ -65,8 +64,8 @@ static void scheduler_move_up(struct scheduler *this)
 		list_push(this->prio_queues + p - 1, t);
 	}
 }
-
-static void scheduler_pick(struct scheduler *this)
+*/
+static struct thread *scheduler_pick(struct scheduler *this)
 {
 	int p;
 	struct thread *t;
@@ -76,12 +75,10 @@ static void scheduler_pick(struct scheduler *this)
 		t = list_pop(this->prio_queues + p);
 		if (t)
 		{
-			this->next_thread = t;
-			section_leave(&this->lock);
-			return;
+			return t;
 		}
 	}
-	this->next_thread = this->idle_thread;
+	return 0;
 }
 
 void _task_switch(void)
@@ -95,6 +92,9 @@ static void scheduler_switch(struct scheduler *this)
 	struct thread *to_thread = this->next_thread;
 
 	if (!to_thread)
+		return;
+
+	if (from_thread == to_thread)
 		return;
 
 	if (from_thread->parent->pdir != to_thread->parent->pdir)
@@ -144,8 +144,8 @@ static int scheduler_get_load(struct scheduler *this)
 
 static struct scheduler *scheduler_find()
 {
-	int lowest = 0xFFFFFF;
 	struct scheduler *sched = schedulers;
+	int lowest = scheduler_get_load(sched);
 	int tmp;
 	int i;
 
@@ -163,7 +163,15 @@ static struct scheduler *scheduler_find()
 
 void sched_thread_ready(struct thread *thread)
 {
+	/*
+	char buf[128];
+	*/
 	struct scheduler *sched = scheduler_find();
+	/*
+	int num = ((int)sched - (int)schedulers) / sizeof(*sched);
+
+	screen_putstr(kprintf(buf, "Adding thread:%x to sched: %x [%x]\n", thread, num, sched));
+	*/
 
 	scheduler_add(sched, thread);
 }
@@ -177,36 +185,53 @@ uint8 sched_can_run(struct scheduler *this)
 		this->next_thread->event = 0;
 		return 1;
 	}
-	scheduler_put_back(scheduler_find(), this->next_thread);
-	
 	return 0;
+}
+
+static void scheduler_wake_all(struct scheduler *this)
+{
+	struct thread *th = (struct thread *)list_pop(&this->waiting_threads);
+	while(th)
+	{
+		scheduler_put_back(this, th);
+		th = (struct thread *)list_pop(&this->waiting_threads);
+	}
 }
 
 uint8 sched_tick(struct thread_state *state)
 {
 	struct scheduler *sched = schedulers + cpuid();
-	sched->started = 1;
 
 	scheduler_put_back(sched, sched->current_thread);
+	scheduler_wake_all(sched);
 	while(1)
 	{
-			
-		section_enter(&sched->lock);
-		scheduler_move_up(sched);
-		scheduler_pick(sched);
-		section_leave(&sched->lock);
+		/*scheduler_move_up(sched);*/
+		sched->next_thread = scheduler_pick(sched);
+		if (!sched->next_thread)
+			sched->next_thread = sched->idle_thread;
 		if (sched_can_run(sched))
 			break;
+		list_push(&sched->waiting_threads, sched->next_thread);
 	}
+
 	scheduler_switch(sched);
 
 	return INT_OK;
 }
 
+static void scheduler_init(struct scheduler *this)
+{
+	kmemset((uint8*)this, 0, sizeof(*this));
+	this->idle_thread = thread_create(proc_get_by_pid(0), (uint32)sched_idle_loop, THREAD_KERNEL);
+	this->current_thread = this->idle_thread;
+	this->started = 0;
+}
+
 void scheduling_init()
 {
 	int i;
-	
+	interrupts_register_handler(INT_SCHED_TICK, sched_tick);
 	for (i = 0; i < MAX_CPU; ++i)
 		scheduler_init(schedulers + i);
 }
@@ -224,9 +249,12 @@ void sched_thread_sleep(uint64 ticks)
 	sched_thread_wait(cur, thread_timer_event);
 }
 
-void sched_yield(void)
+void sched_thread_wait_for_msg()
 {
-	sched_tick(0);
+	/*
+	struct thread *cur = sched_cur_thread();
+	sched_thread_wait(cur, thread_msg_event);
+	*/
 }
 
 struct thread *sched_cur_thread(void)
@@ -239,10 +267,21 @@ void sched_start_timer()
 {
 	lapic_set(0x320, 0x00020080);
 	lapic_set(0x3E0, 0xB);
-	lapic_set(0x380, 0x00010000 + cpuid());
+	lapic_set(0x380, 0x00010000);
 }
 
 struct process *sched_cur_proc(void)
 {
 	return sched_cur_thread()->parent;
+}
+
+void sched_yield(void)
+{
+	sched_tick(0);
+}
+
+void sched_ready()
+{
+	struct scheduler *this = schedulers + cpuid();
+	this->started = 1;
 }

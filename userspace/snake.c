@@ -93,6 +93,7 @@ void enlarge_snake()
 int main()
 {
 	int screen;
+	int keyboard;
 	int i;
 	int tick = 50;
 	uint64 start, stop;
@@ -111,8 +112,11 @@ int main()
 		snake[i].y = snake[i - 1].y - direction.y;
 	}
 
-	while((screen = pidof("sys.drivers.fullscreen")) == -1)
+	while((screen = connect("sys.drivers.fullscreen")) == -1)
 		wait(100);
+
+	keyboard = select();
+	read(keyboard, (uint8*)status, sizeof(status));
 
 	while(1)
 	{
@@ -122,8 +126,10 @@ int main()
 		move_snake();
 		draw_snake();
 		write(screen, (uint8*)buf, sizeof(buf));
-		while(peek())
-			read((uint8*)status, sizeof(status));
+
+		if(peek(keyboard) > 0)
+			read(keyboard, (uint8*)status, sizeof(status));
+
 		stop = time();
 		wait(tick - stop + start);
 		++iterations;

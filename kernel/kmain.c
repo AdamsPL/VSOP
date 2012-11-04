@@ -23,9 +23,9 @@ void hello_world(void)
 	apic_enable();
 	lapic_init();
 
-	cpu_sync(maximum_cpu);
-
 	interrupts_start();
+	sched_ready();
+	cpu_sync(maximum_cpu);
 
 	sched_start_timer();
 	sched_idle_loop();
@@ -44,17 +44,19 @@ void kmain(struct mboot *mboot, unsigned int magic)
 	syscalls_init();
 	drivers_init();
 	proc_create_kernel_proc();
+	
 	scheduling_init();
-
-	mboot_load_modules(mboot);
 
 	timer_init();
 	interrupts_start();
+	sched_ready();
 
 	screen_putstr(kprintf(buf, "MAX_CPU:%x\n", maximum_cpu));
 
 	cpu_wake_all(maximum_cpu);
 	cpu_sync(maximum_cpu);
+	
+	mboot_load_modules(mboot);
 
 	sched_start_timer();
 	sched_idle_loop();

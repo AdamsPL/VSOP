@@ -71,8 +71,9 @@ void handle(int irq)
 	syscall(SYSCALL_HANDLE);
 }
 
-uint8 peek()
+int peek(int descr)
 {
+	asm volatile("movl %0, %%ebx" :: "m"(descr) : "%ebx");
 	return syscall(SYSCALL_PEEK);
 }
 

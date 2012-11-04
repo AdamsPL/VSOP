@@ -31,6 +31,9 @@ interrupt_handler int_handlers[256];
 static struct idt_entry idt_entries[256];
 volatile struct idt iptr;
 
+int int_level[MAX_CPU];
+int task_prio[MAX_CPU];
+
 #include "screen.h"
 
 #define PRINT_FIELD(x) screen_putstr(kprintf(buf, #x":%x|", regs->x));
@@ -260,7 +263,6 @@ void interrupts_init()
 		interrupts_register_handler(i, unhandled_interrupt_handler);
 	interrupts_register_handler(218, keyboard_handler);
 	interrupts_register_handler(15, ignore_int);
-	interrupts_register_handler(INT_SCHED_TICK, sched_tick);
 }
 
 void interrupts_start()

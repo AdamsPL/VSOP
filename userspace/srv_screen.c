@@ -124,15 +124,12 @@ int main()
 	cur_y = 0;
 
 	register_process("sys.drivers.screen");
+	/*
 	screen_clear();
+	*/
 	while(1)
 	{
 		descr = select();
-		if (descr == -1)
-		{
-			wait(1000);
-			continue;
-		}
 		read(descr, (uint8*)msg, 64);
 		iter++;
 		kprintf(buf, "%x:%s\n", iter, msg);

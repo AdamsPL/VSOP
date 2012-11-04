@@ -2,12 +2,17 @@
 
 int main()
 {
-	char buf[64];
+	char msg[64];
+	char buf[128];
 	int next;
 	int screen;
 	int iter = 0;
 	int from;
-
+	
+	/*
+	const int step = 204800;
+	*/
+	const int step = 1024;
 	uint64 start, stop;
 
 	register_process("token0");
@@ -31,11 +36,11 @@ int main()
 		write(next, (uint8*)buf, 32);
 
 		iter++;
-		if (iter % 2048 == 0)
+		if (iter % step == 0)
 		{
 			stop = time();
-			kprintf(buf, "messages: %i time:%i", iter, stop - start);
-			write(screen, (uint8*)buf, 64);
+			kprintf(msg, "messages: %i time:%i [%s]", iter, stop - start, buf);
+			write(screen, (uint8*)msg, 64);
 		}
 	}
 

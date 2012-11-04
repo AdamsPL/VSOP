@@ -73,7 +73,8 @@ static void screen_display(char *buf)
 int main()
 {
 	char msg[SCREEN_HEIGHT * SCREEN_WIDTH];
-	
+	int descr;
+
 	mmap(videomem, (void*)0xB8000);
 	cur_x = 0;
 	cur_y = 0;
@@ -84,8 +85,8 @@ int main()
 	screen_clear();
 	while(1)
 	{
-		
-		read((uint8*)msg, SCREEN_HEIGHT * SCREEN_WIDTH);
+		descr = select();
+		read(descr, (uint8*)msg, SCREEN_HEIGHT * SCREEN_WIDTH);
 		screen_display(msg);
 	}
 	
