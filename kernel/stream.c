@@ -17,8 +17,7 @@ void stream_write(struct stream *this, uint8 *buf, uint32 len)
 		{
 			struct thread *cur = sched_cur_thread();
 			cur->descr = this;
-			cur->event = stream_write_event;
-			sched_yield();
+			sched_thread_wait(cur, stream_write_event);
 		}
 		this->buf[this->write] = *buf;
 		this->write = next_step(this->write);
@@ -34,8 +33,7 @@ void stream_read(struct stream *this, uint8 *buf, uint32 len)
 		{
 			struct thread *cur = sched_cur_thread();
 			cur->descr = this;
-			cur->event = stream_read_event;
-			sched_yield();
+			sched_thread_wait(cur, stream_read_event);
 		}
 		this->read = next_step(this->read);
 		*buf = this->buf[this->read];

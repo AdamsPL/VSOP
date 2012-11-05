@@ -14,5 +14,6 @@ struct process *sched_cur_proc(void);
 void sched_start_timer();
 void sched_idle_loop(void);
 void sched_ready();
+void sched_thread_wait(struct thread *thread, thread_event event);
 
 #endif 

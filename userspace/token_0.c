@@ -11,9 +11,9 @@ int main()
 	
 	int count = 1;
 
-	const int step = 2048;
+	const int step = 1280;
 	/*
-	const int step = 16;
+	const int step = 2048;
 	const int step = 1024;
 	*/
 	uint64 start, stop;

@@ -70,9 +70,7 @@ static struct thread *scheduler_pick(struct scheduler *this)
 	{
 		t = list_pop(this->prio_queues + p);
 		if (t)
-		{
 			return t;
-		}
 	}
 	return 0;
 }
@@ -150,7 +148,7 @@ void sched_thread_ready(struct thread *thread)
 	char buf[128];
 	struct scheduler *sched = scheduler_find();
 	int id = ((int)sched - (int)schedulers) / sizeof(*sched);
-	screen_putstr(kprintf(buf, "Adding thread:%x to sched:%x[%x] started:%x\n", thread, sched, id, sched->started));
+	screen_putstr(kprintf(buf, "Adding thread:%x to sched:[%x]\n", thread, id));
 	list_push(sched->prio_queues + thread->priority, thread);
 	sched->load++;
 }
@@ -219,7 +217,7 @@ void scheduling_init()
 		scheduler_init(schedulers + i);
 }
 
-static void sched_thread_wait(struct thread *thread, thread_event event)
+void sched_thread_wait(struct thread *thread, thread_event event)
 {
 	thread->event = event;
 	sched_yield();
@@ -230,14 +228,6 @@ void sched_thread_sleep(uint64 ticks)
 	struct thread *cur = sched_cur_thread();
 	cur->wait_timer = timer_get_ticks() + ticks;
 	sched_thread_wait(cur, thread_timer_event);
-}
-
-void sched_thread_wait_for_msg()
-{
-	/*
-	struct thread *cur = sched_cur_thread();
-	sched_thread_wait(cur, thread_msg_event);
-	*/
 }
 
 struct thread *sched_cur_thread(void)
@@ -260,10 +250,10 @@ struct process *sched_cur_proc(void)
 
 void sched_yield(void)
 {
-#ifdef CONF_PREEMPTIBLE
+	/*
 	lapic_set(LAPIC_TPR, INT_SCHED_TICK);
-#endif
 	sched_tick(0);
+	*/
 }
 
 void sched_ready()
