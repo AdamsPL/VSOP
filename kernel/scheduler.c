@@ -248,7 +248,7 @@ void sched_start_timer()
 {
 	lapic_set(0x320, 0x00020080);
 	lapic_set(0x3E0, 0xB);
-	lapic_set(0x380, 0x00500000);
+	lapic_set(0x380, 0x00100000);
 }
 
 struct process *sched_cur_proc(void)
