@@ -3,6 +3,16 @@
 #include "util.h"
 #include "screen.h"
 
+static void list_lock(struct list *this)
+{
+	section_enter(&this->lock);
+}
+
+static void list_unlock(struct list *this)
+{
+	section_leave(&this->lock);
+}
+
 static struct list_elem *list_elem_new(struct list *this, void *target)
 {
 	struct list_elem *result;
@@ -31,10 +41,7 @@ void list_push(struct list *this, void *target)
 {
 	struct list_elem *elem;
    
-	if (!target)
-		return;
-
-	section_enter(&this->lock);
+	list_lock(this);
 
 	elem = list_elem_new(this, target);
 
@@ -49,7 +56,7 @@ void list_push(struct list *this, void *target)
 
 cleanup:
 	++this->size;
-	section_leave(&this->lock);
+	list_unlock(this);
 }
 
 void *list_pop(struct list *this)
@@ -60,7 +67,7 @@ void *list_pop(struct list *this)
 	if (this->size == 0)
 		return 0;
 	
-	section_enter(&this->lock);
+	list_lock(this);
 
 	elem = this->head;
 
@@ -80,7 +87,7 @@ void *list_pop(struct list *this)
 
 	if (result)
 		--this->size;
-	section_leave(&this->lock);
+	list_unlock(this);
 	return result;
 }
 
@@ -102,3 +109,13 @@ int list_size(struct list *this)
 {
 	return this->size;
 }
+
+void list_prealloc(struct list *this, int count)
+{
+	while(count-- > 0)
+	{
+		struct list_elem *elem = NEW(struct list_elem);
+		list_elem_delete(this, elem);
+	}
+}
+

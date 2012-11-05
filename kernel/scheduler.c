@@ -200,10 +200,12 @@ static void scheduler_wake_all(struct scheduler *this)
 
 uint8 sched_tick(struct thread_state *state)
 {
+	char buf[128];
 	struct scheduler *sched = schedulers + cpuid();
 
 	scheduler_put_back(sched, sched->current_thread);
 	scheduler_wake_all(sched);
+
 	while(1)
 	{
 		/*scheduler_move_up(sched);*/
@@ -212,9 +214,14 @@ uint8 sched_tick(struct thread_state *state)
 			sched->next_thread = sched->idle_thread;
 		if (sched_can_run(sched))
 			break;
+#ifdef CONF_PREEMPTIBLE
+		scheduler_put_back(sched, sched->next_thread);
+#else
 		list_push(&sched->waiting_threads, sched->next_thread);
+#endif
 	}
-
+	if (sched->next_thread == sched->idle_thread)
+		screen_putstr(kprintf(buf, "IDLE! sched:%x\n", cpuid()));
 	scheduler_switch(sched);
 
 	return INT_OK;
@@ -267,7 +274,7 @@ void sched_start_timer()
 {
 	lapic_set(0x320, 0x00020080);
 	lapic_set(0x3E0, 0xB);
-	lapic_set(0x380, 0x00010000);
+	lapic_set(0x380, 0x00100000);
 }
 
 struct process *sched_cur_proc(void)

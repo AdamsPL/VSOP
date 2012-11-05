@@ -65,4 +65,8 @@ void apic_enable(void);
 void interrupts_disable();
 void interrupts_enable();
 
+int is_preemptible();
+void preempt_disable();
+void preempt_enable();
+
 #endif

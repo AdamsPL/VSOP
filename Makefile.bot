@@ -1,4 +1,5 @@
 $(MOUNTCANARY):
+	sudo modprobe loop
 	mkdir -p $(MNTDIR) || true
 	sudo losetup $(DEV) $(IMG) --offset 1048576 || true
 	sudo mount $(DEV) $(MNTDIR) || true

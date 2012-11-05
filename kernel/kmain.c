@@ -35,16 +35,17 @@ void kmain(struct mboot *mboot, unsigned int magic)
 {
 	char buf[64];
 	gdt_init();
-	screen_clear();
 	mboot_parse(mboot);
 	mboot_parse_cmdline(mboot);
 	cpu_find();
+	screen_clear();
 	interrupts_init();
 
 	syscalls_init();
+
 	drivers_init();
 	proc_create_kernel_proc();
-	
+
 	scheduling_init();
 
 	timer_init();

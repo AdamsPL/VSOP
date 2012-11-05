@@ -9,10 +9,11 @@ int main()
 	int iter = 0;
 	int from;
 	
+	const int step = 16;
 	/*
-	const int step = 204800;
-	*/
 	const int step = 1024;
+	const int step = 128;
+	*/
 	uint64 start, stop;
 
 	register_process("token0");

@@ -20,6 +20,8 @@
 #define UNUSED(x) (void)(x);
 #define MAX_PRIORITY 5
 
+#define CONF_PREEMPTIBLE
+
 typedef unsigned char uint8;
 typedef signed char int8;
 typedef unsigned short uint16;
