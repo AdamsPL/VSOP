@@ -190,22 +190,15 @@ static uint8 unhandled_interrupt_handler(struct thread_state *state)
 	return INT_OK;
 }
 
-void eoi(int id)
-{
-	if (id > 0x30)
-	{
-		lapic_set(LAPIC_EOI, 0x00);
-	}
-}
-
 void irq_handler(struct thread_state regs)
 {
 	asm volatile("movl %%cr2, %0" : "=a"(cr2));
 
+	lapic_set(LAPIC_TPR, regs.int_id);
+	if (regs.int_id > 0x20)
+		lapic_set(LAPIC_EOI, 0x00);
 	asm("sti");
 	int_handlers[regs.int_id](&regs);
-
-	eoi(regs.int_id);
 }
 
 void idt_init()

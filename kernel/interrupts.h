@@ -28,8 +28,6 @@
 #define INT_SYSCALL 80
 #define INT_RTC 211
 
-#define PREEMPT_DISABLE		0xFF
-
 struct thread_state{
 	uint32 tpr;
 	uint32 ds;

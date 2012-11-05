@@ -43,6 +43,8 @@ isr_common:
 
 	call irq_handler
 
+	cli
+
 	pop %eax
 	movl $0xFEE00080, %ebx
 	movl %eax, (%ebx)
@@ -57,11 +59,7 @@ isr_common:
 	add $8, %esp
 	iret
 
-
 _leave_kernel:
-	push $0x80
-	call eoi
-	pop %eax
 	pop %eax
 	pop %eax
 	pop %eax

@@ -82,6 +82,9 @@ void _task_switch(void)
 
 static void scheduler_switch(struct scheduler *this)
 {
+	/*
+	char buf[128];
+	*/
 	struct thread *from_thread = this->current_thread;
 	struct thread *to_thread = this->next_thread;
 
@@ -90,10 +93,13 @@ static void scheduler_switch(struct scheduler *this)
 
 	if (from_thread == to_thread)
 		return;
-
+/*
+	screen_putstr(kprintf(buf, "SWITCHING TO: %s\n", to_thread->parent->name));
+*/
 	if (from_thread->parent->pdir != to_thread->parent->pdir)
 		page_dir_switch(to_thread->parent->pdir);
 
+	asm volatile("cli");
 	tss_set_stack(cpuid(), to_thread->kernel_stack);
 
 	this->current_thread = to_thread;
@@ -220,7 +226,9 @@ void scheduling_init()
 void sched_thread_wait(struct thread *thread, thread_event event)
 {
 	thread->event = event;
-	sched_yield();
+	while(thread->event && !thread->event(thread))
+		sched_yield();
+	thread->event = 0;
 }
 
 void sched_thread_sleep(uint64 ticks)
@@ -240,7 +248,7 @@ void sched_start_timer()
 {
 	lapic_set(0x320, 0x00020080);
 	lapic_set(0x3E0, 0xB);
-	lapic_set(0x380, 0x00100000);
+	lapic_set(0x380, 0x00500000);
 }
 
 struct process *sched_cur_proc(void)
@@ -250,10 +258,8 @@ struct process *sched_cur_proc(void)
 
 void sched_yield(void)
 {
-	/*
 	lapic_set(LAPIC_TPR, INT_SCHED_TICK);
 	sched_tick(0);
-	*/
 }
 
 void sched_ready()
