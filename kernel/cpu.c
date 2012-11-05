@@ -141,8 +141,6 @@ void cpu_wake_all(int count)
 	port_write(0x70, 0x0F);
 	port_write(0x71, 0x0A);
 
-	screen_putstr(kprintf(buf, "trampoline @ %x\n", addr));
-
 	paging_map((uint32)warm_reset_vector, (0x467), PAGE_PRESENT | PAGE_WRITABLE);
 
 	warm_reset_vector[0] = (uint16)(addr & 0xf);
@@ -154,15 +152,12 @@ void cpu_wake_all(int count)
 		screen_putstr(kprintf(buf, "wake! cpu %i lapic_id:%x\n", cpu, id));
 		lapic_set(LAPIC_ICR_HIGH, id << 24);
 		lapic_set(LAPIC_ICR_LOW, INIT | LEVEL | ASSERT);
-		screen_putstr(kprintf(buf, "init! lapic:%x\n", id));
 		timer_active_wait(1);
 		lapic_set(LAPIC_ICR_HIGH, id << 24);
 		lapic_set(LAPIC_ICR_LOW, INIT | LEVEL | DEASSERT);
-		screen_putstr(kprintf(buf, "init! lapic:%x\n", id));
 		timer_active_wait(1);
 		lapic_set(LAPIC_ICR_HIGH, id << 24);
 		lapic_set(LAPIC_ICR_LOW, STARTUP | (addr >> 12));
-		screen_putstr(kprintf(buf, "init! startup:%x\n", id));
 		timer_active_wait(1);
 	}
 	screen_putstr(kprintf(buf, "WAKEUP DONE\n"));

@@ -9,10 +9,12 @@ int main()
 	int iter = 0;
 	int from;
 	
-	const int step = 16;
+	int count = 1;
+
+	const int step = 2048;
 	/*
+	const int step = 16;
 	const int step = 1024;
-	const int step = 128;
 	*/
 	uint64 start, stop;
 
@@ -21,15 +23,16 @@ int main()
 	while((screen = connect("sys.drivers.screen")) == -1)
 		wait(100);
 
-	while((next = connect("token1")) == -1)
-		wait(100);
-
 	kprintf(buf, "STARTED");
 	write(screen, (uint8*)buf, 64);
 
+	while((next = connect("token1")) == -1)
+		wait(100);
+
 	start = time();
 	kprintf(buf, "TOKEN!");
-	write(next, (uint8*)buf, 32);
+	while(count-- > 0)
+		write(next, (uint8*)buf, 32);
 	from = select();
 	while(1)
 	{

@@ -56,7 +56,6 @@ void kmain(struct mboot *mboot, unsigned int magic)
 
 	cpu_wake_all(maximum_cpu);
 	cpu_sync(maximum_cpu);
-	
 	mboot_load_modules(mboot);
 
 	sched_start_timer();

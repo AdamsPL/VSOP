@@ -31,6 +31,10 @@ isr_common:
 	mov %ds, %ax
 	push %eax
 
+	movl $0xFEE00080, %eax
+	movl (%eax), %eax
+	push %eax
+
 	mov $0x10, %ax
 	mov %ax, %ds
 	mov %ax, %es
@@ -38,6 +42,10 @@ isr_common:
 	mov %ax, %gs
 
 	call irq_handler
+
+	pop %eax
+	movl $0xFEE00080, %ebx
+	movl %eax, (%ebx)
 
 	pop %eax
 	mov %ax, %ds
@@ -57,6 +65,11 @@ _leave_kernel:
 	pop %eax
 	pop %eax
 	pop %eax
+
+	pop %eax
+	movl $0xFEE00080, %ebx
+	movl %eax, (%ebx)
+
 	pop %eax
 	mov %ax, %ds
 	mov %ax, %es

@@ -20,6 +20,7 @@ struct scheduler
 	struct thread *current_thread;
 	struct thread *next_thread;
 	struct list waiting_threads;
+	int load;
 	uint8 started;
 };
 
@@ -29,11 +30,6 @@ void sched_idle_loop(void)
 {
 	while(1)
 		asm("hlt");
-}
-
-static void scheduler_add(struct scheduler *this, struct thread *thread)
-{
-	list_push(this->prio_queues + thread->priority, thread);
 }
 
 static void scheduler_put_back(struct scheduler *this, struct thread *th)
@@ -128,30 +124,18 @@ static void scheduler_switch(struct scheduler *this)
 	
 }
 
-static int scheduler_get_load(struct scheduler *this)
-{
-	int p;
-	int result = 0;
-
-	if (!this->started)
-		return 0xFFFFFF;
-
-	for (p = 0; p < MAX_PRIORITY; ++p)
-		result += list_size(this->prio_queues + p);
-
-	return result;
-}
-
 static struct scheduler *scheduler_find()
 {
 	struct scheduler *sched = schedulers;
-	int lowest = scheduler_get_load(sched);
+	int lowest = sched->load;
 	int tmp;
 	int i;
 
 	for (i = 1; i < MAX_CPU; ++i)
 	{
-		tmp = scheduler_get_load(schedulers + i);
+		if (!schedulers[i].started)
+			continue;
+		tmp = schedulers[i].load;
 		if (tmp < lowest)
 		{
 			sched = schedulers + i;
@@ -163,17 +147,12 @@ static struct scheduler *scheduler_find()
 
 void sched_thread_ready(struct thread *thread)
 {
-	/*
 	char buf[128];
-	*/
 	struct scheduler *sched = scheduler_find();
-	/*
-	int num = ((int)sched - (int)schedulers) / sizeof(*sched);
-
-	screen_putstr(kprintf(buf, "Adding thread:%x to sched: %x [%x]\n", thread, num, sched));
-	*/
-
-	scheduler_add(sched, thread);
+	int id = ((int)sched - (int)schedulers) / sizeof(*sched);
+	screen_putstr(kprintf(buf, "Adding thread:%x to sched:%x[%x] started:%x\n", thread, sched, id, sched->started));
+	list_push(sched->prio_queues + thread->priority, thread);
+	sched->load++;
 }
 
 uint8 sched_can_run(struct scheduler *this)
@@ -200,7 +179,6 @@ static void scheduler_wake_all(struct scheduler *this)
 
 uint8 sched_tick(struct thread_state *state)
 {
-	char buf[128];
 	struct scheduler *sched = schedulers + cpuid();
 
 	scheduler_put_back(sched, sched->current_thread);
@@ -220,8 +198,6 @@ uint8 sched_tick(struct thread_state *state)
 		list_push(&sched->waiting_threads, sched->next_thread);
 #endif
 	}
-	if (sched->next_thread == sched->idle_thread)
-		screen_putstr(kprintf(buf, "IDLE! sched:%x\n", cpuid()));
 	scheduler_switch(sched);
 
 	return INT_OK;
@@ -284,6 +260,9 @@ struct process *sched_cur_proc(void)
 
 void sched_yield(void)
 {
+#ifdef CONF_PREEMPTIBLE
+	lapic_set(LAPIC_TPR, INT_SCHED_TICK);
+#endif
 	sched_tick(0);
 }
 

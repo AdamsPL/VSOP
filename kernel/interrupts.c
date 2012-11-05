@@ -12,7 +12,6 @@
 #include "config.h"
 
 #define IOAPIC_DISABLE		0x10000
-#define PREEMPT_DISABLE		0xFF
 #define MAX_INT_LEVEL		0x30
 
 struct idt_entry{
@@ -32,16 +31,6 @@ interrupt_handler int_handlers[256];
 
 static struct idt_entry idt_entries[256];
 volatile struct idt iptr;
-
-int interrupts_are_enabled = 0;
-
-struct prio_stack
-{
-	int count;
-	int prio[MAX_INT_LEVEL];
-};
-
-struct prio_stack task_prio[MAX_CPU];
 
 #include "screen.h"
 
@@ -111,7 +100,7 @@ uint8 keyboard_handler(struct thread_state *state)
 {
 	char buf[128];
 	struct time_t uptime = timer_uptime();
-	screen_putstr(kprintf(buf, "ZZZ :( keyboard!: eip:%x d:%i h:%i m:%i s:%i ms:%i\n", state->eip, uptime.days, uptime.hours, uptime.minutes, uptime.sec, uptime.milisec));
+	screen_putstr(kprintf(buf, "OOO keyboard!: eip:%x tpr:%x d:%i h:%i m:%i s:%i ms:%i\n", state->eip, state->tpr, uptime.days, uptime.hours, uptime.minutes, uptime.sec, uptime.milisec));
 
 	port_read_8(0x60);
 	return INT_OK;
@@ -190,39 +179,6 @@ void apic_init()
 	lapic_init();
 }
 
-#ifdef CONF_PREEMPTIBLE
-static inline void push_task_prio(int prio)
-{
-	int old_prio = lapic_get(LAPIC_TPR);
-	int cpu = cpuid();
-
-	lapic_set(LAPIC_TPR, PREEMPT_DISABLE);
-	task_prio[cpu].prio[task_prio[cpu].count] = old_prio; 
-	++task_prio[cpu].count;
-	lapic_set(LAPIC_TPR, prio);
-}
-
-static inline void pop_task_prio()
-{
-	int prio;
-	int cpu = cpuid();
-
-	lapic_set(LAPIC_TPR, PREEMPT_DISABLE);
-	task_prio[cpu].count--;
-	prio = task_prio[cpu].prio[task_prio[cpu].count];
-	task_prio[cpu].prio[task_prio[cpu].count] = 0;
-	lapic_set(LAPIC_TPR, prio);
-}
-#else
-static inline void push_task_prio(int prio)
-{
-}
-
-static inline void pop_task_prio()
-{
-}
-#endif
-
 static uint8 unhandled_interrupt_handler(struct thread_state *state)
 {
 	char buf[256];
@@ -236,7 +192,6 @@ static uint8 unhandled_interrupt_handler(struct thread_state *state)
 
 void eoi(int id)
 {
-	pop_task_prio();
 	if (id > 0x30)
 	{
 		lapic_set(LAPIC_EOI, 0x00);
@@ -247,11 +202,7 @@ void irq_handler(struct thread_state regs)
 {
 	asm volatile("movl %%cr2, %0" : "=a"(cr2));
 
-	push_task_prio(regs.int_id);
-#ifdef CONF_PREEMPTIBLE
 	asm("sti");
-#endif
-
 	int_handlers[regs.int_id](&regs);
 
 	eoi(regs.int_id);
@@ -306,10 +257,6 @@ void interrupts_init()
 		interrupts_register_handler(i, unhandled_interrupt_handler);
 	interrupts_register_handler(218, keyboard_handler);
 	interrupts_register_handler(15, ignore_int);
-
-	kmemset((uint8*)task_prio, 0, sizeof(task_prio));
-
-	interrupts_are_enabled = 1;
 }
 
 void interrupts_start()
@@ -322,23 +269,4 @@ void interrupts_start()
 void interrupts_stop()
 {
 	asm("cli");
-}
-
-int is_preemptible()
-{
-	return (lapic_get(LAPIC_TPR) != PREEMPT_DISABLE);
-}
-
-void preempt_disable()
-{
-	if (!interrupts_are_enabled)
-		return;
-	push_task_prio(PREEMPT_DISABLE);
-}
-
-void preempt_enable()
-{
-	if (!interrupts_are_enabled)
-		return;
-	pop_task_prio();
 }
