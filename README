@@ -1,0 +1,23 @@
+1) Wstęp
+
+Środowisko uruchomieniowe bazuje w pełni na plikach Makefile i skryptach powłoki.
+Aby przygotować nowy obraz dysku wykorzystywany przez maszynę wirtualną należy uruchomić skrypt 'create_image.sh'. Utworzy on w bieżącym katalogu plik disk.img zawierający podstawowy obraz dysku wykorzystywany w projekcie. 
+
+2) Make
+Najważniejsze cele programu make:
+
+	make - kompiluje cały projekt
+	make mount - podmontowywuje obraz dysku pod specjalny katalog
+	make umount - analogicznie jak wyżej
+	make install - kopiuje pliki wynikowe do katalogu z zamontowanym obrazem
+	make run - uruchamia maszynę wirtualną z zapisanego obrazu i ustawia jej parametry
+
+Większość z powyższych komend wymaga uprawnień administratora
+
+3) Struktura katalogów:
+	kernel - jądro systemu operacyjnego
+	libc - biblioteka standardowa stworzona na potrzeby projektu
+	userspace - zestaw programów z przestrzeni użytkownika
+
+4) Userspace
+	Wybór programów z przestrzeni użytkownika odbywa się przez zaktualizowanie pliku userspace/modfile. Wszystkie programy podane w tym pliku zostaną skompilowane i dołączone do konfiguracji bootloadera jako moduły.
